@@ -57,7 +57,7 @@ const ShareButtonsConfig = {
       requiresNativeShare: true
     }
   },
-  
+
   styles: {
     container: 'social-share-section',
     buttonsWrapper: 'social-share-buttons-icons',
@@ -65,14 +65,14 @@ const ShareButtonsConfig = {
     title: 'social-share-title',
     impactText: 'share-impact-text'
   },
-  
+
   messages: {
     title: '🔊 Spread the Word - Every Share Matters!',
     impactText: 'Your voice amplifies our message. Together we\'re stronger! 💪',
     loadingText: 'Preparing share options...',
     errorText: 'Share options temporarily unavailable'
   },
-  
+
   animation: {
     hoverScale: 1.1,
     clickScale: 0.95,
@@ -88,7 +88,7 @@ class ShareButtonsComponent {
     this.containerId = containerId;
     this.container = null;
     this.config = { ...ShareButtonsConfig, ...options };
-    
+
     this.state = {
       count: 0,
       userComment: null,
@@ -96,42 +96,62 @@ class ShareButtonsComponent {
       isLoading: false,
       platforms: this.getAvailablePlatforms()
     };
-    
+
     this.buttons = new Map();
     this.listeners = new Map();
   }
 
   /**
+   * Get cached data from localStorage
+   * @private
+   * @returns {Object} Cached data
+   */
+  getCachedData() {
+    const cachedCount = localStorage.getItem('nstcg_cached_count');
+    const userComment = localStorage.getItem('nstcg_comment');
+    const isRegistered = localStorage.getItem('nstcg_registered') === 'true';
+    
+    return {
+      count: cachedCount ? (isNaN(cachedCount) ? cachedCount : parseInt(cachedCount, 10)) : null,
+      userComment: userComment || null,
+      isRegistered: isRegistered
+    };
+  }
+
+  /**
    * Initialize the component
-   * @param {number} count - Participant count
-   * @param {string} userComment - User's comment
+   * @param {number} count - Participant count (null to use cached)
+   * @param {string} userComment - User's comment (null to use cached)
    * @param {boolean} isDisabled - Whether buttons are disabled
    */
-  init(count = 0, userComment = null, isDisabled = false) {
-    this.state.count = count;
-    this.state.userComment = userComment;
-    this.state.isDisabled = isDisabled;
+  init(count = null, userComment = null, isDisabled = false) {
+    // Use cached data if parameters not provided
+    const cachedData = this.getCachedData();
     
+    this.state.count = count !== null ? count : (cachedData.count || 0);
+    this.state.userComment = userComment !== null ? userComment : cachedData.userComment;
+    this.state.isDisabled = isDisabled;
+
     // Get or validate container
     if (typeof this.containerId === 'string') {
       this.container = document.getElementById(this.containerId);
     } else {
       this.container = this.containerId;
     }
-    
+
     if (!this.container) {
       console.error(`Share buttons container not found: ${this.containerId}`);
       return;
     }
-    
+
     // Render the component
     this.render();
-    
+
     // Bind events if not disabled
     if (!isDisabled) {
       this.bindEvents();
     }
-    
+
     // Emit initialized event
     eventBus.emit(Events.SHARE_BUTTONS_INITIALIZED, {
       containerId: this.containerId,
@@ -146,12 +166,12 @@ class ShareButtonsComponent {
    */
   getAvailablePlatforms() {
     const platforms = { ...this.config.platforms };
-    
+
     // Remove native share if not supported
     if (!navigator.share && platforms.native) {
       delete platforms.native;
     }
-    
+
     // Sort by order
     return Object.entries(platforms)
       .sort(([, a], [, b]) => a.order - b.order)
@@ -172,14 +192,14 @@ class ShareButtonsComponent {
       shareSection.className = this.config.styles.container;
       this.container.appendChild(shareSection);
     }
-    
+
     // Build HTML
     const html = this.buildHTML();
     shareSection.innerHTML = html;
-    
+
     // Store button references
     this.storeButtonReferences();
-    
+
     // Update state
     stateManager.set('shareButtons.rendered', true);
     stateManager.set('shareButtons.count', this.state.count);
@@ -192,7 +212,7 @@ class ShareButtonsComponent {
   buildHTML() {
     const { isDisabled, isLoading } = this.state;
     const { title, impactText, loadingText } = this.config.messages;
-    
+
     return `
       <h4 class="${this.config.styles.title}">${title}</h4>
       <div class="${this.config.styles.buttonsWrapper}">
@@ -210,11 +230,11 @@ class ShareButtonsComponent {
    */
   buildButtonsHTML() {
     const { isDisabled } = this.state;
-    
+
     return Object.entries(this.state.platforms).map(([key, platform]) => {
       const disabledAttr = isDisabled ? 'disabled' : '';
       const ariaLabel = `Share on ${platform.name}`;
-      
+
       return `
         <button class="${this.config.styles.button} ${key}" 
                 title="${ariaLabel}"
@@ -234,7 +254,7 @@ class ShareButtonsComponent {
   storeButtonReferences() {
     const buttonsWrapper = this.container.querySelector(`.${this.config.styles.buttonsWrapper}`);
     if (!buttonsWrapper) return;
-    
+
     const buttons = buttonsWrapper.querySelectorAll(`.${this.config.styles.button}`);
     buttons.forEach(button => {
       const platform = button.dataset.platform;
@@ -250,13 +270,13 @@ class ShareButtonsComponent {
     this.buttons.forEach((button, platform) => {
       // Create event listener
       const listener = this.createClickListener(platform);
-      
+
       // Store listener reference for cleanup
       this.listeners.set(platform, listener);
-      
+
       // Add event listener
       button.addEventListener('click', listener);
-      
+
       // Add hover effects
       this.addHoverEffects(button);
     });
@@ -270,12 +290,12 @@ class ShareButtonsComponent {
     return async (e) => {
       e.preventDefault();
       e.stopPropagation();
-      
+
       if (this.state.isDisabled || this.state.isLoading) return;
-      
+
       // Add click animation
       this.animateClick(e.currentTarget);
-      
+
       // Handle share action
       await this.handleShare(platform);
     };
@@ -287,11 +307,11 @@ class ShareButtonsComponent {
    */
   async handleShare(platform) {
     const { count, userComment } = this.state;
-    
+
     try {
       // Emit pre-share event
       eventBus.emit(Events.SHARE_BUTTON_CLICK, { platform, count, userComment });
-      
+
       // Call appropriate share method
       switch (platform) {
         case 'twitter':
@@ -316,13 +336,13 @@ class ShareButtonsComponent {
           await socialShareManager.shareNative(count, userComment);
           break;
       }
-      
+
       // Emit success event
       eventBus.emit(Events.SHARE_BUTTON_SUCCESS, { platform, count, userComment });
-      
+
     } catch (error) {
       console.error(`Share failed for ${platform}:`, error);
-      
+
       // Emit error event
       eventBus.emit(Events.SHARE_BUTTON_ERROR, { platform, error });
     }
@@ -334,15 +354,15 @@ class ShareButtonsComponent {
    */
   addHoverEffects(button) {
     const { hoverScale, transitionDuration } = this.config.animation;
-    
+
     button.style.transition = `transform ${transitionDuration}ms ease`;
-    
+
     button.addEventListener('mouseenter', () => {
       if (!this.state.isDisabled) {
         button.style.transform = `scale(${hoverScale})`;
       }
     });
-    
+
     button.addEventListener('mouseleave', () => {
       button.style.transform = 'scale(1)';
     });
@@ -354,9 +374,9 @@ class ShareButtonsComponent {
    */
   animateClick(button) {
     const { clickScale, transitionDuration } = this.config.animation;
-    
+
     button.style.transform = `scale(${clickScale})`;
-    
+
     setTimeout(() => {
       button.style.transform = 'scale(1)';
     }, transitionDuration);
@@ -368,14 +388,27 @@ class ShareButtonsComponent {
    */
   updateState(updates) {
     this.state = { ...this.state, ...updates };
-    
+
     // Re-render if needed
     if (updates.count !== undefined || updates.userComment !== undefined) {
       this.updateShareData(updates.count || this.state.count, updates.userComment || this.state.userComment);
     }
-    
+
     if (updates.isDisabled !== undefined) {
       this.setDisabled(updates.isDisabled);
+    }
+  }
+
+  /**
+   * Update cached data in localStorage
+   * @private
+   */
+  updateCachedData() {
+    if (this.state.count !== null && this.state.count !== 0) {
+      localStorage.setItem('nstcg_cached_count', this.state.count.toString());
+    }
+    if (this.state.userComment) {
+      localStorage.setItem('nstcg_comment', this.state.userComment);
     }
   }
 
@@ -387,16 +420,19 @@ class ShareButtonsComponent {
   updateShareData(count, userComment) {
     this.state.count = count;
     this.state.userComment = userComment;
-    
+
+    // Update cache
+    this.updateCachedData();
+
     // Re-bind events with new data
     this.unbindEvents();
     if (!this.state.isDisabled) {
       this.bindEvents();
     }
-    
+
     // Update state
     stateManager.set('shareButtons.count', count);
-    
+
     // Emit update event
     eventBus.emit(Events.SHARE_BUTTONS_UPDATED, { count, userComment });
   }
@@ -407,10 +443,10 @@ class ShareButtonsComponent {
    */
   setDisabled(disabled) {
     this.state.isDisabled = disabled;
-    
+
     this.buttons.forEach(button => {
       button.disabled = disabled;
-      
+
       if (disabled) {
         button.style.opacity = '0.5';
         button.style.cursor = 'not-allowed';
@@ -419,15 +455,15 @@ class ShareButtonsComponent {
         button.style.cursor = 'pointer';
       }
     });
-    
+
     // Update impact text
     const impactText = this.container.querySelector(`.${this.config.styles.impactText}`);
     if (impactText) {
-      impactText.textContent = disabled ? 
-        this.config.messages.loadingText : 
+      impactText.textContent = disabled ?
+        this.config.messages.loadingText :
         this.config.messages.impactText;
     }
-    
+
     // Bind/unbind events
     if (disabled) {
       this.unbindEvents();
@@ -465,19 +501,19 @@ class ShareButtonsComponent {
   destroy() {
     // Unbind events
     this.unbindEvents();
-    
+
     // Clear references
     this.buttons.clear();
-    
+
     // Remove from DOM
     const shareSection = this.container?.querySelector(`.${this.config.styles.container}`);
     if (shareSection) {
       shareSection.remove();
     }
-    
+
     // Update state
     stateManager.set('shareButtons.rendered', false);
-    
+
     // Emit destroyed event
     eventBus.emit(Events.SHARE_BUTTONS_DESTROYED, { containerId: this.containerId });
   }
@@ -514,9 +550,12 @@ export const ShareButtonsEvents = {
 Object.assign(Events, ShareButtonsEvents);
 
 // Export functions for backward compatibility
-export const addSocialShareButtons = (containerId, count, userComment, isDisabled = false) => {
+export const addSocialShareButtons = (containerId, count = null, userComment = null, isDisabled = false) => {
   const component = new ShareButtonsComponent(containerId);
+  
+  // If count is not provided (null), component will use cached data
   component.init(count, userComment, isDisabled);
+  
   return component;
 };
 
