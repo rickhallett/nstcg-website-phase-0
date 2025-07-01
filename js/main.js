@@ -1,23 +1,77 @@
 import imageUrlWebp from '../images/impact_non_sat_height.webp';
 import imageUrlPng from '../images/impact_non_sat_height_compressed.png';
 
-// The script is loaded as a module, which is deferred by default.
-// This means the DOM will be ready when this code executes.
-// Deliberately show loading screen for 3 seconds to build anticipation
-setTimeout(() => {
+// Function to load impact map on demand
+function loadImpactMap() {
   const mapContainer = document.getElementById('map-container');
-  if (mapContainer) {
-    mapContainer.innerHTML = `
-      <div class="map-image fade-in" id="traffic-impact-map">
-        <picture>
-          <source srcset="${imageUrlWebp}" type="image/webp">
-          <img src="${imageUrlPng}" alt="Map of North Swanage">
-        </picture>
-        <div class="impact-overlay"></div>
-      </div>
-    `;
+  if (mapContainer && !mapContainer.querySelector('.map-image')) {
+    // Show loading animation briefly
+    setTimeout(() => {
+      mapContainer.innerHTML = `
+        <div class="map-image fade-in" id="traffic-impact-map">
+          <picture>
+            <source srcset="${imageUrlWebp}" type="image/webp">
+            <img src="${imageUrlPng}" alt="Map of North Swanage">
+          </picture>
+          <div class="impact-overlay"></div>
+        </div>
+      `;
+    }, 500);
   }
-}, 3000); // 3 second deliberate delay for loading screen effect
+}
+
+// Impact map toggle functionality
+function initializeImpactMapToggle() {
+  const toggleBtn = document.getElementById('impact-toggle');
+  const mapContent = document.getElementById('impact-map-content');
+  const mapSection = document.getElementById('impact-map-section');
+  let mapLoaded = false;
+
+  if (toggleBtn && mapContent) {
+    toggleBtn.addEventListener('click', function () {
+      const isExpanded = this.getAttribute('aria-expanded') === 'true';
+
+      if (!isExpanded) {
+        // Expanding
+        this.setAttribute('aria-expanded', 'true');
+        this.querySelector('.toggle-text').textContent = 'Hide impact zone';
+        mapSection.classList.remove('minimized');
+        mapContent.style.display = 'block';
+
+        // Trigger reflow for animation
+        mapContent.offsetHeight;
+        mapContent.classList.add('expanded');
+
+        // Load map if not already loaded
+        if (!mapLoaded) {
+          loadImpactMap();
+          mapLoaded = true;
+        }
+      } else {
+        // Collapsing
+        this.setAttribute('aria-expanded', 'false');
+        this.querySelector('.toggle-text').textContent = 'Show impact zone';
+        mapContent.classList.remove('expanded');
+
+        // Wait for animation to complete
+        setTimeout(() => {
+          mapContent.style.display = 'none';
+          mapSection.classList.add('minimized');
+        }, 300);
+      }
+    });
+
+    // Start in minimized state
+    mapSection.classList.add('minimized');
+  }
+}
+
+// Initialize impact map toggle when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeImpactMapToggle);
+} else {
+  initializeImpactMapToggle();
+}
 
 // Countdown Timer for alert header
 function updateCountdown() {
@@ -35,7 +89,7 @@ function updateCountdown() {
   if (timeLeft < 0) {
     // Handle expired state
     countdownElements.forEach(el => {
-      el.innerHTML = '<span style="color: #ff6b6b; font-weight: bold;">Consultation Closed</span>';
+      el.innerHTML = '<span style="color: #ff6b6b; font-weight: bold; text-shadow: 0 0 10px #ff6b6b;">Survey Closed</span>';
     });
     return;
   }
@@ -106,8 +160,8 @@ const urlParams = new URLSearchParams(window.location.search);
 const activationEmail = urlParams.get('user_email');
 const bonusPoints = urlParams.get('bonus');
 
-debugLogger.info('URL parameters checked', { 
-  hasEmail: !!activationEmail, 
+debugLogger.info('URL parameters checked', {
+  hasEmail: !!activationEmail,
   hasBonus: !!bonusPoints,
   email: activationEmail,
   bonus: bonusPoints,
@@ -118,7 +172,7 @@ debugLogger.info('URL parameters checked', {
 if (activationEmail && bonusPoints) {
   console.log('Email activation detected:', activationEmail, 'with', bonusPoints, 'bonus points');
   debugLogger.info('Email activation detected', { email: activationEmail, bonusPoints });
-  
+
   // Wait for DOM and MicroModal to be ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
@@ -129,7 +183,7 @@ if (activationEmail && bonusPoints) {
     // DOM is ready, but wait for MicroModal
     setTimeout(() => handleEmailActivation(activationEmail, bonusPoints), 500);
   }
-  
+
   // Still start countdown timer
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', startCountdown);
@@ -282,7 +336,7 @@ document.getElementById('signupForm').addEventListener('submit', async function 
     if (formData.comment) {
       localStorage.setItem('nstcg_comment', formData.comment);
     }
-    
+
     // Fetch and sync referral code from server
     try {
       const referralCode = await window.ReferralUtils.getUserReferralCode();
@@ -824,7 +878,7 @@ function checkReferral() {
   if (referralCode) {
     // Add class to body for CSS styling
     document.body.classList.add('referred-visitor');
-    
+
     // Store referral information in session storage
     sessionStorage.setItem('referrer', referralCode);
     sessionStorage.setItem('referral_code', referralCode);
@@ -928,9 +982,8 @@ async function initializeRegistrationState() {
 
   if (isRegistered && userId) {
     // Transform UI for registered users
-    await transformSurveyButtonToShare();
     transformBottomFormToShare();
-    showModalButtonNotification();
+    // Survey button transformation removed - survey is closed
   }
 }
 
@@ -1012,7 +1065,7 @@ function transformBottomFormToShare() {
         font-size: 18px;
       ">
         <i class="fas fa-check-circle" style="margin-right: 10px;"></i>
-        ✓ You've already registered - now help spread the word!
+          You've already registered - now help spread the word!
       </div>
       <div id="bottom-share-container"></div>
     `;
@@ -1217,12 +1270,12 @@ async function initializeDOMContent() {
         if (newForm) {
           newForm.addEventListener('submit', handleModalFormSubmit);
         }
-        
+
         // Check if user just completed registration and refresh page
         // This ensures UI updates to show social buttons instead of survey buttons
         const isRegistered = localStorage.getItem('nstcg_registered') === 'true';
         const modalHasSuccessContent = modalContent.innerHTML.includes('WELCOME TO THE MOVEMENT');
-        
+
         if (isRegistered && modalHasSuccessContent) {
           // Small delay to ensure smooth modal close animation
           setTimeout(() => {
@@ -1338,7 +1391,7 @@ async function handleModalFormSubmit(e) {
     if (formData.comment) {
       localStorage.setItem('nstcg_comment', formData.comment);
     }
-    
+
     // Fetch and sync referral code from server
     try {
       const referralCode = await window.ReferralUtils.getUserReferralCode();
@@ -1352,17 +1405,17 @@ async function handleModalFormSubmit(e) {
     modalContent.innerHTML = `
       <div class="modal-success-content" style="text-align: center; padding: 40px 20px;">
         <h3 style="color: #00ff00; font-size: 28px; margin-bottom: 20px; font-weight: 900;">
-          ✓ WELCOME TO THE MOVEMENT!
+          ✓ THANK YOU FOR SIGNING UP!
         </h3>
         <p style="font-size: 18px; color: #ccc; margin-bottom: 20px; line-height: 1.5;">
           You are now part of <span id="modal-count-display">0</span> Neighbours fighting for safer streets.<br>
           Together, we're making North Swanage better for everyone.
         </p>
         <p style="color: #00ff00; font-weight: bold; font-size: 16px;">
-          Check your email for community updates.
+          We'll keep you updated on our campaign progress and upcoming actions.
         </p>
         <div id="modal-share-container"></div>
-        <button id="modal-survey-continue-btn" class="modal-survey-continue-btn" style="
+        <button class="modal-close-btn" data-micromodal-close style="
           margin-top: 20px;
           background: #00ff00;
           color: #1a1a1a;
@@ -1375,73 +1428,8 @@ async function handleModalFormSubmit(e) {
           text-transform: uppercase;
           transition: all 0.3s ease;
         " onmouseover="this.style.background='#00cc00'" onmouseout="this.style.background='#00ff00'">
-          Continue to Official Survey →
+          Close
         </button>
-        
-        <div id="modal-survey-instructions" style="display: none; margin-top: 30px; background: #2a2a2a; padding: 25px; border-radius: 10px; border: 2px solid #00ff00;">
-          <h4 style="color: #00ff00; margin-bottom: 20px; font-size: 20px;">
-            Dorset Coast Forum Public Engagement Survey
-          </h4>
-          
-          <div style="background: #1a1a1a; padding: 20px; border-radius: 5px; margin-bottom: 20px;">
-            <p style="color: #ccc; margin-bottom: 15px;">
-              The Dorset Coast Forum has launched a public engagement survey to gather community input on the Shore Road improvements. The survey contains approximately 30 questions covering various aspects including green spaces, pedestrian safety, and traffic management.
-            </p>
-            
-            <div style="margin-left: 20px;">
-              <p style="color: #fff; margin-bottom: 10px;">
-                <strong style="color: #00ff00;">STEP 1:</strong> Answer Question 1 (Your connection to the area)
-              </p>
-              <p style="color: #fff; margin-bottom: 10px;">
-                <strong style="color: #00ff00;">STEP 2:</strong> Skip directly to Question 24 - Select <strong>"Don't Know"</strong>
-              </p>
-              <p style="color: #fff; margin-bottom: 10px;">
-                <strong style="color: #00ff00;">STEP 3:</strong> Go to Question 26 - Rank preferences in this order:
-              </p>
-              <div style="background: #333; padding: 15px; margin-left: 20px; border-left: 4px solid #00ff00;">
-                <p style="color: #00ff00; margin: 5px 0;"><strong>1st Choice:</strong> Two-way traffic on Shore Road with removal of parking</p>
-                <p style="color: #ccc; margin: 5px 0;"><strong>2nd Choice:</strong> Do nothing / keep Shore Road as it is</p>
-                <p style="color: #ccc; margin: 5px 0;"><strong>3rd Choice:</strong> A one-way system on Shore Road - would <span style="color: #FFA500;">redirect significant</span> traffic</p>
-                <p style="color: #ccc; margin: 5px 0;"><strong>4th Choice:</strong> Full closure of Shore Road - would redirect <span style="color: #ff0000;">traffic to residential streets</span></p>
-              </div>
-            </div>
-            
-            <p style="color: #00ff00; margin-top: 20px; font-weight: bold; text-align: center;">
-              ⏱️ This takes only 30 seconds vs 30 minutes for the full survey<br>
-              ✅ These 3 questions constitute a COMPLETE and VALID survey response
-            </p>
-          </div>
-          
-          <div style="background: #1a1a1a; padding: 15px; border-radius: 5px; margin-bottom: 10px;">
-            <label style="display: flex; align-items: center; cursor: pointer; color: #fff;">
-              <input type="checkbox" id="modal-understand-checkbox" style="margin-right: 10px; width: 20px; height: 20px; cursor: pointer;">
-              <span style="font-size: 16px;">I understand the survey structure and am ready to proceed</span>
-            </label>
-          </div>
-          
-          <div style="background: #1a1a1a; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
-            <label style="display: flex; align-items: center; cursor: pointer; color: #fff;">
-              <input type="checkbox" id="modal-valid-survey-checkbox" style="margin-right: 10px; width: 20px; height: 20px; cursor: pointer;">
-              <span style="font-size: 16px;">I understand that questions 1, 24, and 26 do constitute a valid and complete survey</span>
-            </label>
-          </div>
-          
-          <button id="modal-official-survey-btn" class="official-survey-btn" disabled style="
-            width: 100%;
-            background: #666;
-            color: #999;
-            padding: 20px;
-            border: none;
-            border-radius: 5px;
-            font-size: 20px;
-            font-weight: bold;
-            cursor: not-allowed;
-            text-transform: uppercase;
-            transition: all 0.3s ease;
-          ">
-            Open Official Survey →
-          </button>
-        </div>
       </div>
     `;
 
@@ -1452,63 +1440,7 @@ async function handleModalFormSubmit(e) {
       modalContent.style.opacity = '1';
     }, 100);
 
-    // Add event listeners for modal buttons and checkboxes
-    const surveyContBtn = document.getElementById('modal-survey-continue-btn');
-    if (surveyContBtn) {
-      surveyContBtn.addEventListener('click', function() {
-        if (typeof showModalSurveyInstructions === 'function') {
-          showModalSurveyInstructions();
-        } else if (typeof window.showModalSurveyInstructions === 'function') {
-          window.showModalSurveyInstructions();
-        } else {
-          console.error('showModalSurveyInstructions function not found');
-        }
-      });
-    }
-
-    // Add event listeners for checkboxes
-    const understandCheckbox = document.getElementById('modal-understand-checkbox');
-    const validCheckbox = document.getElementById('modal-valid-survey-checkbox');
-    
-    if (understandCheckbox) {
-      understandCheckbox.addEventListener('change', function() {
-        if (typeof toggleModalSurveyButton === 'function') {
-          toggleModalSurveyButton();
-        } else if (typeof window.toggleModalSurveyButton === 'function') {
-          window.toggleModalSurveyButton();
-        } else {
-          console.error('toggleModalSurveyButton function not found');
-        }
-      });
-    }
-    
-    if (validCheckbox) {
-      validCheckbox.addEventListener('change', function() {
-        if (typeof toggleModalSurveyButton === 'function') {
-          toggleModalSurveyButton();
-        } else if (typeof window.toggleModalSurveyButton === 'function') {
-          window.toggleModalSurveyButton();
-        } else {
-          console.error('toggleModalSurveyButton function not found');
-        }
-      });
-    }
-
-    // Add event listener for official survey button
-    const officialSurveyBtn = document.getElementById('modal-official-survey-btn');
-    if (officialSurveyBtn) {
-      officialSurveyBtn.addEventListener('click', function() {
-        if (!this.disabled) {
-          if (typeof openOfficialSurvey === 'function') {
-            openOfficialSurvey();
-          } else if (typeof window.openOfficialSurvey === 'function') {
-            window.openOfficialSurvey();
-          } else {
-            console.error('openOfficialSurvey function not found');
-          }
-        }
-      });
-    }
+    // Survey-related event listeners removed - survey is now closed
 
     // Store user comment for sharing
     const userComment = formData.comment;
@@ -1604,170 +1536,7 @@ async function handleModalFormSubmit(e) {
   }
 }
 
-// Handle continue to survey button in main confirmation
-function initializeSurveyButton() {
-  // Main form survey button
-  const continueSurveyBtn = document.getElementById('continue-survey-btn');
-  if (continueSurveyBtn) {
-    continueSurveyBtn.addEventListener('click', function () {
-      const confirmationDiv = document.getElementById('confirmation');
-      if (confirmationDiv) {
-        // Replace entire confirmation content with survey instructions
-        confirmationDiv.innerHTML = `
-          <div class="survey-instructions" style="margin: 0;">
-            <h4 style="color: #00ff00; margin-bottom: 20px; font-size: 20px; text-align: center;">
-              Dorset Council Consultation Survey
-            </h4>
-            
-            <div class="survey-instructions-content">
-              <p style="color: #ccc; margin-bottom: 15px;">
-                The Dorset Council consultation survey contains approximately 30 questions covering various aspects of the Shore Road project, including green spaces, pedestrian improvements, and traffic management.
-              </p>
-              
-              <p style="color: #ccc; margin-bottom: 15px;">
-                If your primary concern is traffic safety, the most relevant questions are:
-              </p>
-              
-              <div class="survey-step">
-                <span class="survey-step-number">Q1:</span>
-                <span>Your connection to the area</span>
-              </div>
-              
-              <div class="survey-step">
-                <span class="survey-step-number">Q24:</span>
-                <span>Preferred scheme option (non-traffic related)</span>
-              </div>
-              
-              <div class="survey-step">
-                <span class="survey-step-number">Q26:</span>
-                <div>
-                  <span>Preferred traffic solutions</span>
-                  <ul style="color: #999; font-size: 14px; margin-top: 10px; list-style-type: disc; margin-left: 20px;">
-                    <li>Two-way with parking removal - <span style="color: #00ff00;">maintains current traffic flow patterns</span></li>
-                    <li>Keep as is - no changes to current situation</li>
-                    <li>One-way system - would redirect traffic to alternative routes</li>
-                    <li>Full closure - <span style="color: red;">would redistribute all Shore Road traffic to other streets</span></li>
-                  </ul>
-                </div>
-              </div>
-              
-              <p style="color: #ccc; margin-top: 20px; text-align: center;">
-                Completion time varies from 30 seconds (traffic questions only) to 10-30 minutes (full survey).<br>
-                You're free to answer any or all questions according to your interests and available time.
-              </p>
-            </div>
-            
-            <div class="survey-checkbox-container">
-              <label style="display: flex; align-items: center; cursor: pointer; color: #fff;">
-                <input type="checkbox" id="understand-checkbox-new" style="margin-right: 10px; width: 20px; height: 20px; cursor: pointer;">
-                <span style="font-size: 16px;">I understand the survey structure and am ready to proceed</span>
-              </label>
-            </div>
-            
-            <button id="official-survey-btn-new" class="official-survey-btn" disabled style="
-              width: 100%;
-              background: #666;
-              color: #999;
-              padding: 20px;
-              border: none;
-              border-radius: 5px;
-              font-size: 20px;
-              font-weight: bold;
-              cursor: not-allowed;
-              text-transform: uppercase;
-              transition: all 0.3s ease;
-            ">
-              Open Official Survey →
-            </button>
-          </div>
-        `;
-
-        // Re-attach event listeners to the new elements
-        const newCheckbox = document.getElementById('understand-checkbox-new');
-        const newButton = document.getElementById('official-survey-btn-new');
-
-        if (newCheckbox && newButton) {
-          newCheckbox.addEventListener('change', function () {
-            if (this.checked) {
-              newButton.disabled = false;
-              newButton.style.background = '#00ff00';
-              newButton.style.color = '#1a1a1a';
-              newButton.style.cursor = 'pointer';
-              newButton.onmouseover = function () { this.style.background = '#00cc00'; };
-              newButton.onmouseout = function () { this.style.background = '#00ff00'; };
-            } else {
-              newButton.disabled = true;
-              newButton.style.background = '#666';
-              newButton.style.color = '#999';
-              newButton.style.cursor = 'not-allowed';
-              newButton.onmouseover = null;
-              newButton.onmouseout = null;
-            }
-          });
-
-          newButton.addEventListener('click', function () {
-            if (!this.disabled) {
-              window.open('https://www.dorsetcoasthaveyoursay.co.uk/swanage-green-seafront-stabilisation/surveys/swanage-green-seafront-survey-2025', '_blank');
-            }
-          });
-        }
-
-        confirmationDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    });
-  }
-}
-
-// Check if DOM is already loaded for survey button initialization
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initializeSurveyButton);
-} else {
-  initializeSurveyButton();
-}
-
-// Track survey tab opened
-let surveyTabOpened = false;
-let lastSurveyOpenTime = 0;
-
-// Track when survey is opened
-const originalWindowOpen = window.open;
-window.open = function(url, ...args) {
-  if (url && url.includes('dorsetcoasthaveyoursay.co.uk')) {
-    surveyTabOpened = true;
-    lastSurveyOpenTime = Date.now();
-  }
-  return originalWindowOpen.call(window, url, ...args);
-};
-
-// Listen for when user returns to the page
-document.addEventListener('visibilitychange', function() {
-  if (!document.hidden && surveyTabOpened) {
-    const isRegistered = localStorage.getItem('nstcg_registered') === 'true';
-    const timeSinceSurveyOpen = Date.now() - lastSurveyOpenTime;
-    
-    // Only refresh if:
-    // 1. User is registered
-    // 2. At least 5 seconds have passed since survey was opened
-    // 3. We haven't refreshed recently (prevent multiple refreshes)
-    if (isRegistered && timeSinceSurveyOpen > 5000) {
-      surveyTabOpened = false; // Reset flag to prevent multiple refreshes
-      
-      // Check if we need to update UI (form still visible means we should refresh)
-      const formSection = document.querySelector('.form-section');
-      const surveyButtons = document.querySelectorAll('.survey-btn, #continue-survey-btn');
-      const hasVisibleSurveyElements = Array.from(surveyButtons).some(btn => 
-        btn && getComputedStyle(btn).display !== 'none'
-      );
-      
-      if (formSection || hasVisibleSurveyElements) {
-        // Small delay to ensure smooth transition
-        setTimeout(() => {
-          location.reload();
-        }, 500);
-      }
-    }
-  }
-});
+// Survey functionality removed - survey is now closed
 
 // Generate simple user ID for referral tracking
 function generateUserId() {
@@ -2055,18 +1824,6 @@ function addSocialShareButtons(containerId, count, userComment, isDisabled = fal
               ${!isDisabled ? `onclick="shareOnWhatsApp(${count}, ${userComment ? `'${userComment.replace(/'/g, "\\'")}'` : 'null'})"` : ''}>
         <i class="fab fa-whatsapp"></i>
       </button>
-      <button class="share-btn-icon linkedin" 
-              title="Share on LinkedIn"
-              ${disabledAttr}
-              ${!isDisabled ? `onclick="shareOnLinkedIn(${count}, ${userComment ? `'${userComment.replace(/'/g, "\\'")}'` : 'null'})"` : ''}>
-        <i class="fab fa-linkedin-in"></i>
-      </button>
-      <button class="share-btn-icon instagram" 
-              title="Copy link for Instagram"
-              ${disabledAttr}
-              ${!isDisabled ? `onclick="shareOnInstagram()"` : ''}>
-        <i class="fab fa-instagram"></i>
-      </button>
       <button class="share-btn-icon email" 
               title="Share via Email"
               ${disabledAttr}
@@ -2082,43 +1839,43 @@ function addSocialShareButtons(containerId, count, userComment, isDisabled = fal
 async function handleEmailActivation(email, bonusPoints) {
   console.log('Handling email activation for:', email);
   debugLogger.info('handleEmailActivation called', { email, bonusPoints });
-  
+
   try {
     // Decode email
     const decodedEmail = decodeURIComponent(email);
     const points = parseInt(bonusPoints, 10);
-    
+
     // Validate bonus points
     if (isNaN(points) || points < 10 || points > 50) {
       console.error('Invalid bonus points:', bonusPoints);
       return;
     }
-    
+
     // Check if MicroModal is available
     if (typeof MicroModal === 'undefined') {
       console.error('MicroModal not loaded yet');
       setTimeout(() => handleEmailActivation(email, bonusPoints), 500);
       return;
     }
-    
+
     // Clean URL to remove parameters
     const cleanUrl = window.location.pathname;
     window.history.replaceState({}, document.title, cleanUrl);
-    
+
     // Show activation modal
     debugLogger.info('Showing activation modal');
     MicroModal.show('modal-activation');
-    
+
     // Update bonus points display
     const bonusDisplay = document.getElementById('activation-bonus-points');
     if (bonusDisplay) {
       bonusDisplay.textContent = points;
     }
-    
+
     // Store email for form submission
     window.activationEmail = decodedEmail;
     window.activationBonus = points;
-    
+
   } catch (error) {
     console.error('Error handling email activation:', error);
   }
@@ -2127,33 +1884,33 @@ async function handleEmailActivation(email, bonusPoints) {
 // Handle activation form submission
 async function handleActivationSubmit(event) {
   event.preventDefault();
-  
+
   const form = event.target;
   const submitBtn = form.querySelector('button[type="submit"]');
   const visitorType = form.querySelector('input[name="visitor_type"]:checked')?.value;
-  
+
   if (!visitorType) {
     alert('Please select whether you are a local resident or visitor');
     return;
   }
-  
+
   if (!window.activationEmail || !window.activationBonus) {
     console.error('Missing activation data');
     return;
   }
-  
+
   // Disable form
   submitBtn.disabled = true;
   submitBtn.textContent = 'Activating...';
-  
+
   // Show processing state
   const activationForm = document.getElementById('activation-form');
   const processingDiv = document.getElementById('activation-processing');
   const successDiv = document.getElementById('activation-success');
-  
+
   activationForm.style.display = 'none';
   processingDiv.style.display = 'block';
-  
+
   try {
     // Call activation API
     const response = await fetch('/api/activate-user', {
@@ -2167,14 +1924,14 @@ async function handleActivationSubmit(event) {
         bonusPoints: window.activationBonus
       })
     });
-    
+
     if (!response.ok) {
       const error = await response.json();
       throw new Error(error.error || 'Activation failed');
     }
-    
+
     const result = await response.json();
-    
+
     // Store user data in localStorage
     if (result.userData) {
       localStorage.setItem('nstcg_user_id', result.userData.user_id);
@@ -2184,41 +1941,41 @@ async function handleActivationSubmit(event) {
       localStorage.setItem('nstcg_first_name', result.userData.first_name || '');
       localStorage.setItem('nstcg_comment', result.userData.comment || '');
       localStorage.setItem('nstcg_visitor_type', result.userData.visitor_type);
-      
+
       // Show success state
       processingDiv.style.display = 'none';
       successDiv.style.display = 'block';
-      
+
       // Update success message with referral code
       const referralCodeDisplay = document.getElementById('activation-referral-code');
       if (referralCodeDisplay && result.userData.referral_code) {
         referralCodeDisplay.textContent = result.userData.referral_code;
       }
-      
+
       // Reload page after 3 seconds
       setTimeout(() => {
         window.location.reload();
       }, 3000);
     }
-    
+
   } catch (error) {
     console.error('Activation error:', error);
-    
+
     // Show error state
     processingDiv.style.display = 'none';
     activationForm.style.display = 'block';
-    
+
     // Re-enable form
     submitBtn.disabled = false;
     submitBtn.textContent = 'Activate & Claim Points';
-    
+
     // Show error message
     alert('Activation failed: ' + error.message + '\nPlease try again or contact support.');
   }
 }
 
-// Modal survey instructions functions
-function showModalSurveyInstructions() {
+// Modal survey instructions functions - REMOVED (survey closed)
+/* function showModalSurveyInstructions() {
   const modalContent = document.getElementById('modal-survey-content');
   if (modalContent) {
     // Replace entire modal content with just the instructions
@@ -2369,13 +2126,15 @@ function toggleModalSurveyButton() {
 
 function openOfficialSurvey() {
   window.open('https://www.dorsetcoasthaveyoursay.co.uk/swanage-green-seafront-stabilisation/surveys/swanage-green-seafront-survey-2025?ref=nstcg', '_blank');
-}
+} */
+
 // Expose functions globally for inline event handlers and external usage
 window.updateCountdown = updateCountdown;
 window.generateReferralCode = generateReferralCode;
-window.showModalSurveyInstructions = showModalSurveyInstructions;
-window.toggleModalSurveyButton = toggleModalSurveyButton;
-window.openOfficialSurvey = openOfficialSurvey;
+// Survey functions removed - survey is closed
+// window.showModalSurveyInstructions = showModalSurveyInstructions;
+// window.toggleModalSurveyButton = toggleModalSurveyButton;
+// window.openOfficialSurvey = openOfficialSurvey;
 window.addSocialShareButtons = addSocialShareButtons;
 window.showToast = showToast;
 
