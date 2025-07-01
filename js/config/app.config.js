@@ -8,7 +8,7 @@ export const AppConfig = {
   countdown: {
     deadline: '2025-06-29T23:59:59+01:00', // BST (British Summer Time)
     updateInterval: 1000, // milliseconds
-    expiredMessage: 'Consultation Closed'
+    expiredMessage: 'Survey Closed'
   },
 
   // Form configuration
