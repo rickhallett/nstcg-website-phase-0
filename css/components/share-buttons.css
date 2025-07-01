@@ -16,6 +16,7 @@
   margin-bottom: 15px;
   text-transform: uppercase;
   letter-spacing: 1px;
+  text-align: center;
 }
 
 .social-share-buttons {
@@ -84,6 +85,7 @@
   font-size: 14px;
   margin-top: 15px;
   font-style: italic;
+  text-align: center;
 }
 
 /* Icon-based share buttons */
@@ -155,19 +157,19 @@
   .social-share-buttons {
     flex-direction: column;
   }
-  
+
   .share-btn {
     width: 100%;
     justify-content: center;
   }
-  
+
   /* Icon share buttons on mobile */
   .share-btn-icon {
     width: 45px;
     height: 45px;
     font-size: 18px;
   }
-  
+
   .social-share-buttons-icons {
     gap: 10px;
   }
