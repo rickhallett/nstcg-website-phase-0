@@ -651,77 +651,83 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
+
   /* Fix mobile scrolling issues */
   .share-page {
     min-height: auto;
-    padding-top: 80px; /* Account for fixed nav */
+    padding-top: 80px;
+    /* Account for fixed nav */
     -webkit-overflow-scrolling: touch;
     overflow-y: visible;
-    scroll-behavior: auto; /* Disable smooth scrolling on mobile */
+    scroll-behavior: auto;
+    /* Disable smooth scrolling on mobile */
   }
-  
+
   /* Prevent input from causing scroll jumps */
   #referral-link {
-    font-size: 16px; /* Prevents iOS zoom on focus */
+    font-size: 16px;
+    /* Prevents iOS zoom on focus */
     -webkit-user-select: text;
     user-select: text;
   }
-  
+
   /* Prevent scroll on focus */
   #referral-link:focus {
     outline: none;
     border-color: var(--color-primary);
   }
-  
+
   /* Fix link box positioning */
   .link-box {
     position: relative;
     overflow: hidden;
   }
-  
+
   /* Fix notification positioning on mobile */
   .notification {
-    top: 80px !important; /* Below navigation */
+    top: 80px !important;
+    /* Below navigation */
   }
-  
+
   .share-hero h1,
   .leaderboard-hero h1 {
     font-size: 2rem;
   }
-  
+
   .user-stats {
-    grid-template-columns: repeat(3, 1fr);
+    /* grid-template-columns: repeat(3, 1fr); */
+    max-width: 50%;
   }
-  
+
   .social-buttons {
     grid-template-columns: 1fr 1fr;
   }
-  
+
   .tips-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .podium {
     gap: 0.5rem;
   }
-  
+
   .podium-name {
     font-size: 0.9rem;
   }
-  
+
   .podium-points {
     font-size: 1.2rem;
   }
-  
+
   .leaderboard-table {
     font-size: 0.9rem;
   }
-  
+
   .leaderboard-table th,
   .leaderboard-table td {
     padding: 0.75rem 0.5rem;
   }
-  
+
   .filter-btn {
     padding: 0.5rem 1rem;
     font-size: 0.9rem;
@@ -732,19 +738,19 @@
   .share-box {
     padding: 1.5rem 1rem;
   }
-  
+
   .link-input-group {
     flex-direction: column;
   }
-  
+
   .copy-btn {
     width: 100%;
   }
-  
+
   .user-stat-row {
     gap: 1rem;
   }
-  
+
   .stat-value {
     font-size: 1.5rem;
   }
@@ -752,17 +758,18 @@
 
 /* Mobile-specific fixes for scrolling issues */
 @media (max-width: 768px) {
+
   /* Prevent scrolling issues on mobile */
   .mobile-device .leaderboard-page {
     /* Disable momentum scrolling that can cause jumps */
     -webkit-overflow-scrolling: auto;
   }
-  
+
   .mobile-device .leaderboard-table-container {
     /* Contain layout to prevent reflows */
     contain: layout style;
   }
-  
+
   .mobile-device .stat-value,
   .mobile-device .stat-number,
   .mobile-device #update-time {
@@ -770,7 +777,7 @@
     will-change: contents;
     min-height: 1.5em;
   }
-  
+
   .mobile-device .podium-points span,
   .mobile-device .podium-referrals span {
     /* Reserve space for numbers */
@@ -778,27 +785,27 @@
     min-width: 3ch;
     text-align: center;
   }
-  
+
   /* Navigation is now fixed via CSS, no additional fixes needed */
-  
+
   /* Disable hover effects that might trigger on touch */
   .mobile-device .filter-btn:hover,
   .mobile-device .share-cta-btn:hover,
   .mobile-device tr:hover {
     transform: none !important;
   }
-  
+
   /* Prevent touch scrolling issues */
   .mobile-device {
     touch-action: pan-y;
   }
-  
+
   .mobile-device .leaderboard-table-container {
     /* Prevent horizontal scrolling */
     overflow-x: hidden;
     touch-action: pan-y;
   }
-  
+
   /* Ensure no elements can steal focus and cause jumps */
   .mobile-device .filter-btn,
   .mobile-device .share-cta-btn {
@@ -807,7 +814,7 @@
     -webkit-user-select: none;
     user-select: none;
   }
-  
+
   /* Prevent iOS rubber band scrolling */
   .mobile-device .leaderboard-page {
     position: relative;
