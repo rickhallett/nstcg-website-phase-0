@@ -37,20 +37,22 @@ document.addEventListener('DOMContentLoaded', async function() {
     return;
   }
   
-  // Load user stats
-  await loadUserStats();
-  
-  // Generate referral link
+  // Generate referral link immediately with cached data
   generateReferralLink();
   
   // Setup event listeners
   setupEventListeners();
   
-  // Initialize social share buttons
+  // Initialize social share buttons immediately
   initializeSocialButtons();
   
   // Check for share completion
   checkShareCompletion();
+  
+  // Load user stats asynchronously (non-blocking)
+  loadUserStats().catch(error => {
+    console.error('Error loading user stats:', error);
+  });
 });
 
 /**
@@ -137,25 +139,36 @@ function generateReferralLink() {
  * Initialize social share buttons
  */
 async function initializeSocialButtons() {
+  // Get user comment from localStorage
+  const userComment = localStorage.getItem('nstcg_comment') || '';
+  
+  // Get cached count immediately
+  const cachedCount = localStorage.getItem('nstcg_cached_count');
+  const initialCount = cachedCount ? parseInt(cachedCount, 10) : 0;
+  
+  // Add social share buttons immediately with cached data
+  if (window.addSocialShareButtons) {
+    window.addSocialShareButtons('share-social-buttons', initialCount, userComment, false);
+  }
+  
+  // Fetch fresh count in background and update if different
   try {
-    // Get participant count
     const response = await fetch('/api/get-count');
     const data = await response.json();
-    const count = data.count || 0;
+    const freshCount = data.count || 0;
     
-    // Get user comment from localStorage
-    const userComment = localStorage.getItem('nstcg_comment') || '';
+    // Update cache
+    localStorage.setItem('nstcg_cached_count', freshCount.toString());
     
-    // Add social share buttons using the common function
-    if (window.addSocialShareButtons) {
-      window.addSocialShareButtons('share-social-buttons', count, userComment, false);
+    // Only re-render if count changed significantly
+    if (Math.abs(freshCount - initialCount) > 0) {
+      if (window.addSocialShareButtons) {
+        window.addSocialShareButtons('share-social-buttons', freshCount, userComment, false);
+      }
     }
   } catch (error) {
-    console.error('Error initializing social buttons:', error);
-    // Still add buttons even if count fetch fails
-    if (window.addSocialShareButtons) {
-      window.addSocialShareButtons('share-social-buttons', 0, '', false);
-    }
+    console.error('Error fetching fresh count:', error);
+    // Buttons already displayed with cached data, so no action needed
   }
 }
 
