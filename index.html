@@ -89,35 +89,43 @@
           RIGHT NOW
         </h1>
         <p style="margin-top: 20px;">
-          The North Swanage Traffic Safety Consultation is happening NOW,
-          and your community is speaking up. Don't let others decide your future.
+          The North Swanage Traffic Safety Concern Group remains on its campaign for fairer traffic flow and parking
+          options.
         </p>
-      </div>
-
-      <div class="impact-map">
-        <h2>Shore Road Impact Zone</h2>
-        <div id="map-container">
-          <div class="map-placeholder">
-            <div class="map-overlay">
-              <p style="font-size: 24px; font-weight: bold; color: #3498db;">
-                Traffic Impact Map Loading...
-              </p>
-              <p style="margin-top: 10px; color: #ccc;">
-                See how the Nassau initiative will affect YOUR street
-              </p>
-            </div>
-          </div>
-        </div>
-        <p style="margin-top: 20px; font-size: 18px; color: #ff6b6b; font-weight: bold;">
-          ⚠️ Properties within 1km of Shore Road face immediate traffic changes
-        </p>
-      </div>
-
-      <div class="survey-button-section">
-        <button class="survey-btn" onclick="MicroModal.show('modal-survey');">
-          TAKE SURVEY NOW!
+        <p style="margin-top: 10px;">Register to get involved, stay updated, and have your voice heard.</p>
+        <p style="margin-top: 10px; font-weight: bold; color: #ff6b6b;">Don't let others decide your future.</p>
+        <button class="register-btn survey-btn" onclick="MicroModal.show('modal-survey');" style="margin-top: 20px;">
+          Register Now
         </button>
       </div>
+
+      <div class="impact-map" id="impact-map-section">
+        <div class="impact-map-header">
+          <h2>Shore Road Impact Zone</h2>
+          <button class="impact-toggle-btn" id="impact-toggle" aria-expanded="false">
+            <span class="toggle-text">Show impact zone</span>
+            <i class="fas fa-chevron-down toggle-icon"></i>
+          </button>
+        </div>
+        <div class="impact-map-content" id="impact-map-content" style="display: none;">
+          <div id="map-container">
+            <div class="map-placeholder">
+              <div class="map-overlay">
+                <p style="font-size: 24px; font-weight: bold; color: #3498db;">
+                  Traffic Impact Map Loading...
+                </p>
+                <p style="margin-top: 10px; color: #ccc;">
+                  See how the traffic changes will affect YOUR street
+                </p>
+              </div>
+            </div>
+          </div>
+          <p style="margin-top: 20px; font-size: 14px; color: #ff6b6b; font-weight: bold;">
+            ⚠️ Properties within 1km of Shore Road face immediate traffic changes
+          </p>
+        </div>
+      </div>
+
 
       <div class="community-counter">
         <div class="counter-number">0</div>
@@ -249,29 +257,14 @@
       </div>
 
       <div id="confirmation" class="confirmation">
-        <h3>✓ WELCOME TO THE MOVEMENT!</h3>
+        <h3>✓ THANK YOU FOR SIGNING UP!</h3>
         <p style="font-size: 18px; margin-bottom: 20px;">
           You are now part of <strong><span id="confirmation-count">---</span> Neighbours</strong> fighting for safer
           streets.
         </p>
         <p style="color: #00ff00; font-weight: bold;">
-          Check your email for next steps and community updates.
+          We'll keep you updated on our campaign progress and upcoming actions.
         </p>
-        <button id="continue-survey-btn" class="survey-continue-btn" style="
-        margin-top: 20px;
-        background: #00ff00;
-        color: #1a1a1a;
-        padding: 15px 30px;
-        border: none;
-        border-radius: 5px;
-        font-size: 18px;
-        font-weight: bold;
-        cursor: pointer;
-        text-transform: uppercase;
-        transition: all 0.3s ease;
-      " onmouseover="this.style.background='#00cc00'" onmouseout="this.style.background='#00ff00'">
-          Continue to Official Survey →
-        </button>
       </div>
 
       <footer class="footer">
@@ -293,7 +286,7 @@
           aria-labelledby="modal-survey-title">
           <header class="modal__header">
             <h2 class="modal__title" id="modal-survey-title">
-              Community Safety Survey
+              Community Registration
             </h2>
             <button class="modal__close" aria-label="Close modal" data-micromodal-close>×</button>
           </header>

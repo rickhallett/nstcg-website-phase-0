@@ -80,8 +80,8 @@
   background: var(--color-primary);
   color: var(--color-white);
   border: none;
-  padding: 20px 40px;
-  font-size: 20px;
+  padding: 15px 30px;
+  font-size: 16px;
   font-weight: var(--font-weight-black);
   text-transform: uppercase;
   letter-spacing: 2px;
@@ -90,6 +90,7 @@
   transition: all var(--transition-base);
   position: relative;
   z-index: var(--z-base);
+  box-shadow: 0 5px 20px rgba(52, 152, 219, 0.5);
 }
 
 .survey-btn:hover {

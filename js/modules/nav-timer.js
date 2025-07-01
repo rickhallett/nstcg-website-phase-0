@@ -17,11 +17,11 @@ let isRunning = false;
 function calculateTimeRemaining() {
   const now = new Date().getTime();
   const timeLeft = DEADLINE - now;
-  
+
   if (timeLeft < 0) {
     return null; // Timer expired
   }
-  
+
   return {
     days: Math.floor(timeLeft / (1000 * 60 * 60 * 24)),
     hours: Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
@@ -66,40 +66,40 @@ function updateTimer(options = {}) {
     coloredTimer = false,
     timerBlink = false
   } = options;
-  
+
   const timeRemaining = calculateTimeRemaining();
-  
+
   if (!timeRemaining) {
     // Handle expired state
     const containers = document.querySelectorAll(containerSelector);
     containers.forEach(container => {
-      container.innerHTML = '<span class="timer-expired">Consultation Closed</span>';
+      container.innerHTML = '<span class="timer-expired">Survey Closed</span>';
     });
     stopTimer();
     return;
   }
-  
+
   // Update time values
   const daysEl = document.querySelector(daysSelector);
   const hoursEl = document.querySelector(hoursSelector);
   const minutesEl = document.querySelector(minutesSelector);
   const secondsEl = document.querySelector(secondsSelector);
-  
+
   if (daysEl) daysEl.textContent = timeRemaining.days.toString().padStart(2, '0');
   if (hoursEl) hoursEl.textContent = timeRemaining.hours.toString().padStart(2, '0');
   if (minutesEl) minutesEl.textContent = timeRemaining.minutes.toString().padStart(2, '0');
   if (secondsEl) secondsEl.textContent = timeRemaining.seconds.toString().padStart(2, '0');
-  
+
   // Apply color and blink features
   const container = document.querySelector(containerSelector);
   if (container) {
     // Remove all color classes
     container.classList.remove('timer-yellow', 'timer-amber', 'timer-orange', 'timer-red', 'timer-blink');
-    
+
     if (coloredTimer) {
       const colorClass = getTimerColor(timeRemaining.totalHours);
       container.classList.add(colorClass);
-      
+
       if (timerBlink && shouldBlink(timeRemaining.totalHours)) {
         container.classList.add('timer-blink');
       }
@@ -113,10 +113,10 @@ function updateTimer(options = {}) {
  */
 export function startTimer(options = {}) {
   if (isRunning) return;
-  
+
   // Initial update
   updateTimer(options);
-  
+
   // Update every second
   timerInterval = setInterval(() => updateTimer(options), 1000);
   isRunning = true;
