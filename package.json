@@ -23,20 +23,26 @@
     "test:coverage": "NODE_ENV=test jest --coverage",
     "setup:notion": "ts-node scripts/setupNotion.ts",
     "migrate:db": "node scripts/migrate-postgres-users.js",
-    "generate:signups": "ts-node -e \"require('./src/handlers/generateSignups').generateSignups().then(console.log)\""
+    "generate:signups": "ts-node -e \"require('./src/handlers/generateSignups').generateSignups().then(console.log)\"",
+    "generate:local": "node scripts/signup-runner.js",
+    "generate:dry-run": "node scripts/signup-runner.js --dry-run --verbose",
+    "generate:prod": "node scripts/signup-runner.js --api-url https://nstcg.org/api/submit-form"
   },
   "devDependencies": {
     "@faker-js/faker": "^9.9.0",
     "@playwright/test": "^1.40.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.0.10",
+    "@types/node-fetch": "^2.6.12",
     "@types/pg": "^8.15.4",
+    "@types/yargs": "^17.0.33",
     "@vercel/node": "^5.3.2",
     "@vitejs/plugin-legacy": "^5.4.2",
     "concurrently": "^9.2.0",
     "dotenv": "^17.0.1",
     "faker": "^6.6.6",
     "jest": "^30.0.3",
+    "node-fetch": "^3.3.2",
     "open": "^10.0.3",
     "openai": "^5.8.2",
     "pg": "^8.16.3",
@@ -44,7 +50,8 @@
     "ts-jest": "^29.4.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
-    "vite": "^5.4.10"
+    "vite": "^5.4.10",
+    "yargs": "^18.0.0"
   },
   "engines": {
     "node": "22.x"
