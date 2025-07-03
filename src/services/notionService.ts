@@ -1,4 +1,4 @@
-import { Config, NotionPage, NotionBlock } from '../types';
+import { Config, NotionPage, NotionBlock } from '../types/index.js';
 
 export class NotionService {
   private readonly apiVersion = '2022-06-28';
@@ -8,7 +8,7 @@ export class NotionService {
     private readonly token: string,
     private readonly databaseId: string,
     private readonly promptPageId: string
-  ) {}
+  ) { }
 
   private async makeRequest(endpoint: string, method: string = 'GET', body?: unknown): Promise<Response> {
     const headers: Record<string, string> = {
@@ -48,13 +48,9 @@ export class NotionService {
 
       const config: Config = {
         enabled: props.enabled?.checkbox || false,
-        startTime: props.startTime?.rich_text?.[0]?.text?.content || '00:00',
-        endTime: props.endTime?.rich_text?.[0]?.text?.content || '23:59',
-        minSignups: props.minSignups?.number || 5,
-        maxSignups: props.maxSignups?.number || 20,
-        openAIPercentage: props.openAIPercentage?.number || 0.3,
-        avgDelay: props.avgDelay?.number || 120,
-        jitter: props.jitter?.number || 30,
+        openAIPercentage: props.openAIPercentage?.number ?? 0.3,
+        minSignups: props.minSignups?.number ?? 10,
+        maxSignups: props.maxSignups?.number ?? 40,
       };
 
       // Validate configuration
@@ -85,7 +81,7 @@ export class NotionService {
           const text = block.paragraph.rich_text
             .map((rt: any) => rt.text?.content || '')
             .join('');
-          
+
           if (text.trim()) {
             textBlocks.push(text);
           }
@@ -99,25 +95,18 @@ export class NotionService {
   }
 
   private validateConfig(config: Config): void {
-    // Validate signup bounds
-    if (config.maxSignups < config.minSignups) {
-      throw new Error('Invalid configuration: maxSignups must be greater than minSignups');
-    }
-
     // Validate percentage bounds
     if (config.openAIPercentage < 0 || config.openAIPercentage > 1) {
       throw new Error('Invalid configuration: openAIPercentage must be between 0 and 1');
     }
 
-    // Validate positive numbers
-    if (config.minSignups < 0 || config.maxSignups < 0 || config.avgDelay < 0 || config.jitter < 0) {
-      throw new Error('Invalid configuration: numeric values must be non-negative');
+    // Validate daily signup bounds
+    if (config.maxSignups < config.minSignups) {
+      throw new Error('Invalid configuration: maxSignupsPerDay must be greater than or equal to minSignupsPerDay');
     }
 
-    // Validate time format (HH:MM)
-    const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
-    if (!timeRegex.test(config.startTime) || !timeRegex.test(config.endTime)) {
-      throw new Error('Invalid configuration: times must be in HH:MM format');
+    if (config.minSignups < 0) {
+      throw new Error('Invalid configuration: minSignupsPerDay must be non-negative');
     }
   }
 }

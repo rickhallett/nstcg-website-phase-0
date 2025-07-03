@@ -57,7 +57,7 @@
   "crons": [
     {
       "path": "/api/generate-signups",
-      "schedule": "0 0 * * *"
+      "schedule": "* * * * *"
     }
   ],
   "headers": [

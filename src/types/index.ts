@@ -1,12 +1,8 @@
 export interface Config {
   enabled: boolean;
-  startTime: string; // HH:MM format
-  endTime: string; // HH:MM format
+  openAIPercentage: number; // 0-1, determines chance of AI-generated comment
   minSignups: number;
   maxSignups: number;
-  openAIPercentage: number; // 0-1
-  avgDelay: number; // seconds
-  jitter: number; // seconds
 }
 
 export interface GeneratedUser {

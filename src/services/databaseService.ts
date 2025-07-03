@@ -1,5 +1,5 @@
 import { Pool, PoolClient } from 'pg';
-import { GeneratedUser, DatabaseRecord } from '../types';
+import { GeneratedUser, DatabaseRecord } from '../types/index.js';
 import { v4 as uuidv4 } from 'uuid';
 
 interface GenerationStats {
@@ -112,10 +112,10 @@ export class DatabaseService {
     try {
       const result = await this.pool.query(query, []);
       const row = result.rows[0];
-      
+
       const totalGenerated = parseInt(row.total_generated, 10);
       const totalWithComments = parseInt(row.total_with_comments, 10);
-      
+
       return {
         totalGenerated,
         totalWithComments,
@@ -142,7 +142,7 @@ export class DatabaseService {
 
     try {
       const result = await this.pool.query(query, [limit]);
-      
+
       return result.rows.map(row => ({
         batchId: row.generation_batch,
         timestamp: new Date(row.batch_time),

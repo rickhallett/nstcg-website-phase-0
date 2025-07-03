@@ -1,50 +1,79 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { generateSignups } from '../src/handlers/generateSignups';
+import { NotionService } from '../src/services/notionService.js';
+import { UserGenerator } from '../src/services/userGenerator.js';
+import { DatabaseService } from '../src/services/databaseService.js';
 
-export default async function handler(
-  req: VercelRequest,
-  res: VercelResponse
-) {
-  // Only allow POST requests or cron jobs
-  if (req.method !== 'POST' && req.method !== 'GET') {
-    return res.status(405).json({ error: 'Method not allowed' });
+// Main Vercel serverless function handler
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  // --- Security Check ---
+  if (req.headers.authorization !== `Bearer ${process.env.CRON_SECRET}`) {
+    return res.status(401).json({ error: 'Unauthorized' });
   }
 
-  // Check for cron job authentication or API key
-  const authHeader = req.headers.authorization;
-  const isCronJob = req.headers['x-vercel-cron'] === '1';
+  // --- Environment Variable Validation ---
+  const requiredEnvVars = [
+    'NOTION_TOKEN',
+    'NOTION_DATABASE_ID_USER_GEN',
+    'NOTION_USER_GEN_DATABASE_ID',
+    'OPENAI_API_KEY',
+    'POSTGRES_URL',
+  ];
 
-  if (!isCronJob) {
-    // For manual triggers, require API key
-    const apiKey = process.env.NOTION_TOKEN;
-    if (!apiKey || authHeader !== `Bearer ${apiKey}`) {
-      return res.status(401).json({ error: 'Unauthorized' });
+  for (const envVar of requiredEnvVars) {
+    if (!process.env[envVar]) {
+      console.error(`Missing required environment variable: ${envVar}`);
+      return res.status(500).json({ error: `Server configuration error: missing ${envVar}` });
     }
   }
+
+  const notionService = new NotionService(
+    process.env.NOTION_TOKEN!,
+    process.env.NOTION_DATABASE_ID_USER_GEN!,
+    process.env.NOTION_USER_GEN_DATABASE_ID!
+  );
+
+  const databaseService = new DatabaseService(process.env.POSTGRES_URL!);
 
   try {
-    console.log('Starting user generation...');
-
-    // Run generation with throttling enabled
-    const result = await generateSignups(true);
-
-    if (result.success) {
-      console.log(`Successfully generated ${result.generated} users (${result.withComments} with comments)`);
-      console.log(`Batch ID: ${result.batchId}`);
-
-      if (result.todayStats) {
-        console.log(`Today's stats: ${result.todayStats.totalGenerated} total, ${result.todayStats.totalWithComments} with comments`);
-      }
-    } else {
-      console.log(`Generation failed: ${result.message || result.error}`);
+    // Check if generation is globally enabled in Notion (simple boolean check)
+    const config = await notionService.getConfig();
+    if (!config?.enabled) {
+      return res.status(200).json({ message: 'Generation is disabled in Notion. Skipping run.' });
     }
 
-    return res.status(result.success ? 200 : 400).json(result);
-  } catch (error) {
-    console.error('Unexpected error in generate-signups:', error);
-    return res.status(500).json({
-      success: false,
-      error: 'Internal server error',
+    // Fetch the prompt from Notion
+    const prompt = await notionService.getPrompt();
+
+    // Initialize the generator
+    const userGenerator = new UserGenerator(prompt, process.env.OPENAI_API_KEY!);
+
+    // The generator itself decides if it's time to create users
+    const generationResult = await userGenerator.generateUsersForCurrentTime(
+      config.openAIPercentage
+    );
+
+    if (generationResult.users.length === 0) {
+      // This is the normal, expected outcome for most minutes.
+      return res.status(200).json({ message: 'No users generated this minute.' });
+    }
+
+    // If users were generated, save them to the database
+    await databaseService.ensureTable();
+    const batchId = await databaseService.saveUsers(generationResult.users);
+
+    console.log(`Successfully generated and saved ${generationResult.users.length} user(s). Batch ID: ${batchId}`);
+    return res.status(200).json({
+      success: true,
+      generated: generationResult.users.length,
+      batchId,
     });
+
+  } catch (error) {
+    console.error('Error during signup generation:', error);
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+    return res.status(500).json({ error: 'Failed to generate signups.', details: errorMessage });
+  } finally {
+    // Ensure the database connection is always closed
+    await databaseService.close();
   }
 }

@@ -1,12 +1,28 @@
 import { faker } from '@faker-js/faker/locale/en_GB';
 import OpenAI from 'openai';
-import { Config, GeneratedUser, UserGenerationResult } from '../types';
+import { GeneratedUser, UserGenerationResult } from '../types/index.js';
+
+// --- New Time-Based Probability Logic ---
+
+// Peak hours are 8x more likely to have a signup.
+const PEAK_PROBABILITY_MULTIPLIER = 8;
+
+// Define peak traffic hours (UTC)
+const PEAK_HOURS = [
+  7, 8,   // 07:00 - 08:59 (Morning)
+  11, 12, // 11:00 - 12:59 (Lunch)
+  16, 17, // 16:00 - 17:59 (After Work)
+  20, 21  // 20:00 - 21:59 (Evening)
+];
+
+// Base probability calculated to average ~25 signups/day
+// given the peak multiplier and hours.
+const BASE_PROBABILITY_PER_MINUTE = 0.0035; // 0.35% chance
 
 export class UserGenerator {
   private openai: OpenAI | null = null;
 
   constructor(
-    private readonly config: Config,
     private readonly prompt: string,
     private readonly openaiKey?: string
   ) {
@@ -15,44 +31,63 @@ export class UserGenerator {
     }
   }
 
-  async generateUsers(): Promise<UserGenerationResult> {
-    const userCount = faker.number.int({
-      min: this.config.minSignups,
-      max: this.config.maxSignups,
-    });
+  /**
+   * Probabilistically generates 0, 1, or 2 users based on the current time.
+   */
+  async generateUsersForCurrentTime(
+    commentPercentage: number
+  ): Promise<UserGenerationResult> {
+    const currentHour = new Date().getUTCHours();
+    const isPeakTime = PEAK_HOURS.includes(currentHour);
 
+    const probability = isPeakTime
+      ? BASE_PROBABILITY_PER_MINUTE * PEAK_PROBABILITY_MULTIPLIER
+      : BASE_PROBABILITY_PER_MINUTE;
+
+    // Decide if we should generate anyone this minute
+    if (Math.random() > probability) {
+      return { users: [], withComments: 0, withoutComments: 0 }; // Most of the time, do nothing
+    }
+
+    // If we do generate, decide on 1 or 2 users (80% chance for 1)
+    const numberOfUsersToGenerate = Math.random() < 0.8 ? 1 : 2;
     const users: GeneratedUser[] = [];
     let withComments = 0;
-    let withoutComments = 0;
 
-    for (let i = 0; i < userCount; i++) {
-      const shouldHaveComment = Math.random() < this.config.openAIPercentage;
-      let comment: string | undefined;
-
-      if (shouldHaveComment && this.openai) {
-        try {
-          comment = await this.generateComment();
-          withComments++;
-        } catch (error) {
-          console.error('Failed to generate comment:', error);
-          withoutComments++;
-        }
-      } else {
-        withoutComments++;
-      }
-
-      const user = this.generateUser(comment);
+    for (let i = 0; i < numberOfUsersToGenerate; i++) {
+      // Hardcoding 30% chance for a comment for simplicity
+      const user = await this.generateNewUserWithOptionalComment(commentPercentage);
       users.push(user);
+      if (user.comment) {
+        withComments++;
+      }
     }
 
     return {
       users,
       withComments,
-      withoutComments,
+      withoutComments: users.length - withComments,
     };
   }
 
-  private generateUser(comment?: string): GeneratedUser {
+  private async generateNewUserWithOptionalComment(
+    commentPercentage: number
+  ): Promise<GeneratedUser> {
+    const shouldHaveComment = Math.random() < commentPercentage;
+    let comment: string | undefined;
+
+    if (shouldHaveComment && this.openai) {
+      try {
+        comment = await this.generateComment();
+      } catch (error) {
+        console.error('Failed to generate comment:', error);
+        // Proceed without a comment if generation fails
+      }
+    }
+    return this.generateSingleUser(comment);
+  }
+
+  private generateSingleUser(comment?: string): GeneratedUser {
     const firstName = faker.person.firstName();
     const lastName = faker.person.lastName();
     const name = `${firstName} ${lastName}`;
@@ -66,6 +101,10 @@ export class UserGenerator {
       'sky.com',
       'virgin.net',
       'talktalk.net',
+      'yahoo.co.uk',
+      'aol.co.uk',
+      'live.co.uk',
+      'live.com',
     ];
 
     const emailProvider = faker.helpers.arrayElement(emailProviders);
@@ -133,41 +172,5 @@ export class UserGenerator {
       console.error('OpenAI API error:', error);
       throw error;
     }
-  }
-
-  isWithinTimeWindow(): boolean {
-    const now = new Date();
-    const currentTime = now.toLocaleTimeString('en-GB', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false,
-    });
-
-    const [startHour, startMinute] = this.config.startTime.split(':').map(Number);
-    const [endHour, endMinute] = this.config.endTime.split(':').map(Number);
-    const [currentHour, currentMinute] = currentTime.split(':').map(Number);
-
-    const startMinutes = startHour * 60 + startMinute;
-    const endMinutes = endHour * 60 + endMinute;
-    const currentMinutes = currentHour * 60 + currentMinute;
-
-    // Handle overnight windows (e.g., 22:00 to 06:00)
-    if (startMinutes > endMinutes) {
-      return currentMinutes >= startMinutes || currentMinutes <= endMinutes;
-    }
-
-    return currentMinutes >= startMinutes && currentMinutes <= endMinutes;
-  }
-
-  calculateDelay(): number {
-    const baseDelay = this.config.avgDelay;
-    const jitter = this.config.jitter;
-
-    // Random delay between (avgDelay - jitter) and (avgDelay + jitter)
-    const minDelay = Math.max(0, baseDelay - jitter);
-    const maxDelay = baseDelay + jitter;
-
-    const delay = faker.number.int({ min: minDelay, max: maxDelay });
-    return delay * 1000; // Convert to milliseconds
   }
 }
