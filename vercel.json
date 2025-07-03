@@ -49,8 +49,17 @@
     },
     "api/debug-log.js": {
       "maxDuration": 10
+    },
+    "api/generate-signups.ts": {
+      "maxDuration": 60
     }
   },
+  "crons": [
+    {
+      "path": "/api/generate-signups",
+      "schedule": "0 0 * * *"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
