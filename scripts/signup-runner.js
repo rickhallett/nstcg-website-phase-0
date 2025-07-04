@@ -4,6 +4,7 @@ import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import fetch from 'node-fetch';
 import { StandaloneUserGenerator } from '../src/services/standaloneUserGenerator.js';
+import { StandaloneNotionService } from '../src/services/standaloneNotionService.js';
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -155,12 +156,27 @@ class SignupRunner {
     };
     this.isRunning = false;
     this.intervalId = null;
+    this.notionService = null;
+    this.cachedPrompt = null;
+    this.promptLastFetched = null;
+    this.PROMPT_CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
   }
 
   async start() {
     if (!this.config.enabled) {
       await this.logger.info('Signup generation is disabled');
       return;
+    }
+
+    // Initialize Notion service if credentials are provided
+    if (process.env.NOTION_TOKEN && process.env.NOTION_PROMPT_PAGE_ID_USER_GEN) {
+      this.notionService = new StandaloneNotionService(
+        process.env.NOTION_TOKEN,
+        process.env.NOTION_PROMPT_PAGE_ID_USER_GEN
+      );
+      await this.logger.info('Notion service initialized for dynamic prompts');
+    } else {
+      await this.logger.info('Notion credentials not found, using default prompt');
     }
 
     this.isRunning = true;
@@ -199,6 +215,30 @@ class SignupRunner {
     });
 
     process.exit(0);
+  }
+
+  async getPrompt() {
+    // If no Notion service, return default
+    if (!this.notionService) {
+      return 'Generate a brief, authentic comment about local traffic issues in Swanage.';
+    }
+
+    // Check cache
+    const now = Date.now();
+    if (this.cachedPrompt && this.promptLastFetched && (now - this.promptLastFetched) < this.PROMPT_CACHE_DURATION) {
+      return this.cachedPrompt;
+    }
+
+    // Fetch fresh prompt
+    try {
+      this.cachedPrompt = await this.notionService.getPrompt();
+      this.promptLastFetched = now;
+      await this.logger.debug('Fetched fresh prompt from Notion');
+      return this.cachedPrompt;
+    } catch (error) {
+      await this.logger.error('Failed to fetch prompt from Notion, using default', { error: error.message });
+      return 'Generate a brief, authentic comment about local traffic issues in Swanage.';
+    }
   }
 
   async runGeneration() {
@@ -241,11 +281,14 @@ class SignupRunner {
 
   async generateAndSubmitUser() {
     try {
+      // Get prompt (cached or fresh from Notion)
+      const prompt = await this.getPrompt();
+      
       // Generate user data
       const shouldHaveComment = Math.random() < this.config.commentPercentage;
       const userGenerator = new StandaloneUserGenerator(
-        'Generate a brief, authentic comment about local traffic issues in Swanage.',
-        process.env.OPENAI_API_KEY
+        prompt,
+        process.env.ANTHROPIC_API_KEY
       );
 
       // Generate user using the standalone generator
