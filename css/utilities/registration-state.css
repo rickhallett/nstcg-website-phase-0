@@ -3,7 +3,8 @@
 
 /* Hide form sections for registered users */
 html.user-registered .form-section form,
-html.user-registered .survey-button-section > *:not(.already-registered-banner):not(#registered-share-container) {
+html.user-registered .survey-button-section > *:not(.already-registered-banner):not(#registered-share-container),
+html.user-registered .hero .register-btn {
   display: none !important;
 }
 
@@ -23,6 +24,7 @@ html.user-registered .survey-button-section {
 
 /* Also support body class for JS updates */
 body.user-registered .form-section form,
-body.user-registered .survey-button-section > *:not(.already-registered-banner):not(#registered-share-container) {
+body.user-registered .survey-button-section > *:not(.already-registered-banner):not(#registered-share-container),
+body.user-registered .hero .register-btn {
   display: none !important;
 }
