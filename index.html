@@ -42,8 +42,25 @@
 
   <!-- Critical inline script for instant UI updates -->
   <script>
-    // Check registration status immediately for fastest possible UI update
-    if (localStorage.getItem('nstcg_registered') === 'true') {
+    // Cache invalidation check - clear stale registration data
+    const CACHE_VALIDITY_MS = 10 * 60 * 1000; // 10 minutes
+    const registrationTime = localStorage.getItem('nstcg_registration_time');
+    const isRegistered = localStorage.getItem('nstcg_registered') === 'true';
+    
+    if (isRegistered && registrationTime) {
+      const elapsed = Date.now() - parseInt(registrationTime, 10);
+      if (elapsed > CACHE_VALIDITY_MS) {
+        // Cache expired - clear user data
+        ['nstcg_registered', 'nstcg_user_id', 'nstcg_email', 'nstcg_first_name', 
+         'nstcg_last_name', 'nstcg_comment', 'nstcg_registration_time',
+         'nstcg_referral_code', 'nstcg_share_count', 'nstcg_last_share_date']
+        .forEach(key => localStorage.removeItem(key));
+      } else {
+        // Cache still valid
+        document.documentElement.classList.add('user-registered');
+      }
+    } else if (isRegistered) {
+      // No timestamp - old registration, keep for backward compatibility
       document.documentElement.classList.add('user-registered');
     }
   </script>
