@@ -331,6 +331,7 @@ document.getElementById('signupForm').addEventListener('submit', async function 
     localStorage.setItem('nstcg_user_id', userId);
     localStorage.setItem('nstcg_email', formData.email);
     localStorage.setItem('nstcg_registered', 'true');
+    localStorage.setItem('nstcg_registration_time', Date.now().toString());
     localStorage.setItem('nstcg_first_name', formData.firstName);
     localStorage.setItem('nstcg_last_name', formData.lastName);
     if (formData.comment) {
@@ -1386,6 +1387,7 @@ async function handleModalFormSubmit(e) {
     localStorage.setItem('nstcg_user_id', userId);
     localStorage.setItem('nstcg_email', formData.email);
     localStorage.setItem('nstcg_registered', 'true');
+    localStorage.setItem('nstcg_registration_time', Date.now().toString());
     localStorage.setItem('nstcg_first_name', formData.firstName);
     localStorage.setItem('nstcg_last_name', formData.lastName);
     if (formData.comment) {
@@ -1937,6 +1939,7 @@ async function handleActivationSubmit(event) {
       localStorage.setItem('nstcg_user_id', result.userData.user_id);
       localStorage.setItem('nstcg_email', result.userData.email);
       localStorage.setItem('nstcg_registered', 'true');
+      localStorage.setItem('nstcg_registration_time', Date.now().toString());
       localStorage.setItem('nstcg_referral_code', result.userData.referral_code || '');
       localStorage.setItem('nstcg_first_name', result.userData.first_name || '');
       localStorage.setItem('nstcg_comment', result.userData.comment || '');
