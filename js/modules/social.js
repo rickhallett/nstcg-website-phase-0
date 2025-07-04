@@ -450,11 +450,24 @@ class SocialShareManager {
    */
   createShareButtonsHTML(count, userComment, isDisabled) {
     const disabledAttr = isDisabled ? 'disabled' : '';
+    
+    // Check if we're on the share page and user is registered
+    const isSharePage = window.location.pathname === '/share.html' || window.location.pathname === '/share';
+    const isRegistered = localStorage.getItem('nstcg_registered') === 'true';
+    
+    // Define which platforms to show on share page for registered users
+    const sharePlatforms = ['twitter', 'facebook', 'whatsapp', 'email'];
+    
+    // Filter platforms based on context
+    let platformsToShow = Object.entries(SocialConfig.platforms);
+    if (isSharePage && isRegistered) {
+      platformsToShow = platformsToShow.filter(([key]) => sharePlatforms.includes(key));
+    }
 
     return `
       <h4 class="social-share-title">🔊 Spread the Word - Every Share Matters!</h4>
       <div class="social-share-buttons-icons">
-        ${Object.entries(SocialConfig.platforms).map(([key, platform]) => `
+        ${platformsToShow.map(([key, platform]) => `
           <button class="share-btn-icon ${key}" 
                   title="Share on ${platform.name}"
                   data-platform="${key}"
@@ -462,7 +475,7 @@ class SocialShareManager {
             <i class="${platform.icon}"></i>
           </button>
         `).join('')}
-        ${navigator.share ? `
+        ${!isSharePage && navigator.share ? `
           <button class="share-btn-icon native" 
                   title="Share"
                   data-platform="native"
