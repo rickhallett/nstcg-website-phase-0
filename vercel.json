@@ -35,6 +35,9 @@
     "api/track-share.js": {
       "maxDuration": 10
     },
+    "api/track-email.js": {
+      "maxDuration": 10
+    },
     "api/get-leaderboard.js": {
       "maxDuration": 10
     },
