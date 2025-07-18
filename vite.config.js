@@ -1,41 +1,43 @@
-import { defineConfig } from 'vite'
-import legacy from '@vitejs/plugin-legacy'
-import { resolve } from 'path'
+import { defineConfig } from "vite";
+import legacy from "@vitejs/plugin-legacy";
+import { resolve } from "path";
 
 // Custom plugin to preserve direct CSS links in HTML
 const preserveCssLinks = () => {
   return {
-    name: 'preserve-css-links',
+    name: "preserve-css-links",
     transformIndexHtml: {
-      order: 'post',
+      order: "post",
       handler(html) {
         // Ensure main.css link is present in the head
-        if (!html.includes('href="css/main.css"') && !html.includes('href="/css/main.css"')) {
+        if (
+          !html.includes('href="css/main.css"') &&
+          !html.includes('href="/css/main.css"')
+        ) {
           // Add the CSS link right after the <title> tag
           html = html.replace(
-            '</title>',
+            "</title>",
             '</title>\n    <link rel="stylesheet" href="/css/main.css">'
-          )
+          );
         }
-        return html
-      }
-    }
-  }
-}
+        return html;
+      },
+    },
+  };
+};
 
 export default defineConfig({
   // Multi-page app configuration
   build: {
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'index.html'),
-        feeds: resolve(__dirname, 'feeds.html'),
-        share: resolve(__dirname, 'share.html'),
-        donate: resolve(__dirname, 'donate.html'),
-        leaderboard: resolve(__dirname, 'leaderboard.html'),
-        privacy: resolve(__dirname, 'privacy-policy.html'),
-        terms: resolve(__dirname, 'terms-and-conditions.html'),
-        notfound: resolve(__dirname, '404.html')
+        main: resolve(__dirname, "index.html"),
+        feeds: resolve(__dirname, "feeds.html"),
+        share: resolve(__dirname, "share.html"),
+        leaderboard: resolve(__dirname, "leaderboard.html"),
+        privacy: resolve(__dirname, "privacy-policy.html"),
+        terms: resolve(__dirname, "terms-and-conditions.html"),
+        notfound: resolve(__dirname, "404.html"),
       },
       output: {
         // Optimize chunk splitting for preloading system
@@ -63,25 +65,27 @@ export default defineConfig({
         // Optimize chunk file names
         chunkFileNames: (chunkInfo) => {
           const facadeModuleId = chunkInfo.facadeModuleId
-            ? chunkInfo.facadeModuleId.split('/').pop().replace('.js', '')
-            : 'chunk';
+            ? chunkInfo.facadeModuleId.split("/").pop().replace(".js", "")
+            : "chunk";
           return `assets/js/[name]-[hash].js`;
         },
-        entryFileNames: 'assets/js/[name]-[hash].js',
+        entryFileNames: "assets/js/[name]-[hash].js",
         assetFileNames: (assetInfo) => {
-          const info = assetInfo.name.split('.');
+          const info = assetInfo.name.split(".");
           const ext = info[info.length - 1];
           if (/\.(css)$/.test(assetInfo.name)) {
             return `assets/css/[name]-[hash][extname]`;
           }
-          if (/\.(png|jpe?g|svg|gif|tiff|bmp|ico|webp)$/i.test(assetInfo.name)) {
+          if (
+            /\.(png|jpe?g|svg|gif|tiff|bmp|ico|webp)$/i.test(assetInfo.name)
+          ) {
             return `assets/images/[name]-[hash][extname]`;
           }
           return `assets/[ext]/[name]-[hash][extname]`;
-        }
+        },
       },
       // Tree shaking is disabled to ensure all modules are included in the build.
-      treeshake: false
+      treeshake: false,
     },
     // Minification settings
     minify: true,
@@ -90,15 +94,15 @@ export default defineConfig({
         drop_console: false, // PRESERVE console logs for debugging
         drop_debugger: false, // PRESERVE debugger statements
         pure_funcs: [], // Don't remove any console methods
-        passes: 1 // Single pass to preserve readability
+        passes: 1, // Single pass to preserve readability
       },
       mangle: {
         // Preserve function names for global access and debugging
-        keep_fnames: true // ALWAYS preserve function names
+        keep_fnames: true, // ALWAYS preserve function names
       },
       format: {
-        comments: true // Keep comments for debugging
-      }
+        comments: true, // Keep comments for debugging
+      },
     },
     // CSS minification
     cssMinify: true,
@@ -107,13 +111,13 @@ export default defineConfig({
     // Disable CSS code splitting to prevent FOUC
     cssCodeSplit: false,
     // Output directory
-    outDir: 'dist',
+    outDir: "dist",
     // Clear output directory before build
     emptyOutDir: true,
     // Asset optimization
-    assetsDir: 'assets',
+    assetsDir: "assets",
     // Chunk size warning limit (increased for preloading modules)
-    chunkSizeWarningLimit: 1500
+    chunkSizeWarningLimit: 1500,
   },
 
   // Development server configuration
@@ -123,18 +127,18 @@ export default defineConfig({
     host: true, // Allow external connections
     // Proxy API calls to maintain compatibility
     proxy: {
-      '/api': {
-        target: 'http://localhost:3000',
+      "/api": {
+        target: "http://localhost:3000",
         changeOrigin: true,
         // rewrite: (path) => path
-      }
-    }
+      },
+    },
   },
 
   // Preview server configuration
   preview: {
     port: 4173,
-    host: true
+    host: true,
   },
 
   // Plugin configuration
@@ -143,18 +147,25 @@ export default defineConfig({
     preserveCssLinks(),
     // Legacy browser support
     legacy({
-      targets: ['defaults', 'not IE 11']
-    })
+      targets: ["defaults", "not IE 11"],
+    }),
   ],
 
   // Base URL configuration
-  base: '/',
+  base: "/",
 
   // Public directory (will be copied to dist root)
-  publicDir: 'public',
+  publicDir: "public",
 
   // Asset handling
-  assetsInclude: ['**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.gif', '**/*.svg', '**/*.webp'],
+  assetsInclude: [
+    "**/*.png",
+    "**/*.jpg",
+    "**/*.jpeg",
+    "**/*.gif",
+    "**/*.svg",
+    "**/*.webp",
+  ],
 
   // CSS configuration
   css: {
@@ -163,22 +174,22 @@ export default defineConfig({
     // Prevent CSS code splitting to ensure CSS loads first
     // This forces CSS to be extracted into separate files
     postcss: {
-      plugins: []
-    }
+      plugins: [],
+    },
   },
-  
+
   // Experimental features to control CSS handling
   experimental: {
     renderBuiltUrl(filename, { hostId, hostType, type }) {
       // Ensure CSS files maintain their paths
-      if (type === 'css') {
-        return filename
+      if (type === "css") {
+        return filename;
       }
-    }
+    },
   },
 
   // Define global constants
   define: {
-    __DEV__: JSON.stringify(process.env.NODE_ENV === 'development')
-  }
-})
+    __DEV__: JSON.stringify(process.env.NODE_ENV === "development"),
+  },
+});
