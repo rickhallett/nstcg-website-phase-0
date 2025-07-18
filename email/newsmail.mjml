@@ -1,0 +1,73 @@
+<mjml>
+  <mj-head>
+    <mj-title>IMMEDIATE RELEASE: PHILIP EADES TAKES STRONG STAND AGAINST SHORE ROAD CLOSURE</mj-title>
+    <mj-preview>Independent candidate Philip Michael Eades has publicly rejected the proposed Shore Road closure plan</mj-preview>
+    <mj-attributes>
+      <mj-all font-family="Arial, sans-serif" />
+      <mj-text font-size="16px" line-height="1.5" color="#333333" />
+      <mj-section background-color="#ffffff" />
+    </mj-attributes>
+  </mj-head>
+  <mj-body background-color="#f4f4f4">
+    <!-- Header -->
+    <mj-section background-color="#003366" padding="20px">
+      <mj-column>
+        <mj-text color="#ffffff" font-size="24px" font-weight="bold" align="center">
+          NSTCG NEWS UPDATE
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Main Content -->
+    <mj-section padding="20px">
+      <mj-column>
+        <mj-text font-size="22px" font-weight="bold" color="#003366" padding-bottom="10px">
+          IMMEDIATE RELEASE: PHILIP EADES TAKES STRONG STAND AGAINST SHORE ROAD CLOSURE
+        </mj-text>
+        
+        <mj-text font-size="14px" color="#666666" padding-bottom="20px">
+          SWANAGE, DORSET - Independent candidate Philip Michael Eades has publicly rejected the proposed Shore Road closure plan, citing significant concerns about traffic displacement and negative impacts on surrounding residential areas.
+        </mj-text>
+
+        <mj-text padding-bottom="15px">
+          <span style="font-style: italic;">"…the potential dangers of displacing traffic including the rerouting of buses and commercial vehicles onto Washpond Lane, De Moulham and Northbrook Roads are too great for us to support closing Shore Road"</span> stated Eades when commenting on the controversial Swanage Green Seafront Stabilisation & Shore Road Enhancement Scheme.
+        </mj-text>
+
+        <mj-text padding-bottom="15px">
+          The North Swanage Traffic Concern Group (NSTCG) has been documenting feedback on the closure plan through its website at <a href="http://www.nstcg.org" style="color: #003366; text-decoration: underline;">www.nstcg.org</a>. Eades' position echoes the group's concerns about the potential impacts of redirecting traffic through residential areas.
+        </mj-text>
+
+        <mj-text padding-bottom="15px">
+          Eades, who stands as a Swanage Independent, represents an alternative voice to the Conservative-led Swanage Town Council, who were a funder of the Shore Road survey and contracted Dorset Coast Forum to manage the public consultation process.
+        </mj-text>
+
+        <mj-text padding-bottom="20px">
+          Questions continue to be raised about the consultation process. The NSTCG continues to document these concerns and communicate with key stakeholders about the potential impacts of the proposed changes.
+        </mj-text>
+
+        <mj-text padding-bottom="20px">
+          For more information about the Shore Road closure proposal and community concerns, visit <a href="http://www.nstcg.org" style="color: #003366; text-decoration: underline;">www.nstcg.org</a>.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Call to Action -->
+    <mj-section background-color="#f8f8f8" padding="20px">
+      <mj-column>
+        <mj-button href="http://www.nstcg.org" background-color="#003366" color="#ffffff" font-size="18px" padding="15px 30px">
+          Visit NSTCG Website
+        </mj-button>
+      </mj-column>
+    </mj-section>
+
+    <!-- Footer -->
+    <mj-section background-color="#333333" padding="20px">
+      <mj-column>
+        <mj-text color="#ffffff" font-size="14px" align="center">
+          Contact: North Swanage Traffic Concern Group<br/>
+          Website: <a href="http://www.nstcg.org" style="color: #ffffff; text-decoration: underline;">www.nstcg.org</a>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

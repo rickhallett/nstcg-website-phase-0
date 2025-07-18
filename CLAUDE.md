@@ -162,3 +162,19 @@ FEATURE_REFERRAL=true
 - Email activation flow requires MJML compilation: `npm run compile-email`
 
 For detailed architecture information, refer to `architecture.md`.
+
+## Important Guidelines
+
+### File Management
+- Do what has been asked; nothing more, nothing less
+- NEVER create files unless they're absolutely necessary
+- ALWAYS prefer editing existing files over creating new ones
+- NEVER proactively create documentation files (*.md) unless explicitly requested
+
+### Code Organization
+- When adding scripts, place them in the appropriate subdirectory:
+  - Email-related → `scripts/email-campaigns/`
+  - Gmail/OAuth → `scripts/gmail-setup/`
+  - Data utilities → `scripts/utilities/`
+- Follow existing patterns and conventions in the codebase
+- Keep compiled outputs and tracking files out of version control

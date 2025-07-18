@@ -21,12 +21,10 @@
     "test": "NODE_ENV=test jest",
     "test:watch": "NODE_ENV=test jest --watch",
     "test:coverage": "NODE_ENV=test jest --coverage",
-    "setup:notion": "ts-node scripts/setupNotion.ts",
-    "migrate:db": "node scripts/migrate-postgres-users.js",
-    "generate:signups": "ts-node -e \"require('./src/handlers/generateSignups').generateSignups().then(console.log)\"",
-    "generate:local": "node scripts/signup-runner.js",
-    "generate:dry-run": "node scripts/signup-runner.js --dry-run --verbose",
-    "generate:prod": "node scripts/signup-runner.js --api-url https://nstcg.org/api/submit-form"
+    "compile-email": "node scripts/compile-email.js",
+    "generate:local": "node scripts/utilities/signup-runner.js",
+    "generate:dry-run": "node scripts/utilities/signup-runner.js --dry-run --verbose",
+    "generate:prod": "node scripts/utilities/signup-runner.js --api-url https://nstcg.org/api/submit-form"
   },
   "devDependencies": {
     "@faker-js/faker": "^9.9.0",

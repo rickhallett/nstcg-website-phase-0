@@ -65,3 +65,33 @@ scripts/gmail-service-account*.json*
 mcp.json
 .claude/mcp.json
 .cursor/mcp.json
+
+# Compiled email templates
+email/*-compiled.html
+email/encourage.html
+
+# Test and example scripts
+scripts/example-*.js
+scripts/test-*.js
+
+# Generated tracking files
+scripts/sent-*.json
+scripts/failed-*.json
+scripts/test-results.json
+
+# OAuth tokens and credentials
+scripts/token.json
+scripts/credentials.json
+
+# Archive directory
+archive/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Bun
+bun.lockb

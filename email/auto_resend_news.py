@@ -7,52 +7,49 @@ import getpass
 import json
 import os
 import sys
-import subprocess
 import time
 import argparse
 from datetime import datetime
 from pathlib import Path
-
-# Try to import required packages
-try:
-    from notion_client import Client as NotionClient
-    from dotenv import load_dotenv
-except ImportError:
-    print("❌ Missing required packages. Please install:")
-    print("   pip install notion-client python-dotenv")
-    sys.exit(1)
+import resend
+import dotenv
+import requests
+import string
+import random
 
 # Load environment variables
-load_dotenv()
+dotenv.load_dotenv()
+
+resend.api_key = os.getenv("RESEND_API_KEY")
+
+from notion_client import Client as NotionClient
 
 # Get script directory
 SCRIPT_DIR = Path(__file__).parent.absolute()
 PROJECT_ROOT = SCRIPT_DIR.parent
 
 # File paths
-SENT_EMAILS_FILE = PROJECT_ROOT / "scripts" / "sent-emails.json"
-FAILED_EMAILS_FILE = PROJECT_ROOT / "scripts" / "failed-emails.json"
-MJML_TEMPLATE_FILE = SCRIPT_DIR / "email" / "eades.mjml"
+SENT_EMAILS_FILE = PROJECT_ROOT / "scripts" / "sent-news-emails.json"
+FAILED_EMAILS_FILE = PROJECT_ROOT / "scripts" / "failed-news-emails.json"
 
 # Configuration
 CONFIG = {
-    "RATE_LIMIT_MS": 6000,  # 1 second between emails
-    "GMAIL_USER": "engineering@send.nstcg.org",  # Default sender email
-    "EMAIL_SUBJECT": "⏰ Time is Running Out - Activate Your Referral Code!",
+    "RATE_LIMIT_SECONDS": 30,  # 30 seconds between emails to prevent API blocking
+    "GMAIL_USER": "engineering@nstcg.org",  # Default sender email
+    "EMAIL_SUBJECT": "Important Update: Philip Eades Opposes Shore Road Closure",
+    "SITE_URL": "https://nstcg.org",
 }
 
 
 def parse_arguments():
     """Parse command line arguments"""
     parser = argparse.ArgumentParser(
-        description="Send activation emails to users from Notion database",
+        description="Send news update emails to users from Notion database",
         epilog="""
 Examples:
-  python auto_smtp.py --dry-run              # Preview mode
-  python auto_smtp.py --batch-size=10        # Process 10 emails per batch
-  python auto_smtp.py --resume               # Resume previous run
-  python auto_smtp.py --hans-solo            # Send test email to kai@oceanheart.ai
-  python auto_smtp.py -hs                    # Same as --hans-solo
+  python auto_resend_news.py --dry-run              # Preview mode
+  python auto_resend_news.py --test-email kai@example.com  # Send test to specific email
+  python auto_resend_news.py --resume               # Resume previous run
         """,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
@@ -63,23 +60,12 @@ Examples:
         "--resume", action="store_true", help="Resume from previous run"
     )
     parser.add_argument(
-        "--batch-size",
-        type=int,
-        default=50,
-        help="Number of emails to process per batch (default: 50)",
+        "--test-email",
+        type=str,
+        help="Send test email to a specific email address",
     )
     parser.add_argument("--gmail-user", type=str, help="Gmail address to send from")
-    parser.add_argument(
-        "--single-email",
-        type=str,
-        help="Send email to a single email address",
-    )
-    parser.add_argument(
-        "--hans-solo",
-        "-hs",
-        action="store_true",
-        help="Send single test email to kai@oceanheart.ai",
-    )
+
     return parser.parse_args()
 
 
@@ -183,100 +169,65 @@ def save_json_file(filepath, data):
         json.dump(data, f, indent=2)
 
 
-def compile_mjml_template(user_email):
-    """Compile MJML template with user email interpolation"""
+def generate_news_email(user):
+    """Generate personalized news email HTML"""
     try:
-        # Read MJML template
-        with open(MJML_TEMPLATE_FILE, "r") as f:
-            mjml_content = f.read()
+        # Read the template
+        template_path = SCRIPT_DIR / "news-email-template.html"
+        with open(template_path, "r", encoding="utf-8") as f:
+            html_content = f.read()
 
-        # Replace user_email placeholder
-        mjml_content = mjml_content.replace("{{user_email}}", user_email)
+        # Simple interpolation - just replace the name
+        html_content = html_content.replace("{{name}}", user["name"])
 
-        # Compile MJML to HTML using subprocess
-        result = subprocess.run(
-            ["npx", "mjml", "-i", "-s"],
-            input=mjml_content,
-            capture_output=True,
-            text=True,
-            check=True,
-        )
+        return html_content
 
-        return result.stdout
-
-    except subprocess.CalledProcessError as e:
-        print(f"❌ MJML compilation failed: {e.stderr}")
-        raise
-    except FileNotFoundError:
-        print("❌ MJML template file not found or npx/mjml not installed")
+    except Exception as e:
+        print(f"❌ Email generation failed: {e}")
         raise
 
 
-def send_email(to_email, html_content, smtp_server, gmail_user, gmail_password):
-    """Send email via SMTP"""
+def send_email(to_email, html_content, gmail_user):
+    """Send email via Resend API"""
     try:
-        # Create message
-        msg = MIMEMultipart("alternative")
-        msg["From"] = gmail_user
-        msg["To"] = to_email
-        msg["Subject"] = CONFIG["EMAIL_SUBJECT"]
+        params: resend.Emails.SendParams = {
+            "from": "North Swanage Traffic Concern Group <engineering@nstcg.org>",
+            "to": [to_email],
+            "subject": CONFIG["EMAIL_SUBJECT"],
+            "html": html_content,
+        }
 
-        # Add HTML content
-        html_part = MIMEText(html_content, "html")
-        msg.attach(html_part)
+        email = resend.Emails.send(params)
+        print(email)
 
-        # Send email
-        smtp_server.send_message(msg)
         return True, None
 
     except Exception as e:
         return False, str(e)
 
 
-def run_hans_solo(gmail_user):
-    """Hans Solo mode - send single test email to kai@oceanheart.ai"""
-    print("🚀 Hans Solo Mode - Sending test email...\n")
+def run_test_email(test_email, gmail_user):
+    """Send single test email to specified address"""
+    print(f"🚀 Test Mode - Sending test email to {test_email}...\n")
 
     start_time = time.time()
-    test_email = "engineering@send.nstcg.org"
 
     try:
-        print(f"📧 Sending test email to: {test_email}")
+        # Create test user object
+        test_user = {
+            "id": "test-user",
+            "email": test_email,
+            "firstName": test_email.split("@")[0],
+            "lastName": "Test",
+            "name": test_email.split("@")[0],
+        }
 
-        # Get Gmail password
-        gmail_password = os.getenv("GMAIL_APP_PASSWORD")
-        if not gmail_password:
-            gmail_password = getpass.getpass(
-                "Enter your Gmail App Password (16 characters): "
-            )
-
-        # Connect to SMTP
-        print("🔧 Connecting to Gmail SMTP...")
-        try:
-            smtp_server = smtplib.SMTP("smtp.gmail.com", 587)
-            smtp_server.starttls()
-            smtp_server.login(gmail_user, gmail_password)
-            print("✅ Connected to Gmail SMTP\n")
-        except Exception as e:
-            print(f"❌ Failed to connect to Gmail: {e}")
-            print("\nMake sure you have:")
-            print("1. Enabled 2-factor authentication")
-            print("2. Generated an App Password (not your regular password)")
-            print("3. Used the correct Gmail address")
-            return
-
-        # Compile MJML template with test email
-        html_content = compile_mjml_template(test_email)
+        # Generate personalized email
+        html_content = generate_news_email(test_user)
 
         # Send the email
         print(f"📧 Sending to {test_email}...", end=" ", flush=True)
-        success, error = send_email(
-            test_email,
-            html_content,
-            smtp_server,
-            gmail_user,
-            gmail_password,
-        )
+        success, error = send_email(test_email, html_content, gmail_user)
 
         if success:
             print("✅")
@@ -288,32 +239,28 @@ def run_hans_solo(gmail_user):
             print(f"❌ ({error})")
             print(f"❌ Failed to send test email: {error}")
 
-        # Close SMTP connection
-        smtp_server.quit()
-
         duration = time.time() - start_time
         print(f"\n⏱️  Duration: {duration:.1f} seconds")
-        print("\n🎉 Hans Solo test completed!")
+        print("\n🎉 Test completed!")
 
     except Exception as e:
-        print(f"\n❌ Hans Solo test failed: {e}")
+        print(f"\n❌ Test failed: {e}")
         sys.exit(1)
 
 
 def main():
     args = parse_arguments()
 
-    # Check for Hans Solo mode first
-    if args.hans_solo:
-        gmail_user = args.gmail_user or CONFIG["GMAIL_USER"]
-        return run_hans_solo(gmail_user)
-
     # Set Gmail user
     gmail_user = args.gmail_user or CONFIG["GMAIL_USER"]
 
-    print("🚀 Starting Email Activation Campaign...")
+    # Check for test email mode
+    if args.test_email:
+        return run_test_email(args.test_email, gmail_user)
+
+    print("🚀 Starting News Email Campaign...")
     print(f"Mode: {'DRY RUN' if args.dry_run else 'LIVE'}")
-    print(f"Batch Size: {args.batch_size}")
+    print(f"Rate Limit: {CONFIG['RATE_LIMIT_SECONDS']} seconds between emails")
     print(f"Resume: {'Yes' if args.resume else 'No'}\n")
 
     start_time = time.time()
@@ -350,31 +297,15 @@ def main():
             print("✅ All users have already received emails!")
             return
 
-        # Get Gmail password
-        gmail_password = os.getenv("GMAIL_APP_PASSWORD")
-        if not gmail_password and not args.dry_run:
-            gmail_password = getpass.getpass(
-                "Enter your Gmail App Password (16 characters): "
-            )
-
-        # Connect to SMTP (skip in dry run)
-        smtp_server = None
+        # Using Resend API
         if not args.dry_run:
-            print("🔧 Connecting to Gmail SMTP...")
-            try:
-                smtp_server = smtplib.SMTP("smtp.gmail.com", 587)
-                smtp_server.starttls()
-                smtp_server.login(gmail_user, gmail_password)
-                print("✅ Connected to Gmail SMTP\n")
-            except Exception as e:
-                print(f"❌ Failed to connect to Gmail: {e}")
-                print("\nMake sure you have:")
-                print("1. Enabled 2-factor authentication")
-                print("2. Generated an App Password (not your regular password)")
-                print("3. Used the correct Gmail address")
+            print("🔧 Using Resend API for email delivery")
+            if not resend.api_key:
+                print("❌ RESEND_API_KEY not found in environment")
                 return
+            print("✅ Resend API configured\n")
 
-        # Process users
+        # Process users sequentially with rate limiting
         for i, user in enumerate(filtered_users):
             progress = f"[{i+1}/{len(filtered_users)}]"
 
@@ -383,8 +314,8 @@ def main():
                     print(f"📧 {progress} Would send to: {user['email']}")
                     stats["sent"] += 1
                 else:
-                    # Compile MJML with user email
-                    html_content = compile_mjml_template(user["email"])
+                    # Generate personalized email
+                    html_content = generate_news_email(user)
 
                     # Send email
                     print(
@@ -395,9 +326,7 @@ def main():
                     success, error = send_email(
                         user["email"],
                         html_content,
-                        smtp_server,
                         gmail_user,
-                        gmail_password,
                     )
 
                     if success:
@@ -423,9 +352,12 @@ def main():
                         )
                         save_json_file(FAILED_EMAILS_FILE, failed_emails)
 
-                # Rate limiting
-                if i < len(filtered_users) - 1:
-                    time.sleep(CONFIG["RATE_LIMIT_MS"] / 1000)
+                # Rate limiting - wait 30 seconds between emails
+                if i < len(filtered_users) - 1 and not args.dry_run:
+                    print(
+                        f"⏳ Waiting {CONFIG['RATE_LIMIT_SECONDS']} seconds before next email..."
+                    )
+                    time.sleep(CONFIG["RATE_LIMIT_SECONDS"])
 
             except KeyboardInterrupt:
                 print("\n\n⚠️ Campaign interrupted by user")
@@ -434,10 +366,6 @@ def main():
             except Exception as e:
                 print(f"❌ Error processing {user['email']}: {e}")
                 stats["failed"] += 1
-
-        # Close SMTP connection
-        if smtp_server:
-            smtp_server.quit()
 
         # Summary
         duration = time.time() - start_time
@@ -452,7 +380,7 @@ def main():
         print(f"Failed: {stats['failed']}")
         print(f"Duration: {duration/60:.1f} minutes")
         print(f"{'='*50}")
-        print("\n🎉 Email campaign completed!")
+        print("\n🎉 News email campaign completed!")
 
     except Exception as e:
         print(f"\n❌ Campaign failed: {e}")
