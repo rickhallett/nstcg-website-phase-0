@@ -45,252 +45,29 @@ npm run both
 
 ## 📁 Project Structure
 
-<details>
-<summary><strong>📊 Complete Project Tree (Click to expand)</strong></summary>
+### Core Directory Layout
 
 ```
 .
-├── 404.html
-├── ai_docs
-│   └── claude_code_fresh_tutorials.md
-├── api                     # Vercel serverless functions
-│   ├── _init-google-credentials.js
-│   ├── activate-user.js
-│   ├── analyze-concerns.js
-│   ├── create-checkout-session.js
-│   ├── debug-env.js
-│   ├── debug-log.js
-│   ├── feature-flags.js
-│   ├── get-all-participants.js
-│   ├── get-count.js
-│   ├── get-donations.js
-│   ├── get-leaderboard.js
-│   ├── get-recent-signups.js
-│   ├── get-total-donations.js
-│   ├── get-user-stats.js
-│   ├── log-visit.js
-│   ├── middleware
-│   │   └── feature-flags.js
-│   ├── notion-feature-flags.js
-│   ├── submit-form.js
-│   ├── track-share.js
-│   ├── utils
-│   │   └── logger.js
-│   ├── verify-recaptcha.js
-│   └── webhook
-│       └── stripe.js
-├── architecture.md
-├── CLAUDE.md
-├── components              # Reusable HTML components
-│   └── navigation.html
-├── config                  # Application configuration
-│   ├── feature-precedence.js
-│   └── features.js
-├── css                     # Modular CSS architecture
-│   ├── base
-│   │   ├── animations.css
-│   │   ├── reset.css
-│   │   ├── typography.css
-│   │   └── variables.css
-│   ├── components
-│   │   ├── confirmation.css
-│   │   ├── counter.css
-│   │   ├── financial-card.css
-│   │   ├── forms.css
-│   │   ├── gamification.css
-│   │   ├── hero.css
-│   │   ├── impact-map.css
-│   │   ├── live-feed.css
-│   │   ├── messages.css
-│   │   ├── modal.css
-│   │   ├── navigation.css
-│   │   ├── share-buttons.css
-│   │   ├── social-proof.css
-│   │   ├── survey.css
-│   │   ├── thought-bubbles.css
-│   │   └── toast.css
-│   ├── layout
-│   │   ├── container.css
-│   │   ├── footer.css
-│   │   └── header.css
-│   ├── main.css
-│   ├── pages
-│   │   ├── donate.css
-│   │   └── feeds.css
-│   └── utilities
-│       ├── helpers.css
-│       ├── mobile.css
-│       └── registration-state.css
-├── data                    # Static JSON data
-│   ├── feed-actions.json
-│   ├── social-referral-codes.json
-│   └── thought-bubbles.json
-├── docs                    # Technical documentation
-│   ├── activation-testing-procedure.md
-│   ├── GAMIFICATION_SETUP.md
-│   ├── leaderboard-debugging.md
-│   ├── NOTION_FEATURE_FLAGS.md
-│   ├── RECAPTCHA_SERVICE_ACCOUNT_SPEC.md
-│   └── RECAPTCHA_SETUP.md
-├── donate.html
-├── email                   # Email campaigns and templates
-│   ├── activate-compiled.html
-│   ├── activate.html
-│   ├── activate.mjml
-│   ├── auto_smtp.py      # Python email automation
-│   ├── auto-mailto.py
-│   ├── pytest.ini
-│   ├── README.md
-│   ├── requirements-test.txt
-│   └── tests             # Email system tests
-│       ├── __init__.py
-│       ├── conftest.py
-│       ├── fixtures
-│       ├── mock_smtp_server.py
-│       ├── test_auto_smtp.py
-│       ├── test_integration.py
-│       └── test_performance.py
-├── favicon.ico
-├── feeds.html
-├── images                  # Static images and assets
-│   ├── impact_non_sat_height_compressed.png
-│   ├── impact_non_sat_height.png
-│   ├── impact_non_sat_height.webp
-│   └── social-share-preview-placeholder.txt
-├── index.html
-├── js                      # JavaScript modules
-│   ├── components         # Reusable UI components
-│   │   ├── counter.js
-│   │   ├── share-buttons.js
-│   │   └── toast.js
-│   ├── config            # JS configuration files
-│   │   ├── api.config.js
-│   │   ├── app.config.js
-│   │   └── ui.config.js
-│   ├── core              # Core system modules
-│   │   ├── CacheManager.js
-│   │   ├── eventBus.js
-│   │   ├── state-example.js
-│   │   └── StateManager.js
-│   ├── donate-entry.js   # Page entry points
-│   ├── donate.js
-│   ├── feeds-entry.js
-│   ├── leaderboard-entry.js
-│   ├── main-entry.js
-│   ├── main.js
-│   ├── modules           # Feature modules
-│   │   ├── api-integration.js
-│   │   ├── api-preloader.js
-│   │   ├── api.js
-│   │   ├── countdown.js
-│   │   ├── donate-features.js
-│   │   ├── feed.js
-│   │   ├── feeds-page.js
-│   │   ├── forms.js
-│   │   ├── homepage-features.js
-│   │   ├── leaderboard-features.js
-│   │   ├── leaderboard.js
-│   │   ├── modal.js
-│   │   ├── nav-timer.js
-│   │   ├── navigation-features.js
-│   │   ├── navigation.js
-│   │   ├── recaptcha.js
-│   │   ├── referral-utils.js
-│   │   ├── share-features.js
-│   │   ├── share-functionality.js
-│   │   └── social.js
-│   ├── share-entry.js
-│   └── utils             # Utility functions
-│       ├── alpine-check.js
-│       ├── cache.js
-│       ├── debug-logger.js
-│       ├── dom.js
-│       ├── feature-flags.js
-│       ├── include-nav.js
-│       ├── templates.js
-│       └── validation.js
-├── leaderboard.html
-├── logs                    # Application logs
-│   ├── api
-│   │   ├── activate-user-2025-06-28.log
-│   │   └── get-leaderboard-2025-06-28.log
-│   └── frontend
-│       └── activation-flow-2025-06-28.log
-├── maintenance.html
-├── package.json
-├── PRD                     # Product Requirements Documents
-│   ├── community-engagement-features.md
-│   ├── donations-page.md
-│   ├── email-campaign-activation.md
-│   ├── footer-legal-pages.md
-│   ├── live-feeds-page.md
-│   ├── navigation-system.md
-│   ├── nstcg-modularization.md
-│   ├── recaptcha.md
-│   ├── referral-gamification.md
-│   ├── state-management-improvements.md
-│   └── vercel-local-development-setup.md
-├── privacy-policy.html
-├── public                  # Public assets (duplicated for deployment)
-│   ├── components
-│   ├── css
-│   ├── data
-│   └── images
-├── README.md
-├── screenshots             # Test failure screenshots
-│   └── [Various test failure screenshots]
-├── scripts                 # Build and utility scripts
-│   ├── apply-org-policy.sh
-│   ├── cleanup-test-databases.js
-│   ├── compile-email-wrapper.js
-│   ├── compile-email.js
-│   ├── create-feature-flags-database.js
-│   ├── create-gamification-database.js
-│   ├── email-campaign.js
-│   ├── launch-campaign.js
-│   ├── monitor-campaign.js
-│   ├── oauth-setup.js
-│   ├── setup-gmail-auth.js
-│   ├── test-activation-flow.js
-│   ├── test-email-campaign.js
-│   ├── vercel-deploy-config.js
-│   └── [Additional utility scripts]
-├── share.html
-├── specs                   # Feature specifications
-│   ├── donation-page-implementation.md
-│   ├── email-campaign-implementation.md
-│   ├── referral-e2e-testing-spec.md
-│   └── referral-gamification-spec.md
-├── terms-and-conditions.html
-├── tests                   # End-to-end testing suite
-│   ├── config
-│   │   ├── puppeteer-config.js
-│   │   └── test-constants.js
-│   ├── e2e
-│   │   ├── activation.test.js
-│   │   ├── leaderboard.test.js
-│   │   ├── referral-enhanced.test.js
-│   │   ├── referral.test.js
-│   │   ├── registration.test.js
-│   │   └── sharing.test.js
-│   ├── fixtures
-│   │   └── test-users.json
-│   ├── setup
-│   │   ├── global-setup-enhanced.js
-│   │   ├── global-setup.js
-│   │   └── global-teardown.js
-│   └── utils
-│       ├── custom-matchers.js
-│       ├── notion-helpers.js
-│       ├── performance-monitor.js
-│       └── test-helpers.js
-├── vercel.json
-└── vite.config.js
-
-49 directories, 263 files
+├── api/                    # Vercel serverless functions
+├── components/             # Reusable HTML components
+├── config/                 # Application configuration
+├── css/                    # Modular CSS architecture
+├── data/                   # Static JSON data
+├── docs/                   # Technical documentation
+├── email/                  # Email templates and automation
+├── images/                 # Static images and assets
+├── js/                     # JavaScript modules
+├── logs/                   # Application logs (gitignored)
+├── PRD/                    # Product requirements documents
+├── public/                 # Build output (gitignored)
+├── scripts/                # Development and utility scripts
+│   ├── email-campaigns/    # Email campaign management
+│   ├── gmail-setup/        # Gmail authentication tools
+│   └── utilities/          # General utility scripts
+├── specs/                  # Feature specifications
+└── tests/                  # End-to-end testing suite
 ```
-
-</details>
 
 ### 🏗️ Architecture Overview
 
@@ -299,8 +76,8 @@ npm run both
 | **`api/`** | Vercel serverless functions | `submit-form.js`, `get-leaderboard.js`, `create-checkout-session.js` |
 | **`css/`** | Modular CSS architecture | `base/`, `components/`, `layout/`, `utilities/` |
 | **`js/`** | JavaScript modules | `core/`, `modules/`, `components/`, `utils/` |
-| **`email/`** | Email campaign system | `auto_smtp.py`, `activate.mjml`, Python tests |
-| **`scripts/`** | Development & deployment | Database setup, email campaigns, OAuth setup |
+| **`email/`** | Email campaign system | `auto_smtp.py`, `auto_resend_news.py`, MJML templates |
+| **`scripts/`** | Development & utilities | Organized into subdirectories: `email-campaigns/`, `gmail-setup/`, `utilities/` |
 | **`tests/`** | E2E testing suite | Playwright tests, fixtures, custom matchers |
 | **`docs/`** | Technical documentation | Setup guides, debugging procedures |
 | **`PRD/`** | Product requirements | Feature specifications and requirements |
@@ -312,7 +89,7 @@ npm run both
 - **Styling System** (`css/`): Component-based CSS with base styles, utilities, and responsive design
 - **Backend APIs** (`api/`): Registration, leaderboards, payments, feature flags, user analytics
 - **Email System** (`email/`): MJML templates, Python automation, comprehensive testing
-- **Testing Suite** (`tests/`): End-to-end tests with Playwright, performance monitoring
+- **Testing Suite** (`tests/`): End-to-end tests with Puppeteer, performance monitoring
 - **Documentation** (`docs/`, `specs/`, `PRD/`): Complete technical and product documentation
 
 ## 🔧 Development
@@ -418,20 +195,7 @@ npm run preview
 
 ### 2. Create Required Databases
 
-Run the setup scripts:
-
-```bash
-# Create main participant database
-node scripts/create-database.js
-
-# Create gamification database
-node scripts/create-gamification-database.js
-
-# Create feature flags database
-node scripts/create-feature-flags-database.js
-```
-
-Or create manually with these properties:
+Create databases manually in Notion with these properties:
 
 **Main Database**:
 - Name (Title)
@@ -546,8 +310,11 @@ Features can be toggled via Notion database or environment variables:
 # Compile MJML to HTML
 npm run compile-email
 
-# Send test email
-node scripts/test-send-email.js
+# Run email campaigns
+node scripts/email-campaigns/email-campaign.js
+
+# Monitor campaign progress
+node scripts/email-campaigns/monitor-campaign.js
 ```
 
 ## 🤝 Contributing
