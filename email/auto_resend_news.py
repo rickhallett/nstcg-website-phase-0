@@ -16,6 +16,7 @@ import dotenv
 import requests
 import string
 import random
+import base64
 
 # Load environment variables
 dotenv.load_dotenv()
@@ -38,6 +39,7 @@ CONFIG = {
     "GMAIL_USER": "engineering@nstcg.org",  # Default sender email
     "EMAIL_SUBJECT": "Important Update: Philip Eades Opposes Shore Road Closure",
     "SITE_URL": "https://nstcg.org",
+    "CAMPAIGN_ID": "news-philip-eades-2024",  # Campaign identifier for tracking
 }
 
 
@@ -169,6 +171,26 @@ def save_json_file(filepath, data):
         json.dump(data, f, indent=2)
 
 
+def obfuscate_email(email):
+    """Simple obfuscation for email addresses in tracking URLs"""
+    return base64.b64encode(email.encode()).decode().replace("=", "")
+
+
+def generate_tracking_pixel_url(email, campaign_id=None):
+    """Generate tracking pixel URL for email open tracking"""
+    campaign = campaign_id or CONFIG.get("CAMPAIGN_ID", "default")
+    base_url = CONFIG.get("SITE_URL", "https://nstcg.org")
+    
+    params = {
+        "e": obfuscate_email(email),
+        "c": campaign,
+        "t": str(int(time.time() * 1000))  # Timestamp in milliseconds
+    }
+    
+    query_string = "&".join([f"{k}={v}" for k, v in params.items()])
+    return f"{base_url}/api/track-email?{query_string}"
+
+
 def generate_news_email(user):
     """Generate personalized news email HTML"""
     try:
@@ -177,8 +199,16 @@ def generate_news_email(user):
         with open(template_path, "r", encoding="utf-8") as f:
             html_content = f.read()
 
-        # Simple interpolation - just replace the name
-        html_content = html_content.replace("{{name}}", user["name"])
+        # Simple interpolation - replace the name if placeholder exists
+        if "{{name}}" in html_content:
+            html_content = html_content.replace("{{name}}", user["name"])
+        
+        # Generate tracking pixel HTML
+        tracking_url = generate_tracking_pixel_url(user["email"])
+        tracking_pixel = f'<img src="{tracking_url}" alt="" width="1" height="1" style="display:block;border:0;outline:none;text-decoration:none;" />'
+        
+        # Replace tracking pixel placeholder
+        html_content = html_content.replace("{{tracking_pixel}}", tracking_pixel)
 
         return html_content
 

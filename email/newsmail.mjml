@@ -69,5 +69,14 @@
         </mj-text>
       </mj-column>
     </mj-section>
+
+    <!-- Email Tracking Pixel -->
+    <mj-section padding="0">
+      <mj-column>
+        <mj-raw>
+          {{tracking_pixel}}
+        </mj-raw>
+      </mj-column>
+    </mj-section>
   </mj-body>
 </mjml>
