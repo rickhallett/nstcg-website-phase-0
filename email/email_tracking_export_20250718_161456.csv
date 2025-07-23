@@ -1,0 +1,2 @@
+email,campaign,open_count,first_opened,last_opened,country
+manual-test@example.com,manual-test-campaign,1,2025-07-18T16:08:00.000+00:00,2025-07-18T16:08:00.000+00:00,Test Country

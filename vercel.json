@@ -14,9 +14,6 @@
     "api/get-recent-signups.js": {
       "maxDuration": 10
     },
-    "api/create-checkout-session.js": {
-      "maxDuration": 10
-    },
     "api/feature-flags.js": {
       "maxDuration": 10
     },
@@ -26,19 +23,10 @@
     "api/track-share.js": {
       "maxDuration": 10
     },
-    "api/track-email.js": {
-      "maxDuration": 10
-    },
     "api/get-leaderboard.js": {
       "maxDuration": 10
     },
-    "api/debug-env.js": {
-      "maxDuration": 10
-    },
     "api/verify-recaptcha.js": {
-      "maxDuration": 10
-    },
-    "api/activate-user.js": {
       "maxDuration": 10
     }
   },

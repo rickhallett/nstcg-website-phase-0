@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "both": "concurrently -n \"vite,api\" -c \"blue,green\" \"npm:dev:vite\" \"npm:dev:vercel\"",
+    "both:preview": "npm run build && npm run preview",
     "dev:vite": "vite",
     "dev:vercel": "vercel dev",
     "start": "npm run dev",

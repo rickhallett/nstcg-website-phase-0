@@ -38,12 +38,6 @@ export default defineConfig({
         privacy: resolve(__dirname, "privacy-policy.html"),
         terms: resolve(__dirname, "terms-and-conditions.html"),
         notfound: resolve(__dirname, "404.html"),
-        // FB investigation pages
-        fbMain: resolve(__dirname, "fb/index.html"),
-        fbElectoral: resolve(__dirname, "fb/electoral-violation.html"),
-        fbEmergency: resolve(__dirname, "fb/emergency-services.html"),
-        fbRigged: resolve(__dirname, "fb/rigged-consultation.html"),
-        fbCountdown: resolve(__dirname, "fb/final-countdown.html"),
       },
       output: {
         // Optimize chunk splitting for preloading system
@@ -94,7 +88,7 @@ export default defineConfig({
       treeshake: false,
     },
     // Minification settings
-    minify: true,
+    minify: "terser",
     terserOptions: {
       compress: {
         drop_console: false, // PRESERVE console logs for debugging
@@ -181,6 +175,12 @@ export default defineConfig({
     // This forces CSS to be extracted into separate files
     postcss: {
       plugins: [],
+    },
+    // Ensure CSS processing is consistent between dev and prod
+    preprocessorOptions: {
+      css: {
+        charset: false,
+      },
     },
   },
 
