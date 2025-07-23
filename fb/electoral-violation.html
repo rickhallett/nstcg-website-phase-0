@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      BREAKING: Council Caught Using Public Platform for Political Agenda |
+      Swanage Election Scandal
+    </title>
+    <meta
+      name="description"
+      content="Swanage Town Council violated electoral law by allowing political endorsements on official platform during election period. Evidence exposed."
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --serif: "Georgia", "Times New Roman", serif;
+        --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        --text-black: #121212;
+        --text-gray: #666;
+        --light-gray: #f7f7f7;
+        --accent-blue: #326891;
+        --data-red: #d62728;
+        --data-orange: #ff7f0e;
+        --data-green: #2ca02c;
+        --alert-red: #dc3545;
+      }
+
+      body {
+        font-family: var(--serif);
+        color: var(--text-black);
+        background: white;
+        line-height: 1.8;
+        overflow-x: hidden;
+      }
+
+      .headline {
+        font-family: var(--serif);
+        font-size: clamp(32px, 7vw, 72px);
+        line-height: 1.1;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin-bottom: 24px;
+        color: var(--alert-red);
+      }
+
+      .subheadline {
+        font-family: var(--sans);
+        font-size: clamp(16px, 2.5vw, 22px);
+        line-height: 1.4;
+        color: var(--text-gray);
+        font-weight: 300;
+      }
+
+      .body-text {
+        font-size: 18px;
+        line-height: 1.8;
+        color: var(--text-black);
+        max-width: 650px;
+        margin: 0 auto;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      .narrow-container {
+        max-width: 650px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      .hero {
+        min-height: 80vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        position: relative;
+        background: linear-gradient(135deg, #fff 0%, #fff5f5 100%);
+        border-bottom: 4px solid var(--alert-red);
+      }
+
+      .breaking-badge {
+        display: inline-block;
+        background: var(--alert-red);
+        color: white;
+        padding: 8px 16px;
+        font-family: var(--sans);
+        font-size: 14px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 20px;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      .byline {
+        font-family: var(--sans);
+        font-size: 14px;
+        color: var(--text-gray);
+        margin: 40px 0;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .evidence-section {
+        padding: 80px 0;
+        background: var(--light-gray);
+      }
+
+      .evidence-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+        margin: 40px 0;
+      }
+
+      .evidence-card {
+        background: white;
+        padding: 30px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        border-left: 4px solid var(--alert-red);
+        opacity: 0;
+        transform: translateY(30px);
+        animation: slideInUp 0.8s ease-out forwards;
+      }
+
+      .evidence-card:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .evidence-card:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+
+      @keyframes slideInUp {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .evidence-title {
+        font-family: var(--sans);
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 15px;
+        color: var(--alert-red);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .evidence-detail {
+        font-family: var(--serif);
+        font-size: 15px;
+        line-height: 1.6;
+      }
+
+      .timeline {
+        background: white;
+        padding: 60px 0;
+      }
+
+      .timeline-item {
+        display: flex;
+        margin: 30px 0;
+        opacity: 0;
+        transform: translateX(-30px);
+        animation: slideInLeft 0.8s ease-out forwards;
+      }
+
+      .timeline-item:nth-child(2) {
+        animation-delay: 0.3s;
+      }
+      .timeline-item:nth-child(3) {
+        animation-delay: 0.6s;
+      }
+      .timeline-item:nth-child(4) {
+        animation-delay: 0.9s;
+      }
+
+      @keyframes slideInLeft {
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .timeline-date {
+        background: var(--alert-red);
+        color: white;
+        padding: 10px 15px;
+        font-family: var(--sans);
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        white-space: nowrap;
+        margin-right: 20px;
+        height: fit-content;
+      }
+
+      .timeline-content {
+        flex: 1;
+        font-size: 16px;
+        line-height: 1.6;
+      }
+
+      .pull-quote {
+        margin: 80px 0;
+        padding: 60px 0;
+        background: var(--alert-red);
+        color: white;
+        text-align: center;
+      }
+
+      .pull-quote-text {
+        font-size: 28px;
+        line-height: 1.4;
+        font-style: italic;
+        margin-bottom: 20px;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .pull-quote-attribution {
+        font-family: var(--sans);
+        font-size: 14px;
+        opacity: 0.9;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .action-section {
+        background: var(--text-black);
+        color: white;
+        padding: 80px 0;
+        text-align: center;
+      }
+
+      .action-title {
+        font-size: 36px;
+        margin-bottom: 20px;
+      }
+
+      .action-text {
+        font-family: var(--sans);
+        font-size: 18px;
+        margin-bottom: 40px;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .share-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+
+      .share-btn {
+        background: var(--alert-red);
+        color: white;
+        padding: 15px 30px;
+        text-decoration: none;
+        font-family: var(--sans);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        transition: transform 0.3s ease;
+      }
+
+      .share-btn:hover {
+        transform: translateY(-2px);
+        background: #c82333;
+      }
+
+      .contact-info {
+        margin-top: 60px;
+        font-family: var(--sans);
+        font-size: 14px;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 768px) {
+        .timeline-item {
+          flex-direction: column;
+        }
+
+        .timeline-date {
+          margin-right: 0;
+          margin-bottom: 10px;
+          width: fit-content;
+        }
+
+        .evidence-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .share-buttons {
+          flex-direction: column;
+          align-items: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <section class="hero">
+      <div class="container">
+        <div class="breaking-badge">BREAKING NEWS</div>
+        <h1 class="headline">Council Caught Red-Handed</h1>
+        <p class="subheadline">
+          Swanage Town Council violated electoral law using official platform
+          for political endorsements during legally-required neutrality period
+        </p>
+        <div class="byline">
+          Investigation by North Swanage Traffic Concern Group • December 2024
+        </div>
+      </div>
+    </section>
+
+    <section class="evidence-section">
+      <div class="container">
+        <h2 style="text-align: center; font-size: 32px; margin-bottom: 40px">
+          The Evidence
+        </h2>
+        <div class="evidence-grid">
+          <div class="evidence-card">
+            <div class="evidence-title">Electoral Law Breach</div>
+            <div class="evidence-detail">
+              For THREE DAYS during the pre-election "Purdah" period,
+              Conservative-controlled Swanage Town Council allowed their
+              official Facebook page to be used for political endorsements.
+            </div>
+          </div>
+          <div class="evidence-card">
+            <div class="evidence-title">Biased Commentary</div>
+            <div class="evidence-detail">
+              Official platform explicitly attacked one candidate while
+              promoting Conservative positions - a clear violation of election
+              neutrality rules.
+            </div>
+          </div>
+          <div class="evidence-card">
+            <div class="evidence-title">Cover-Up Attempt</div>
+            <div class="evidence-detail">
+              When challenged by residents, posts were quietly removed with NO
+              public apology or acknowledgment of wrongdoing.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="timeline">
+      <div class="narrow-container">
+        <h2 style="text-align: center; font-size: 32px; margin-bottom: 50px">
+          Timeline of Violations
+        </h2>
+        <div class="timeline-item">
+          <div class="timeline-date">Day -3</div>
+          <div class="timeline-content">
+            Purdah period begins - all council communications must remain
+            politically neutral
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">Day -2</div>
+          <div class="timeline-content">
+            Political endorsements appear on official Swanage Town Council
+            Facebook page
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">Day -1</div>
+          <div class="timeline-content">
+            Residents challenge council about electoral law violations
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">Today</div>
+          <div class="timeline-content">
+            Posts quietly removed, no public apology issued
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="pull-quote">
+      <div class="container">
+        <p class="pull-quote-text">
+          "This isn't just about broken rules - it's about broken trust. How can
+          we believe in fair elections when those in power bend the law?"
+        </p>
+        <p class="pull-quote-attribution">
+          Local Resident & Electoral Law Expert
+        </p>
+      </div>
+    </section>
+
+    <section class="action-section">
+      <div class="container">
+        <h2 class="action-title">Democracy Demands Action</h2>
+        <p class="action-text">
+          Electoral law exists to protect fair elections. When councils violate
+          these rules, citizens must hold them accountable. Share this evidence
+          and demand better.
+        </p>
+
+        <div class="share-buttons">
+          <a href="#" class="share-btn" onclick="shareToFacebook()"
+            >Share on Facebook</a
+          >
+          <a href="#" class="share-btn" onclick="shareToTwitter()"
+            >Share on Twitter</a
+          >
+          <a
+            href="mailto:?subject=Electoral Law Violation in Swanage&body=Check out this evidence of electoral law violations by Swanage Town Council"
+            class="share-btn"
+            >Email This</a
+          >
+        </div>
+
+        <div class="contact-info">
+          <p>
+            <strong>Formal complaint filed with Electoral Commission</strong>
+          </p>
+          <p>Contact: action@swanagetraffic.org | 01929 555 100</p>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      function shareToFacebook() {
+        window.open(
+          "https://www.facebook.com/sharer/sharer.php?u=" +
+            encodeURIComponent(window.location.href),
+          "_blank"
+        );
+      }
+
+      function shareToTwitter() {
+        const text =
+          "BREAKING: Swanage Town Council caught violating electoral law!";
+        window.open(
+          "https://twitter.com/intent/tweet?text=" +
+            encodeURIComponent(text) +
+            "&url=" +
+            encodeURIComponent(window.location.href),
+          "_blank"
+        );
+      }
+    </script>
+  </body>
+</html>

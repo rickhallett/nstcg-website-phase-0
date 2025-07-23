@@ -17,15 +17,6 @@
     "api/create-checkout-session.js": {
       "maxDuration": 10
     },
-    "api/webhook/stripe.js": {
-      "maxDuration": 10
-    },
-    "api/get-donations.js": {
-      "maxDuration": 10
-    },
-    "api/get-total-donations.js": {
-      "maxDuration": 10
-    },
     "api/feature-flags.js": {
       "maxDuration": 10
     },
@@ -49,20 +40,8 @@
     },
     "api/activate-user.js": {
       "maxDuration": 10
-    },
-    "api/debug-log.js": {
-      "maxDuration": 10
-    },
-    "api/generate-signups.ts": {
-      "maxDuration": 60
     }
   },
-  "crons": [
-    {
-      "path": "/api/generate-signups",
-      "schedule": "* * * * *"
-    }
-  ],
   "headers": [
     {
       "source": "/(favicon.ico|favicon-*.png|apple-touch-icon.png|site.webmanifest|android-chrome-*.png)",
