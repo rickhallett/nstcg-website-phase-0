@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Emergency Services Left in the Dark | Council's Dangerous Road Plans |
+      Swanage
+    </title>
+    <meta
+      name="description"
+      content="Swanage Town Council never consulted South West Ambulance Trust about Shore Road changes. Emergency response times at risk."
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --serif: "Georgia", "Times New Roman", serif;
+        --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        --text-black: #121212;
+        --text-gray: #666;
+        --light-gray: #f7f7f7;
+        --accent-blue: #326891;
+        --data-red: #d62728;
+        --data-orange: #ff7f0e;
+        --data-green: #2ca02c;
+        --emergency-red: #ff4444;
+      }
+
+      body {
+        font-family: var(--serif);
+        color: var(--text-black);
+        background: white;
+        line-height: 1.8;
+        overflow-x: hidden;
+      }
+
+      .headline {
+        font-family: var(--serif);
+        font-size: clamp(36px, 7vw, 84px);
+        line-height: 1.1;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin-bottom: 24px;
+      }
+
+      .subheadline {
+        font-family: var(--sans);
+        font-size: clamp(16px, 2.5vw, 22px);
+        line-height: 1.4;
+        color: var(--text-gray);
+        font-weight: 300;
+      }
+
+      .body-text {
+        font-size: 18px;
+        line-height: 1.8;
+        color: var(--text-black);
+        max-width: 650px;
+        margin: 0 auto;
+      }
+
+      .drop-cap {
+        float: left;
+        font-size: 84px;
+        line-height: 0.8;
+        margin: 10px 10px 0 0;
+        font-weight: 700;
+        color: var(--emergency-red);
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      .narrow-container {
+        max-width: 650px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      .hero {
+        min-height: 90vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        position: relative;
+        background: linear-gradient(
+          to bottom,
+          white 0%,
+          white 70%,
+          var(--light-gray) 100%
+        );
+      }
+
+      .emergency-icon {
+        font-size: 24px;
+        font-weight: 900;
+        background: var(--emergency-red);
+        color: white;
+        padding: 15px 25px;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        opacity: 0;
+        animation: emergencyPulse 2s ease-in-out infinite;
+        font-family: var(--sans);
+        letter-spacing: 0.1em;
+        display: inline-block;
+      }
+
+      @keyframes emergencyPulse {
+        0%,
+        100% {
+          opacity: 0.7;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.1);
+        }
+      }
+
+      .byline {
+        font-family: var(--sans);
+        font-size: 14px;
+        color: var(--text-gray);
+        margin: 40px 0;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .chapter {
+        padding: 100px 0;
+        opacity: 0;
+        transform: translateY(50px);
+        transition: all 0.8s ease-out;
+      }
+
+      .chapter.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .chapter-number {
+        font-family: var(--sans);
+        font-size: 14px;
+        color: var(--emergency-red);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 20px;
+      }
+
+      .chapter-title {
+        font-size: 36px;
+        font-weight: 700;
+        margin-bottom: 40px;
+        line-height: 1.2;
+      }
+
+      .sticky-stat {
+        position: sticky;
+        top: 100px;
+        background: white;
+        padding: 40px;
+        box-shadow: 0 8px 30px rgba(255, 68, 68, 0.15);
+        margin: 60px 0;
+        text-align: center;
+        z-index: 10;
+        border: 3px solid var(--emergency-red);
+      }
+
+      .big-number {
+        font-size: 96px;
+        font-weight: 700;
+        color: var(--emergency-red);
+        line-height: 1;
+        margin-bottom: 15px;
+        text-shadow: 2px 2px 4px rgba(255, 68, 68, 0.2);
+      }
+
+      .stat-label {
+        font-family: var(--sans);
+        font-size: 18px;
+        color: var(--text-black);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+      }
+
+      .stat-description {
+        font-family: var(--serif);
+        font-size: 16px;
+        color: var(--text-gray);
+        margin-top: 10px;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .consultation-void {
+        background: var(--emergency-red);
+        color: white;
+        padding: 80px 0;
+        margin: 80px 0;
+        text-align: center;
+      }
+
+      .void-stamp {
+        font-size: 120px;
+        font-weight: 900;
+        opacity: 0.3;
+        transform: rotate(-15deg);
+        margin: 20px 0;
+        font-family: var(--sans);
+        letter-spacing: 0.1em;
+      }
+
+      .void-text {
+        font-size: 24px;
+        margin-bottom: 20px;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .photo-section {
+        margin: 100px 0;
+        position: relative;
+      }
+
+      .photo-container {
+        position: relative;
+        margin: 60px 0;
+        opacity: 0;
+        transform: scale(0.95);
+        transition: all 1s ease-out;
+      }
+
+      .photo-container.visible {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      .photo-placeholder {
+        width: 100%;
+        height: 50vh;
+        background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+        position: relative;
+        overflow: hidden;
+        border: 3px solid var(--emergency-red);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 48px;
+        color: var(--emergency-red);
+      }
+
+      .photo-caption {
+        font-family: var(--sans);
+        font-size: 14px;
+        color: var(--text-gray);
+        margin-top: 15px;
+        line-height: 1.4;
+        text-align: center;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .photo-label {
+        background: var(--emergency-red);
+        color: white;
+        padding: 12px 20px;
+        font-family: var(--sans);
+        font-size: 16px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        border-radius: 4px;
+      }
+
+      .impact-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 40px;
+        margin: 80px 0;
+      }
+
+      .impact-card {
+        background: var(--light-gray);
+        padding: 40px;
+        text-align: center;
+        border-left: 5px solid var(--emergency-red);
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.8s ease-out;
+      }
+
+      .impact-card.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .impact-icon {
+        font-size: 14px;
+        font-weight: 900;
+        background: var(--emergency-red);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        font-family: var(--sans);
+        letter-spacing: 0.1em;
+        display: inline-block;
+      }
+
+      .impact-title {
+        font-family: var(--sans);
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .impact-text {
+        font-size: 16px;
+        line-height: 1.6;
+        color: var(--text-gray);
+      }
+
+      .priority-callout {
+        background: var(--text-black);
+        color: white;
+        padding: 60px 40px;
+        margin: 80px 0;
+        text-align: center;
+      }
+
+      .priority-title {
+        font-size: 32px;
+        margin-bottom: 20px;
+        color: var(--emergency-red);
+      }
+
+      .priority-text {
+        font-family: var(--sans);
+        font-size: 18px;
+        line-height: 1.6;
+        max-width: 700px;
+        margin: 0 auto;
+      }
+
+      .action-section {
+        background: var(--light-gray);
+        padding: 80px 0;
+        text-align: center;
+      }
+
+      .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        flex-wrap: wrap;
+        margin-top: 40px;
+      }
+
+      .action-btn {
+        background: var(--emergency-red);
+        color: white;
+        padding: 18px 36px;
+        text-decoration: none;
+        font-family: var(--sans);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        transition: all 0.3s ease;
+        border: 3px solid var(--emergency-red);
+      }
+
+      .action-btn:hover {
+        background: white;
+        color: var(--emergency-red);
+      }
+
+      .emergency-contact {
+        background: var(--emergency-red);
+        color: white;
+        padding: 40px;
+        margin-top: 60px;
+        text-align: center;
+      }
+
+      .emergency-contact h3 {
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+
+      @media (max-width: 768px) {
+        .big-number {
+          font-size: 64px;
+        }
+
+        .void-stamp {
+          font-size: 80px;
+        }
+
+        .impact-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .action-buttons {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .sticky-stat {
+          position: relative;
+          top: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <section class="hero">
+      <div class="container">
+        <div class="emergency-icon">ALERT</div>
+        <h1 class="headline">Emergency Services Left in the Dark</h1>
+        <p class="subheadline">
+          Council's secret Shore Road plans could put lives at risk - South West
+          Ambulance Trust never consulted
+        </p>
+        <div class="byline">
+          Investigation by North Swanage Traffic Concern Group • December 2024
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="revelation">
+      <div class="narrow-container">
+        <div class="chapter-number">Shocking Discovery</div>
+        <h2 class="chapter-title">The Missing Consultation</h2>
+        <div class="body-text">
+          <p>
+            <span class="drop-cap">W</span>hile Swanage Town Council pushes
+            through their controversial Shore Road changes, we've uncovered a
+            dangerous oversight: they NEVER consulted the South West Ambulance
+            Trust about how emergency vehicles would access our community.
+          </p>
+
+          <p>
+            That's right - NO ONE asked the ambulance service how their
+            multi-million pound infrastructure plan would affect emergency
+            response times to YOUR home, YOUR family, YOUR neighbors.
+          </p>
+
+          <p>
+            But they did remember to design improvements that boost revenue to
+            Council-owned assets. Priorities much?
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="sticky-stat">
+      <div class="big-number">0</div>
+      <div class="stat-label">Emergency Service Consultations</div>
+      <div class="stat-description">
+        Zero consultations with ambulance services during planning phase
+      </div>
+    </div>
+
+    <section class="consultation-void">
+      <div class="container">
+        <div class="void-stamp">VOID</div>
+        <p class="void-text">
+          Where public safety consultation should have been, there's nothing but
+          dangerous negligence
+        </p>
+      </div>
+    </section>
+
+    <section class="chapter" id="consequences">
+      <div class="narrow-container">
+        <div class="chapter-number">The Consequences</div>
+        <h2 class="chapter-title">Lives at Risk</h2>
+        <div class="body-text">
+          <p>
+            Emergency response isn't a luxury - it's a lifeline. When Shore Road
+            closes, ambulances will face the same traffic chaos as everyone
+            else, navigating through congested Victorian streets never designed
+            for emergency vehicles.
+          </p>
+
+          <p>
+            The summer tourist season makes everything worse. When 180,000
+            visitors flood Swanage, every minute counts. Blocked roads don't
+            just cause inconvenience - they can be the difference between life
+            and death.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="sticky-stat">
+      <div class="big-number">47</div>
+      <div class="stat-label">Additional Minutes</div>
+      <div class="stat-description">
+        Estimated delay to emergency response during peak hours
+      </div>
+    </div>
+
+    <section class="photo-section">
+      <div class="container">
+        <div class="photo-container">
+          <div class="photo-placeholder">
+            <div class="photo-label">AMBULANCE ROUTE</div>
+          </div>
+          <p class="photo-caption">
+            Current ambulance route via Shore Road: Direct access to all areas
+            of Swanage
+          </p>
+        </div>
+
+        <div class="photo-container">
+          <div class="photo-placeholder">
+            <div class="photo-label">ROAD CLOSURE</div>
+          </div>
+          <p class="photo-caption">
+            Proposed alternative routes: Narrow Victorian streets with traffic
+            chaos
+          </p>
+        </div>
+
+        <div class="photo-container">
+          <div class="photo-placeholder">
+            <div class="photo-label">TIME CRITICAL</div>
+          </div>
+          <p class="photo-caption">
+            Summer congestion: When every second counts, delays cost lives
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="impact-grid">
+      <div class="container">
+        <div class="impact-card">
+          <div class="impact-icon">MEDICAL</div>
+          <div class="impact-title">Medical Emergencies</div>
+          <div class="impact-text">
+            Heart attacks, strokes, and accidents require immediate response.
+            Traffic delays can be fatal.
+          </div>
+        </div>
+        <div class="impact-card">
+          <div class="impact-icon">ELDERLY</div>
+          <div class="impact-title">Elderly & Vulnerable</div>
+          <div class="impact-text">
+            Swanage's aging population depends on reliable emergency access more
+            than ever.
+          </div>
+        </div>
+        <div class="impact-card">
+          <div class="impact-icon">FIRE</div>
+          <div class="impact-title">Fire Services</div>
+          <div class="impact-text">
+            Fire engines and ambulances share the same congested alternative
+            routes.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="priority-callout">
+      <div class="container">
+        <h2 class="priority-title">Public Safety Must Come First</h2>
+        <p class="priority-text">
+          Infrastructure decisions should protect lives, not endanger them. Any
+          plan that affects emergency access MUST involve emergency services
+          from day one. The fact that this didn't happen reveals a dangerous
+          disregard for public safety.
+        </p>
+      </div>
+    </section>
+
+    <section class="action-section">
+      <div class="container">
+        <h2 style="font-size: 36px; margin-bottom: 30px">
+          Demand Emergency Service Consultation
+        </h2>
+        <p
+          style="
+            font-family: var(--sans);
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto;
+          "
+        >
+          Before any Shore Road changes proceed, emergency services MUST be
+          properly consulted. Lives depend on it.
+        </p>
+
+        <div class="action-buttons">
+          <a href="#" class="action-btn" onclick="shareEvidence()"
+            >Share This Evidence</a
+          >
+          <a href="tel:01929555100" class="action-btn">Call the Alliance</a>
+          <a href="mailto:action@swanagetraffic.org" class="action-btn"
+            >Email Concerns</a
+          >
+        </div>
+
+        <div class="emergency-contact">
+          <h3>Emergency Service Consultation Should Include:</h3>
+          <p>
+            South West Ambulance Trust • Dorset Fire Service • Air Ambulance
+            Routes<br />
+            Peak Season Access Plans • Emergency Vehicle Priority Systems
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      // Intersection Observer for animations
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px",
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      }, observerOptions);
+
+      // Observe all animatable elements
+      document
+        .querySelectorAll(".chapter, .photo-container, .impact-card")
+        .forEach((el) => {
+          observer.observe(el);
+        });
+
+      // Parallax effect on emergency icon
+      window.addEventListener("scroll", () => {
+        const scrolled = window.pageYOffset;
+        const icon = document.querySelector(".emergency-icon");
+        if (icon && scrolled < window.innerHeight) {
+          icon.style.transform = `translateY(${scrolled * 0.3}px)`;
+        }
+      });
+
+      function shareEvidence() {
+        if (navigator.share) {
+          navigator.share({
+            title: "Emergency Services Left in the Dark - Swanage",
+            text: "Council never consulted ambulance services about Shore Road changes!",
+            url: window.location.href,
+          });
+        } else {
+          // Fallback to Facebook share
+          window.open(
+            "https://www.facebook.com/sharer/sharer.php?u=" +
+              encodeURIComponent(window.location.href),
+            "_blank"
+          );
+        }
+      }
+    </script>
+  </body>
+</html>

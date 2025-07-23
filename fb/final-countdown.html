@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Two Days Left: Will Swanage Choose Integrity or More of the Same? | July
+      24th Election
+    </title>
+    <meta
+      name="description"
+      content="48 hours to save Swanage democracy. Electoral violations, rigged consultations, ignored emergency services. Vote for change July 24th."
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --serif: "Georgia", "Times New Roman", serif;
+        --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        --text-black: #121212;
+        --text-gray: #666;
+        --light-gray: #f7f7f7;
+        --accent-blue: #326891;
+        --data-red: #d62728;
+        --data-orange: #ff7f0e;
+        --data-green: #2ca02c;
+        --urgent-red: #dc3545;
+        --countdown-gold: #f39c12;
+        --democracy-blue: #3498db;
+      }
+
+      body {
+        font-family: var(--serif);
+        color: var(--text-black);
+        background: white;
+        line-height: 1.8;
+        overflow-x: hidden;
+      }
+
+      .headline {
+        font-family: var(--serif);
+        font-size: clamp(28px, 6vw, 84px);
+        line-height: 1.1;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin-bottom: 24px;
+      }
+
+      .subheadline {
+        font-family: var(--sans);
+        font-size: clamp(16px, 2.5vw, 24px);
+        line-height: 1.4;
+        color: var(--text-gray);
+        font-weight: 300;
+      }
+
+      .body-text {
+        font-size: 18px;
+        line-height: 1.8;
+        color: var(--text-black);
+        max-width: 650px;
+        margin: 0 auto;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      .narrow-container {
+        max-width: 650px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        position: relative;
+        background: linear-gradient(135deg, #fff 0%, #fff8f0 50%, #ffe6e6 100%);
+      }
+
+      .countdown-container {
+        background: var(--urgent-red);
+        color: white;
+        padding: 30px;
+        margin: 40px auto;
+        max-width: 600px;
+        box-shadow: 0 8px 30px rgba(220, 53, 69, 0.3);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .countdown-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 10px,
+          rgba(255, 255, 255, 0.1) 10px,
+          rgba(255, 255, 255, 0.1) 20px
+        );
+        animation: slide 20s linear infinite;
+      }
+
+      @keyframes slide {
+        0% {
+          transform: translateX(-20px);
+        }
+        100% {
+          transform: translateX(0px);
+        }
+      }
+
+      .countdown-content {
+        position: relative;
+        z-index: 2;
+      }
+
+      .countdown-badge {
+        font-family: var(--sans);
+        font-size: 16px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 15px;
+        opacity: 0;
+        animation: urgentPulse 2s ease-in-out infinite;
+      }
+
+      @keyframes urgentPulse {
+        0%,
+        100% {
+          opacity: 0.8;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.05);
+        }
+      }
+
+      .countdown-time {
+        font-size: 72px;
+        font-weight: 900;
+        line-height: 1;
+        margin: 20px 0;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .countdown-label {
+        font-family: var(--sans);
+        font-size: 18px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+      }
+
+      .byline {
+        font-family: var(--sans);
+        font-size: 14px;
+        color: var(--text-gray);
+        margin: 40px 0;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .evidence-summary {
+        background: var(--text-black);
+        color: white;
+        padding: 80px 0;
+        margin: 80px 0;
+      }
+
+      .evidence-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 40px;
+        margin: 50px 0;
+      }
+
+      .evidence-item {
+        text-align: center;
+        padding: 30px;
+        border: 2px solid var(--urgent-red);
+        background: rgba(220, 53, 69, 0.1);
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.8s ease-out;
+      }
+
+      .evidence-item.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .evidence-icon {
+        font-size: 14px;
+        font-weight: 900;
+        background: var(--urgent-red);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        font-family: var(--sans);
+        letter-spacing: 0.1em;
+        display: inline-block;
+      }
+
+      .evidence-title {
+        font-family: var(--sans);
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--urgent-red);
+      }
+
+      .evidence-description {
+        font-size: 14px;
+        line-height: 1.5;
+        opacity: 0.9;
+      }
+
+      .action-section {
+        background: var(--democracy-blue);
+        color: white;
+        padding: 100px 0;
+        text-align: center;
+      }
+
+      .action-title {
+        font-size: 48px;
+        margin-bottom: 30px;
+        font-weight: 700;
+      }
+
+      .action-subtitle {
+        font-family: var(--sans);
+        font-size: 24px;
+        margin-bottom: 50px;
+        opacity: 0.9;
+      }
+
+      .vote-form {
+        max-width: 500px;
+        margin: 0 auto;
+        background: white;
+        padding: 50px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        color: var(--text-black);
+      }
+
+      .form-title {
+        font-size: 32px;
+        margin-bottom: 20px;
+        text-align: center;
+        color: var(--democracy-blue);
+      }
+
+      .form-description {
+        font-family: var(--sans);
+        font-size: 16px;
+        color: var(--text-gray);
+        text-align: center;
+        margin-bottom: 40px;
+        line-height: 1.6;
+      }
+
+      .form-group {
+        margin-bottom: 25px;
+      }
+
+      .form-group label {
+        display: block;
+        font-family: var(--sans);
+        font-size: 14px;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--text-gray);
+        font-weight: 600;
+      }
+
+      .form-group input,
+      .form-group select,
+      .form-group textarea {
+        width: 100%;
+        padding: 15px;
+        border: 2px solid #ddd;
+        font-family: var(--serif);
+        font-size: 16px;
+        transition: border-color 0.3s ease;
+      }
+
+      .form-group input:focus,
+      .form-group select:focus,
+      .form-group textarea:focus {
+        outline: none;
+        border-color: var(--democracy-blue);
+      }
+
+      .commitment-checkbox {
+        display: flex;
+        align-items: center;
+        margin: 30px 0;
+        padding: 20px;
+        background: var(--light-gray);
+      }
+
+      .commitment-checkbox input {
+        width: auto;
+        margin-right: 15px;
+        transform: scale(1.5);
+      }
+
+      .commitment-text {
+        font-family: var(--sans);
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--democracy-blue);
+      }
+
+      .vote-btn {
+        width: 100%;
+        padding: 20px;
+        background: var(--democracy-blue);
+        color: white;
+        border: none;
+        font-family: var(--sans);
+        font-size: 18px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 20px;
+      }
+
+      .vote-btn:hover {
+        background: var(--urgent-red);
+        transform: translateY(-2px);
+      }
+
+      .vote-btn:disabled {
+        background: var(--text-gray);
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .form-confirmation {
+        display: none;
+        padding: 30px;
+        background: var(--data-green);
+        color: white;
+        text-align: center;
+        font-family: var(--sans);
+        margin-top: 20px;
+        font-size: 18px;
+      }
+
+      .voting-info {
+        background: var(--countdown-gold);
+        color: var(--text-black);
+        padding: 80px 0;
+        text-align: center;
+      }
+
+      .voting-details {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 40px;
+        margin: 50px 0;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .voting-detail {
+        background: white;
+        padding: 30px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .detail-icon {
+        font-size: 14px;
+        font-weight: 900;
+        background: var(--countdown-gold);
+        color: var(--text-black);
+        padding: 8px 12px;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        font-family: var(--sans);
+        letter-spacing: 0.1em;
+        display: inline-block;
+      }
+
+      .detail-title {
+        font-family: var(--sans);
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .detail-text {
+        font-size: 16px;
+        line-height: 1.5;
+      }
+
+      .final-appeal {
+        background: var(--text-black);
+        color: white;
+        padding: 100px 0;
+        text-align: center;
+      }
+
+      .appeal-title {
+        font-size: 42px;
+        margin-bottom: 30px;
+        color: var(--countdown-gold);
+      }
+
+      .appeal-text {
+        font-family: var(--sans);
+        font-size: 20px;
+        line-height: 1.6;
+        max-width: 800px;
+        margin: 0 auto 50px auto;
+      }
+
+      .share-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        flex-wrap: wrap;
+        margin-top: 40px;
+      }
+
+      .share-btn {
+        background: var(--urgent-red);
+        color: white;
+        padding: 18px 36px;
+        text-decoration: none;
+        font-family: var(--sans);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        transition: all 0.3s ease;
+      }
+
+      .share-btn:hover {
+        background: var(--countdown-gold);
+        color: var(--text-black);
+        transform: translateY(-2px);
+      }
+
+      @media (max-width: 768px) {
+        .countdown-time {
+          font-size: 48px;
+        }
+
+        .evidence-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .voting-details {
+          grid-template-columns: 1fr;
+        }
+
+        .share-buttons {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .vote-form {
+          padding: 30px 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <section class="hero">
+      <div class="container">
+        <div class="countdown-container">
+          <div class="countdown-bg"></div>
+          <div class="countdown-content">
+            <div class="countdown-badge">FINAL COUNTDOWN</div>
+            <div class="countdown-time" id="countdown-time">72</div>
+            <div class="countdown-label">Hours to Save Swanage Democracy</div>
+          </div>
+        </div>
+        <h1 class="headline">Choose Integrity or More of the Same</h1>
+        <p class="subheadline">
+          July 24th is YOUR chance to demand representatives who respect
+          democracy, consult properly, and put Swanage residents first
+        </p>
+        <div class="byline">
+          Final Appeal by North Swanage Traffic Concern Group • July 2025
+        </div>
+      </div>
+    </section>
+
+    <section class="evidence-summary">
+      <div class="container">
+        <h2
+          style="
+            text-align: center;
+            font-size: 42px;
+            margin-bottom: 30px;
+            color: var(--urgent-red);
+          "
+        >
+          The Evidence is Overwhelming
+        </h2>
+        <p
+          style="
+            text-align: center;
+            font-family: var(--sans);
+            font-size: 20px;
+            margin-bottom: 50px;
+            opacity: 0.9;
+          "
+        >
+          After years of Conservative control, Swanage Town Council has shown
+          its true colors
+        </p>
+
+        <div class="evidence-grid">
+          <div class="evidence-item">
+            <div class="evidence-icon">LAW</div>
+            <div class="evidence-title">Electoral Law Violations</div>
+            <div class="evidence-description">
+              Official platform used for political endorsements during Purdah
+              period
+            </div>
+          </div>
+          <div class="evidence-item">
+            <div class="evidence-icon">ALERT</div>
+            <div class="evidence-title">Emergency Services Ignored</div>
+            <div class="evidence-description">
+              Zero consultation with ambulance services on infrastructure
+              changes
+            </div>
+          </div>
+          <div class="evidence-item">
+            <div class="evidence-icon">FRAUD</div>
+            <div class="evidence-title">Rigged Consultations</div>
+            <div class="evidence-description">
+              CAPTCHA barriers, missing surveys, excluded businesses
+            </div>
+          </div>
+          <div class="evidence-item">
+            <div class="evidence-icon">MONEY</div>
+            <div class="evidence-title">Council Assets Favored</div>
+            <div class="evidence-description">
+              Enhanced access and revenue for council-owned facilities
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="action-section">
+      <div class="container">
+        <h2 class="action-title">Make Your Voice Count</h2>
+        <p class="action-subtitle">
+          Join residents demanding better democracy in Swanage
+        </p>
+
+        <div class="vote-form">
+          <h3 class="form-title">Commit to Vote for Change</h3>
+          <p class="form-description">
+            Add your name to show Swanage residents are united for democratic
+            reform and transparent governance.
+          </p>
+
+          <form id="vote-commitment-form">
+            <div class="form-group">
+              <label for="voter-name">Full Name</label>
+              <input type="text" id="voter-name" name="voter-name" required />
+            </div>
+
+            <div class="form-group">
+              <label for="voter-email">Email Address</label>
+              <input
+                type="email"
+                id="voter-email"
+                name="voter-email"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="voter-postcode">Postcode</label>
+              <input
+                type="text"
+                id="voter-postcode"
+                name="voter-postcode"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="voting-priority">Top Priority for New Council</label>
+              <select id="voting-priority" name="voting-priority" required>
+                <option value="">Choose your priority...</option>
+                <option value="transparency">Transparent consultations</option>
+                <option value="safety">Emergency service consultation</option>
+                <option value="democracy">Electoral law compliance</option>
+                <option value="business">Fair treatment of businesses</option>
+                <option value="residents">Residents first policies</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="voter-message"
+                >Why are you voting for change? (Optional)</label
+              >
+              <textarea
+                id="voter-message"
+                name="voter-message"
+                rows="3"
+              ></textarea>
+            </div>
+
+            <div class="commitment-checkbox">
+              <input
+                type="checkbox"
+                id="vote-commitment"
+                name="vote-commitment"
+                required
+              />
+              <label for="vote-commitment" class="commitment-text">
+                I commit to voting on July 24th for candidates who support
+                democratic transparency and proper consultation
+              </label>
+            </div>
+
+            <button type="submit" class="vote-btn" id="submit-commitment">
+              Add My Commitment to Vote for Change
+            </button>
+          </form>
+
+          <div id="commitment-confirmation" class="form-confirmation">
+            <strong>Thank you for committing to vote for change!</strong><br />
+            Together, we will restore democracy to Swanage.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="voting-info">
+      <div class="container">
+        <h2 style="font-size: 42px; margin-bottom: 30px">
+          Election Day Information
+        </h2>
+        <p
+          style="font-family: var(--sans); font-size: 20px; margin-bottom: 50px"
+        >
+          Everything you need to vote for change on July 24th
+        </p>
+
+        <div class="voting-details">
+          <div class="voting-detail">
+            <div class="detail-icon">DATE</div>
+            <div class="detail-title">When to Vote</div>
+            <div class="detail-text">
+              Polling stations open 7:00 AM - 10:00 PM<br />Thursday, July 24th,
+              2025
+            </div>
+          </div>
+          <div class="voting-detail">
+            <div class="detail-icon">PLACE</div>
+            <div class="detail-title">Where to Vote</div>
+            <div class="detail-text">
+              Check your polling card or contact Purbeck District Council for
+              your designated station
+            </div>
+          </div>
+          <div class="voting-detail">
+            <div class="detail-icon">ID</div>
+            <div class="detail-title">What to Bring</div>
+            <div class="detail-text">
+              Photo ID required: Driving license, passport, or Voter Authority
+              Certificate
+            </div>
+          </div>
+          <div class="voting-detail">
+            <div class="detail-icon">VOTE</div>
+            <div class="detail-title">Who to Vote For</div>
+            <div class="detail-text">
+              Look for candidates supporting transparency, proper consultation,
+              and residents-first policies
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="final-appeal">
+      <div class="container">
+        <h2 class="appeal-title">This is Our Moment</h2>
+        <p class="appeal-text">
+          Democracy isn't just about elections - it's about having
+          representatives who respect the law, consult genuinely, and put
+          community needs before political gain. The North Swanage Traffic
+          Concern Group has formally complained to the Electoral Commission
+          about these violations. Now it's time for YOU to make your voice heard
+          at the ballot box.
+        </p>
+        <p class="appeal-text">
+          Change is possible, but only if we act. Only if we vote. Only if we
+          stand together for the Swanage we deserve.
+        </p>
+
+        <div class="share-buttons">
+          <a href="#" class="share-btn" onclick="shareCountdown()"
+            >Share the Countdown</a
+          >
+          <a
+            href="mailto:?subject=48 Hours to Save Swanage Democracy&body=Check out the evidence and commit to vote for change: "
+            class="share-btn"
+            >Email Friends</a
+          >
+          <a href="tel:01929555100" class="share-btn">Call Alliance</a>
+        </div>
+
+        <div
+          style="
+            margin-top: 60px;
+            font-family: var(--sans);
+            font-size: 14px;
+            opacity: 0.8;
+          "
+        >
+          <p><strong>The choice is yours. The time is now.</strong></p>
+          <p>Contact: action@swanagetraffic.org | 01929 555 100</p>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      // Live countdown timer
+      function updateCountdown() {
+        const electionDate = new Date("2025-07-24T07:00:00").getTime();
+        const now = new Date().getTime();
+        const timeLeft = electionDate - now;
+
+        const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+        const countdownElement = document.getElementById("countdown-time");
+
+        if (hours > 0) {
+          countdownElement.textContent = hours;
+        } else {
+          countdownElement.textContent = "VOTE NOW!";
+          countdownElement.style.fontSize = "48px";
+          document.querySelector(".countdown-label").textContent =
+            "Polling Stations Open";
+        }
+      }
+
+      // Update countdown every hour
+      updateCountdown();
+      setInterval(updateCountdown, 3600000);
+
+      // Intersection Observer for evidence items
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px",
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+          if (entry.isIntersecting) {
+            setTimeout(() => {
+              entry.target.classList.add("visible");
+            }, index * 200);
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll(".evidence-item").forEach((el) => {
+        observer.observe(el);
+      });
+
+      // Form handling
+      document
+        .getElementById("vote-commitment-form")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          // Simple validation
+          const checkbox = document.getElementById("vote-commitment");
+          if (!checkbox.checked) {
+            alert("Please confirm your commitment to vote for change.");
+            return;
+          }
+
+          // Show confirmation
+          document.getElementById("commitment-confirmation").style.display =
+            "block";
+
+          // Scroll to confirmation
+          document.getElementById("commitment-confirmation").scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+
+          // Reset form after delay
+          setTimeout(() => {
+            this.reset();
+          }, 2000);
+        });
+
+      // Enable/disable submit button based on commitment checkbox
+      document
+        .getElementById("vote-commitment")
+        .addEventListener("change", function () {
+          const submitBtn = document.getElementById("submit-commitment");
+          submitBtn.disabled = !this.checked;
+        });
+
+      function shareCountdown() {
+        const text =
+          "⏰ 48 HOURS LEFT! Swanage faces a choice: integrity or more corruption. Electoral violations, rigged consultations, emergency services ignored. Vote for change July 24th! #SwanageElection #DemocracyMatters";
+
+        if (navigator.share) {
+          navigator.share({
+            title: "48 Hours to Save Swanage Democracy",
+            text: text,
+            url: window.location.href,
+          });
+        } else {
+          window.open(
+            "https://www.facebook.com/sharer/sharer.php?u=" +
+              encodeURIComponent(window.location.href) +
+              "&quote=" +
+              encodeURIComponent(text),
+            "_blank"
+          );
+        }
+      }
+
+      // Dynamic background animation speed based on urgency
+      function adjustUrgency() {
+        const hours = parseInt(
+          document.getElementById("countdown-time").textContent
+        );
+        const bgElement = document.querySelector(".countdown-bg");
+
+        if (hours < 24) {
+          bgElement.style.animationDuration = "10s"; // Faster when urgent
+        } else if (hours < 48) {
+          bgElement.style.animationDuration = "15s";
+        }
+      }
+
+      adjustUrgency();
+      setInterval(adjustUrgency, 3600000);
+    </script>
+  </body>
+</html>

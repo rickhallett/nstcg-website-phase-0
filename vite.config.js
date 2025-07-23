@@ -38,6 +38,12 @@ export default defineConfig({
         privacy: resolve(__dirname, "privacy-policy.html"),
         terms: resolve(__dirname, "terms-and-conditions.html"),
         notfound: resolve(__dirname, "404.html"),
+        // FB investigation pages
+        fbMain: resolve(__dirname, "fb/index.html"),
+        fbElectoral: resolve(__dirname, "fb/electoral-violation.html"),
+        fbEmergency: resolve(__dirname, "fb/emergency-services.html"),
+        fbRigged: resolve(__dirname, "fb/rigged-consultation.html"),
+        fbCountdown: resolve(__dirname, "fb/final-countdown.html"),
       },
       output: {
         // Optimize chunk splitting for preloading system
