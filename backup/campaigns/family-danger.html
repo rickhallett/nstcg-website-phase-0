@@ -1,0 +1,659 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Your Children at Risk | £6 Million Gamble | Swanage Council Scandal
+    </title>
+    <meta
+      name="description"
+      content="Swanage Town Council plans to waste £4-6 MILLION on a vanity project that puts your children's safety at risk. School routes will become traffic chaos zones."
+    />
+    <style>
+      /* CSS Reset for consistent rendering */
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+      }
+
+      :root {
+        --serif: "Georgia", "Times New Roman", serif;
+        --sans:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        --text-black: #121212;
+        --text-gray: #666;
+        --light-gray: #f7f7f7;
+        --accent-blue: #326891;
+        --data-red: #d62728;
+        --data-orange: #ff7f0e;
+        --data-green: #2ca02c;
+        --emergency-red: #ff4444;
+        --money-green: #00aa00;
+        --warning-yellow: #ffcc00;
+      }
+
+      html,
+      body {
+        font-family: var(--serif) !important;
+        color: var(--text-black) !important;
+        background: white !important;
+        line-height: 1.8 !important;
+        overflow-x: hidden !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
+      .headline {
+        font-family: var(--serif);
+        font-size: clamp(36px, 7vw, 84px);
+        line-height: 1.1;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin-bottom: 24px;
+      }
+
+      .subheadline {
+        font-family: var(--sans);
+        font-size: clamp(16px, 2.5vw, 22px);
+        line-height: 1.4;
+        color: var(--text-gray);
+        font-weight: 300;
+      }
+
+      .body-text {
+        font-size: 18px;
+        line-height: 1.8;
+        color: var(--text-black);
+        max-width: 650px;
+        margin: 0 auto;
+      }
+
+      .drop-cap {
+        float: left;
+        font-size: 84px;
+        line-height: 0.8;
+        margin: 10px 10px 0 0;
+        font-weight: 700;
+        color: var(--emergency-red);
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      .narrow-container {
+        max-width: 650px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      /* Navigation */
+      .investigation-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: var(--text-black);
+        color: white;
+        z-index: 1000;
+        transition: transform 0.3s ease-out;
+        border-bottom: 3px solid var(--data-red);
+      }
+
+      .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 60px;
+      }
+
+      .nav-brand {
+        font-family: var(--serif);
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--data-red);
+        text-decoration: none;
+        letter-spacing: -0.01em;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 0;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .nav-links li {
+        border-left: 1px solid #333;
+      }
+
+      .nav-links li:last-child {
+        border-right: 1px solid #333;
+      }
+
+      .nav-links a {
+        display: block;
+        padding: 20px 16px;
+        color: white;
+        text-decoration: none;
+        font-family: var(--sans);
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        transition: all 0.3s ease;
+      }
+
+      .nav-links a:hover {
+        background: var(--data-red);
+        color: white;
+      }
+
+      .nav-links a.active {
+        background: var(--data-red);
+      }
+
+      /* Hero Section */
+      .hero {
+        padding-top: 120px;
+        padding-bottom: 60px;
+        background: linear-gradient(
+          to bottom,
+          white 0%,
+          white 70%,
+          var(--light-gray) 100%
+        );
+      }
+
+      .hero-content {
+        opacity: 0;
+        transform: translateY(30px);
+        animation: fadeInUp 0.8s ease-out forwards;
+      }
+
+      .badge {
+        display: inline-block;
+        background: var(--emergency-red);
+        color: white;
+        padding: 8px 20px;
+        font-family: var(--sans);
+        font-size: 14px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 20px;
+        animation: pulse 2s ease-in-out infinite;
+      }
+
+      .money-badge {
+        background: var(--money-green);
+        font-size: 16px;
+        padding: 10px 24px;
+      }
+
+      /* Content Sections */
+      .section {
+        padding: 60px 0;
+        opacity: 0;
+        transform: translateY(50px);
+        transition: all 0.8s ease-out;
+      }
+
+      .section.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .section-number {
+        font-family: var(--sans);
+        font-size: 14px;
+        color: var(--accent-blue);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 20px;
+      }
+
+      .section-title {
+        font-size: 36px;
+        font-weight: 700;
+        margin-bottom: 40px;
+        line-height: 1.2;
+      }
+
+      /* Special Styling */
+      .danger-box {
+        background: #fff5f5;
+        border: 3px solid var(--emergency-red);
+        padding: 30px;
+        margin: 40px 0;
+        position: relative;
+      }
+
+      .danger-box::before {
+        content: "DANGER ZONE";
+        position: absolute;
+        top: -16px;
+        left: 30px;
+        background: white;
+        padding: 0 10px;
+        color: var(--emergency-red);
+        font-family: var(--sans);
+        font-weight: 700;
+        font-size: 14px;
+        letter-spacing: 0.1em;
+      }
+
+      .money-box {
+        background: #f0fff0;
+        border: 3px solid var(--money-green);
+        padding: 30px;
+        margin: 40px 0;
+        text-align: center;
+      }
+
+      .big-money {
+        font-size: 64px;
+        font-weight: 700;
+        color: var(--money-green);
+        line-height: 1;
+        margin-bottom: 10px;
+      }
+
+      .pull-quote {
+        margin: 60px 0;
+        padding: 40px 0;
+        border-top: 3px solid var(--text-black);
+        border-bottom: 3px solid var(--text-black);
+        text-align: center;
+      }
+
+      .pull-quote-text {
+        font-size: 28px;
+        line-height: 1.4;
+        font-style: italic;
+        margin-bottom: 20px;
+      }
+
+      .pull-quote-attribution {
+        font-family: var(--sans);
+        font-size: 14px;
+        color: var(--text-gray);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      /* Impact List */
+      .impact-list {
+        margin: 40px 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .impact-list li {
+        position: relative;
+        padding-left: 40px;
+        margin-bottom: 20px;
+        font-size: 18px;
+        line-height: 1.6;
+      }
+
+      .impact-list li::before {
+        content: "▶";
+        position: absolute;
+        left: 0;
+        top: 0;
+        color: var(--emergency-red);
+        font-weight: 700;
+        font-size: 16px;
+      }
+
+      /* Timeline */
+      .countdown-timer {
+        background: var(--text-black);
+        color: white;
+        padding: 40px;
+        text-align: center;
+        margin: 60px 0;
+      }
+
+      .countdown-label {
+        font-family: var(--sans);
+        font-size: 18px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 20px;
+      }
+
+      .countdown-number {
+        font-size: 84px;
+        font-weight: 700;
+        line-height: 1;
+        color: var(--emergency-red);
+      }
+
+      .countdown-unit {
+        font-family: var(--sans);
+        font-size: 24px;
+        text-transform: uppercase;
+        margin-top: 10px;
+      }
+
+      /* Call to Action */
+      .action-section {
+        background: var(--emergency-red);
+        color: white;
+        padding: 80px 0;
+        text-align: center;
+      }
+
+      .action-title {
+        font-size: 48px;
+        margin-bottom: 20px;
+      }
+
+      .action-subtitle {
+        font-family: var(--sans);
+        font-size: 24px;
+        margin-bottom: 40px;
+      }
+
+      .action-btn {
+        display: inline-block;
+        padding: 20px 40px;
+        background: white;
+        color: var(--emergency-red);
+        text-decoration: none;
+        font-family: var(--sans);
+        font-size: 18px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        transition: all 0.3s ease;
+      }
+
+      .action-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Animations */
+      @keyframes fadeInUp {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      /* Mobile Responsive */
+      @media (max-width: 768px) {
+        .headline {
+          font-size: 32px;
+        }
+
+        .big-money {
+          font-size: 48px;
+        }
+
+        .countdown-number {
+          font-size: 64px;
+        }
+
+        .nav-links {
+          display: none;
+        }
+
+        .action-title {
+          font-size: 32px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="investigation-nav">
+      <div class="nav-container">
+        <a href="/" class="nav-brand">SHORE ROAD SCANDAL</a>
+        <ul class="nav-links">
+          <li><a href="index.html">Full Investigation</a></li>
+          <li><a href="violation.html">Electoral Scandal</a></li>
+          <li><a href="emergency.html">Safety Ignored</a></li>
+          <li><a href="rigged.html">Rigged Process</a></li>
+          <li><a href="family-danger.html" class="active">Family Danger</a></li>
+          <li><a href="final.html">Vote Now</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <div class="badge">SWANAGE FAMILIES: URGENT WARNING</div>
+          <h1 class="headline">
+            Your Council is Gambling £6 MILLION on a Vanity Project That Puts
+            Your Children at Risk
+          </h1>
+          <p class="subheadline">
+            While you struggle with rising costs, they're blowing millions on a
+            tourist scheme that will turn your children's school route into a
+            DEATH TRAP
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Money Section -->
+    <section class="section">
+      <div class="narrow-container">
+        <div class="money-box">
+          <div class="money-badge">YOUR MONEY</div>
+          <div class="big-money">£4-6 MILLION</div>
+          <p>OF PUBLIC FUNDS WASTED</p>
+          <p style="margin-top: 20px; font-size: 20px">
+            That's YOUR council tax. YOUR services cut. YOUR children's future
+            mortgaged.
+          </p>
+        </div>
+
+        <div class="body-text">
+          <p>
+            <span class="drop-cap">W</span>HILE families across Swanage struggle
+            with the cost of living crisis, your Conservative councillors are
+            planning to WASTE up to £6 MILLION on their personal vanity project.
+          </p>
+
+          <p>
+            This isn't about improving our town. This is about the mayor's
+            flagship seafront scheme – a tourist attraction that will sit EMPTY
+            and DERELICT for 9 months of the year.
+          </p>
+
+          <p>
+            The REAL purpose? To drive extra revenue to the council's own beach
+            huts and cafe. Your children's safety is just collateral damage in
+            their profit scheme.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Danger Section -->
+    <section class="section">
+      <div class="narrow-container">
+        <div class="section-number">THE SHOCKING TRUTH</div>
+        <h2 class="section-title">Your Children Will Pay the Price</h2>
+
+        <div class="danger-box">
+          <p>
+            Shore Road closure will force ALL traffic through De Moulham Road –
+            a narrow residential street where children walk to St. Mary's School
+            EVERY DAY.
+          </p>
+        </div>
+
+        <div class="body-text">
+          <p>
+            Picture this: Your 7-year-old trying to cross De Moulham Road as
+            THOUSANDS of extra vehicles thunder past. Buses and lorries on roads
+            never designed for them. No safe crossing points. No traffic calming
+            measures. Just CHAOS.
+          </p>
+
+          <ul class="impact-list">
+            <li>
+              Compass Point estates and new housing developments ALREADY
+              struggle with traffic chaos on Northbrook Road
+            </li>
+            <li>
+              400 EXTRA CARS DAILY from two new housing estates on old Harrow
+              House land
+            </li>
+            <li>
+              Kids ALREADY dodging brick lorries in the morning to get to school
+              down Washpond Lane
+            </li>
+            <li>
+              Emergency services WEREN'T EVEN CONSULTED – ambulances could be
+              delayed reaching your family
+            </li>
+          </ul>
+
+          <p>
+            Northbrook & De Moulham Road residents are FURIOUS. Videos show
+            buses already take up the ENTIRE road width. Now imagine that
+            traffic multiplied by 10x with your kids trying to get to school
+            safely.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quote Section -->
+    <section class="pull-quote">
+      <div class="container">
+        <p class="pull-quote-text">
+          "This isn't about improving Swanage – it's about putting our children
+          in danger every day walking to school"
+        </p>
+        <p class="pull-quote-attribution">Concerned Parent, De Moulham Road</p>
+      </div>
+    </section>
+
+    <!-- Who Benefits Section -->
+    <section class="section">
+      <div class="narrow-container">
+        <div class="section-number">FOLLOW THE MONEY</div>
+        <h2 class="section-title">Who Really Benefits?</h2>
+
+        <div class="body-text">
+          <p>
+            <strong>WHO BENEFITS?</strong> Only the tourists and Council's own
+            revenue-generating assets.
+          </p>
+          <p>
+            <strong>WHO PAYS?</strong> YOU do – through council tax AND your
+            children's safety.
+          </p>
+
+          <p>
+            This vanity project is designed purely to drive extra revenue to the
+            council's beach huts and cafe while turning your quiet residential
+            streets into main traffic arteries. Your children's daily walk to
+            school will become a DANGER ZONE.
+          </p>
+
+          <p>
+            Your families DESERVE BETTER than councillors who gamble millions on
+            tourist attractions while making your children's walk to school a
+            daily terror.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Countdown Section -->
+    <section class="countdown-timer">
+      <div class="container">
+        <div class="countdown-label">Time Left to Stop This Madness</div>
+        <div class="countdown-number">5</div>
+        <div class="countdown-unit">HOURS</div>
+      </div>
+    </section>
+
+    <!-- Action Section -->
+    <section class="action-section">
+      <div class="container">
+        <h2 class="action-title">PROTECT YOUR CHILDREN</h2>
+        <p class="action-subtitle">
+          Vote for councillors who put children's safety before vanity projects
+        </p>
+        <p style="margin-bottom: 40px; font-size: 20px">
+          Phillip Eades was the FIRST to come out against this dangerous scheme.
+          His political credentials speak for themselves and he WILL counter
+          this ridiculous plan.
+        </p>
+        <a href="/vote" class="action-btn">VOTE FOR SAFETY</a>
+      </div>
+    </section>
+
+    <!-- Footer Message -->
+    <section class="section">
+      <div class="narrow-container">
+        <div class="body-text" style="text-align: center; font-style: italic">
+          <p>
+            #SwanageChildren #SafetyFirst #StopTheWaste #SwanageMatters
+            #VoteForFamilies #July24Vote
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      // Intersection Observer for scroll animations
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -100px 0px",
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll(".section").forEach((el) => {
+        observer.observe(el);
+      });
+    </script>
+
+    <!-- Visitor Tracking -->
+    <script type="text/javascript" src="/campaigns/tracker.js"></script>
+  </body>
+</html>

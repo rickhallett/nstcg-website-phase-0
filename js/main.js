@@ -1,77 +1,79 @@
-import imageUrlWebp from '../images/impact_non_sat_height.webp';
-import imageUrlPng from '../images/impact_non_sat_height_compressed.png';
+// DISABLED: Impact map images removed - files deleted
+// import imageUrlWebp from '../images/impact_non_sat_height.webp';
+// import imageUrlPng from '../images/impact_non_sat_height_compressed.png';
 
+// DISABLED: Impact map functionality commented out - images removed
 // Function to load impact map on demand
-function loadImpactMap() {
-  const mapContainer = document.getElementById('map-container');
-  if (mapContainer && !mapContainer.querySelector('.map-image')) {
-    // Show loading animation briefly
-    setTimeout(() => {
-      mapContainer.innerHTML = `
-        <div class="map-image fade-in" id="traffic-impact-map">
-          <picture>
-            <source srcset="${imageUrlWebp}" type="image/webp">
-            <img src="${imageUrlPng}" alt="Map of North Swanage">
-          </picture>
-          <div class="impact-overlay"></div>
-        </div>
-      `;
-    }, 500);
-  }
-}
+// function loadImpactMap() {
+//   const mapContainer = document.getElementById('map-container');
+//   if (mapContainer && !mapContainer.querySelector('.map-image')) {
+//     // Show loading animation briefly
+//     setTimeout(() => {
+//       mapContainer.innerHTML = `
+//         <div class="map-image fade-in" id="traffic-impact-map">
+//           <picture>
+//             <source srcset="${imageUrlWebp}" type="image/webp">
+//             <img src="${imageUrlPng}" alt="Map of North Swanage">
+//           </picture>
+//           <div class="impact-overlay"></div>
+//         </div>
+//       `;
+//     }, 500);
+//   }
+// }
 
 // Impact map toggle functionality
-function initializeImpactMapToggle() {
-  const toggleBtn = document.getElementById('impact-toggle');
-  const mapContent = document.getElementById('impact-map-content');
-  const mapSection = document.getElementById('impact-map-section');
-  let mapLoaded = false;
+// function initializeImpactMapToggle() {
+//   const toggleBtn = document.getElementById('impact-toggle');
+//   const mapContent = document.getElementById('impact-map-content');
+//   const mapSection = document.getElementById('impact-map-section');
+//   let mapLoaded = false;
 
-  if (toggleBtn && mapContent) {
-    toggleBtn.addEventListener('click', function () {
-      const isExpanded = this.getAttribute('aria-expanded') === 'true';
+//   if (toggleBtn && mapContent) {
+//     toggleBtn.addEventListener('click', function () {
+//       const isExpanded = this.getAttribute('aria-expanded') === 'true';
 
-      if (!isExpanded) {
-        // Expanding
-        this.setAttribute('aria-expanded', 'true');
-        this.querySelector('.toggle-text').textContent = 'Hide impact zone';
-        mapSection.classList.remove('minimized');
-        mapContent.style.display = 'block';
+//       if (!isExpanded) {
+//         // Expanding
+//         this.setAttribute('aria-expanded', 'true');
+//         this.querySelector('.toggle-text').textContent = 'Hide impact zone';
+//         mapSection.classList.remove('minimized');
+//         mapContent.style.display = 'block';
 
-        // Trigger reflow for animation
-        mapContent.offsetHeight;
-        mapContent.classList.add('expanded');
+//         // Trigger reflow for animation
+//         mapContent.offsetHeight;
+//         mapContent.classList.add('expanded');
 
-        // Load map if not already loaded
-        if (!mapLoaded) {
-          loadImpactMap();
-          mapLoaded = true;
-        }
-      } else {
-        // Collapsing
-        this.setAttribute('aria-expanded', 'false');
-        this.querySelector('.toggle-text').textContent = 'Show impact zone';
-        mapContent.classList.remove('expanded');
+//         // Load map if not already loaded
+//         if (!mapLoaded) {
+//           loadImpactMap();
+//           mapLoaded = true;
+//         }
+//       } else {
+//         // Collapsing
+//         this.setAttribute('aria-expanded', 'false');
+//         this.querySelector('.toggle-text').textContent = 'Show impact zone';
+//         mapContent.classList.remove('expanded');
 
-        // Wait for animation to complete
-        setTimeout(() => {
-          mapContent.style.display = 'none';
-          mapSection.classList.add('minimized');
-        }, 300);
-      }
-    });
+//         // Wait for animation to complete
+//         setTimeout(() => {
+//           mapContent.style.display = 'none';
+//           mapSection.classList.add('minimized');
+//         }, 300);
+//       }
+//     });
 
-    // Start in minimized state
-    mapSection.classList.add('minimized');
-  }
-}
+//     // Start in minimized state
+//     mapSection.classList.add('minimized');
+//   }
+// }
 
 // Initialize impact map toggle when DOM is ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initializeImpactMapToggle);
-} else {
-  initializeImpactMapToggle();
-}
+// if (document.readyState === 'loading') {
+//   document.addEventListener('DOMContentLoaded', initializeImpactMapToggle);
+// } else {
+//   initializeImpactMapToggle();
+// }
 
 // Countdown Timer for alert header
 function updateCountdown() {
