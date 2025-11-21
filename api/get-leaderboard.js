@@ -17,18 +17,11 @@ const CACHE_TTL = 2 * 60 * 1000; // 2 minutes
 
 export default async function handler(req, res) {
   logger.logRequest(req);
-  
-  // Check if leaderboard feature is enabled
-  if (await requireFeatures('leaderboard.enabled', 'referralScheme.enabled')(req, res) !== true) {
-    logger.info('Leaderboard features not enabled');
-    return; // Response already sent by middleware
-  }
 
   // CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  // Cache for 2 minutes with stale-while-revalidate
   res.setHeader('Cache-Control', 's-maxage=120, stale-while-revalidate=600, max-age=120');
 
   // Handle preflight
@@ -40,6 +33,19 @@ export default async function handler(req, res) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
+
+  // Gamification disabled - return empty leaderboard
+  const { period = 'all', limit = 50, page = 1 } = req.query;
+  return res.status(200).json({
+    leaderboard: [],
+    total: 0,
+    page: parseInt(page) || 1,
+    limit: Math.min(parseInt(limit) || 50, 100),
+    totalPages: 0,
+    period,
+    lastUpdated: new Date().toISOString(),
+    message: 'Leaderboard feature is currently disabled'
+  });
 
   try {
     // Get query parameters

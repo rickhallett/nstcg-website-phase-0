@@ -1,3 +1,5 @@
+import { getDb } from './utils/neon-db.js';
+
 // Simple caching mechanism
 let cachedCount = null;
 let cacheTime = 0;
@@ -28,59 +30,11 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Query Notion database
-    const response = await fetch(`https://api.notion.com/v1/databases/${process.env.NOTION_DATABASE_ID}/query`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${process.env.NOTION_TOKEN}`,
-        'Content-Type': 'application/json',
-        'Notion-Version': '2022-06-28'
-      },
-      body: JSON.stringify({
-        page_size: 1 // We only need the count, not the data
-      })
-    });
+    const sql = getDb();
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error('Notion API error:', {
-        status: response.status,
-        error: errorData
-      });
-      throw new Error('Failed to fetch from Notion');
-    }
-
-    const data = await response.json();
-
-    // Get total count - need to handle pagination
-    let totalCount = data.results.length;
-    let hasMore = data.has_more;
-    let nextCursor = data.next_cursor;
-
-    // If there are more pages, we need to count them
-    while (hasMore) {
-      const nextResponse = await fetch(`https://api.notion.com/v1/databases/${process.env.NOTION_DATABASE_ID}/query`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${process.env.NOTION_TOKEN}`,
-          'Content-Type': 'application/json',
-          'Notion-Version': '2022-06-28'
-        },
-        body: JSON.stringify({
-          start_cursor: nextCursor,
-          page_size: 100 // Get more items per page for efficiency
-        })
-      });
-
-      if (!nextResponse.ok) {
-        throw new Error('Failed to fetch next page from Notion');
-      }
-
-      const nextData = await nextResponse.json();
-      totalCount += nextData.results.length;
-      hasMore = nextData.has_more;
-      nextCursor = nextData.next_cursor;
-    }
+    // Query Neon database for count
+    const result = await sql`SELECT COUNT(*) as count FROM leads`;
+    const totalCount = parseInt(result[0].count, 10);
 
     // Update cache
     cachedCount = 215 + totalCount; // Add base count to database count
@@ -104,9 +58,9 @@ export default async function handler(req, res) {
     // Return cached count if available (even if stale)
     if (cachedCount !== null) {
       console.log('Returning stale cache due to error');
-      return res.status(200).json({ 
+      return res.status(200).json({
         count: cachedCount,
-        stale: true 
+        stale: true
       });
     }
 

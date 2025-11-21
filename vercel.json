@@ -28,6 +28,9 @@
     },
     "api/verify-recaptcha.js": {
       "maxDuration": 10
+    },
+    "api/analyze-concerns.js": {
+      "maxDuration": 30
     }
   },
   "headers": [

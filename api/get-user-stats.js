@@ -15,28 +15,29 @@ const cache = new Map();
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
 export default async function handler(req, res) {
-  // Check if referral feature is enabled
-  if (await requireFeature('referralScheme.enabled')(req, res) !== true) {
-    return; // Response already sent by middleware
-  }
-  
   // CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  // Cache for 5 minutes with stale-while-revalidate
   res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=600, max-age=300');
-  
+
   // Handle preflight
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
-  
+
   // Only allow GET
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
-  
+
+  // Gamification disabled - return default stats
+  return res.status(200).json({
+    stats: getDefaultStats(),
+    exists: false,
+    message: 'Gamification feature is currently disabled'
+  });
+
   // Get user identifier from query params (email or user_id)
   const { email, user_id } = req.query;
   

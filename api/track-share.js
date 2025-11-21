@@ -19,11 +19,6 @@ const DAILY_SHARE_LIMITS = {
 const POINTS_PER_SHARE = 0; // No points awarded for shares
 
 export default async function handler(req, res) {
-  // Check if referral and share tracking features are enabled
-  if (await requireFeatures('referralScheme.enabled', 'referralScheme.trackReferrals')(req, res) !== true) {
-    return; // Response already sent by middleware
-  }
-
   // CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -38,6 +33,13 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
+
+  // Gamification disabled - return success with no-op
+  return res.status(200).json({
+    success: true,
+    points_awarded: 0,
+    message: 'Share tracking is currently disabled'
+  });
 
   try {
     const { email, user_id, platform, referral_code, first_name, last_name } = req.body;
