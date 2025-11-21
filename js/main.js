@@ -1419,7 +1419,7 @@ async function handleModalFormSubmit(e) {
           We'll keep you updated on our campaign progress and upcoming actions.
         </p>
         <div id="modal-share-container"></div>
-        <button class="modal-close-btn" data-micromodal-close style="
+        <button onclick="window.showModalSurveyInstructions()" style="
           margin-top: 20px;
           background: #00ff00;
           color: #1a1a1a;
@@ -1432,6 +1432,19 @@ async function handleModalFormSubmit(e) {
           text-transform: uppercase;
           transition: all 0.3s ease;
         " onmouseover="this.style.background='#00cc00'" onmouseout="this.style.background='#00ff00'">
+          Take the Official Survey
+        </button>
+        <button class="modal-close-btn" data-micromodal-close style="
+          margin-top: 10px;
+          background: transparent;
+          color: #999;
+          padding: 10px 20px;
+          border: 1px solid #666;
+          border-radius: 5px;
+          font-size: 14px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        " onmouseover="this.style.borderColor='#999'" onmouseout="this.style.borderColor='#666'">
           Close
         </button>
       </div>
@@ -1979,8 +1992,8 @@ async function handleActivationSubmit(event) {
   }
 }
 
-// Modal survey instructions functions - REMOVED (survey closed)
-/* function showModalSurveyInstructions() {
+// Modal survey instructions functions
+function showModalSurveyInstructions() {
   const modalContent = document.getElementById('modal-survey-content');
   if (modalContent) {
     // Replace entire modal content with just the instructions
@@ -2131,15 +2144,14 @@ function toggleModalSurveyButton() {
 
 function openOfficialSurvey() {
   window.open('https://www.dorsetcoasthaveyoursay.co.uk/swanage-green-seafront-stabilisation/surveys/swanage-green-seafront-survey-2025?ref=nstcg', '_blank');
-} */
+}
 
 // Expose functions globally for inline event handlers and external usage
 window.updateCountdown = updateCountdown;
-window.generateReferralCode = generateReferralCode;
-// Survey functions removed - survey is closed
-// window.showModalSurveyInstructions = showModalSurveyInstructions;
-// window.toggleModalSurveyButton = toggleModalSurveyButton;
-// window.openOfficialSurvey = openOfficialSurvey;
+// generateReferralCode is available via window.ReferralUtils.generateReferralCode
+window.showModalSurveyInstructions = showModalSurveyInstructions;
+window.toggleModalSurveyButton = toggleModalSurveyButton;
+window.openOfficialSurvey = openOfficialSurvey;
 window.addSocialShareButtons = addSocialShareButtons;
 window.showToast = showToast;
 
