@@ -1,5 +1,8 @@
 import { getDb } from './utils/neon-db.js';
 
+// Base count to adjust displayed total
+const BASE_COUNT = -104; // Adjust display count (546 in DB - 104 = 442 displayed)
+
 // Simple caching mechanism
 let cachedCount = null;
 let cacheTime = 0;
@@ -34,16 +37,17 @@ export default async function handler(req, res) {
 
     // Query Neon database for count
     const result = await sql`SELECT COUNT(*) as count FROM leads`;
-    const totalCount = parseInt(result[0].count, 10);
+    const databaseCount = parseInt(result[0].count, 10);
+    const displayCount = databaseCount + BASE_COUNT;
 
     // Update cache
-    cachedCount = 215 + totalCount; // Add base count to database count
+    cachedCount = displayCount;
     cacheTime = now;
 
     // Log count for monitoring
     console.log('Database count fetched:', {
-      databaseCount: totalCount,
-      displayCount: cachedCount,
+      databaseCount: databaseCount,
+      displayCount: displayCount,
       timestamp: new Date().toISOString()
     });
 
@@ -65,6 +69,6 @@ export default async function handler(req, res) {
     }
 
     // Return default count on error
-    res.status(200).json({ count: 215 });
+    res.status(200).json({ count: 0 });
   }
 }

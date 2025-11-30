@@ -26,7 +26,7 @@ const CACHE_CONFIG = {
  * Feeds Page configuration
  */
 const FeedsConfig = {
-  baseCount: 215, // Historical count before database tracking
+  baseCount: -104, // Adjust display count (546 in DB - 104 = 442 displayed)
   
   selectors: {
     totalCount: '#total-count',
@@ -301,16 +301,16 @@ class FeedsPageManager {
       totalElement.innerHTML = this.formatNumber(totalWithBase);
     }
 
-    // Update today count
+    // Update today count (hardcoded to 0)
     const todayElement = document.querySelector(FeedsConfig.selectors.todayCount);
     if (todayElement) {
-      todayElement.innerHTML = this.formatNumber(data.todayCount || 0);
+      todayElement.innerHTML = this.formatNumber(0);
     }
 
-    // Update week count
+    // Update week count (hardcoded to 0)
     const weekElement = document.querySelector(FeedsConfig.selectors.weekCount);
     if (weekElement) {
-      weekElement.innerHTML = this.formatNumber(data.weekCount || 0);
+      weekElement.innerHTML = this.formatNumber(0);
     }
 
     // Update feeds count
