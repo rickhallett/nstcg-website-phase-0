@@ -26,7 +26,7 @@ const CACHE_CONFIG = {
  * Feeds Page configuration
  */
 const FeedsConfig = {
-  baseCount: -104, // Adjust display count (546 in DB - 104 = 442 displayed)
+  baseCount: 26, // Adjust display count (416 in DB + 26 = 442 displayed)
   
   selectors: {
     totalCount: '#total-count',

@@ -1,7 +1,7 @@
 import { getDb } from './utils/neon-db.js';
 
 // Base count to adjust displayed total
-const BASE_COUNT = -104; // Adjust display count (546 in DB - 104 = 442 displayed)
+const BASE_COUNT = 26; // Adjust display count (416 in DB + 26 = 442 displayed)
 
 // Simple caching mechanism
 let cachedCount = null;
