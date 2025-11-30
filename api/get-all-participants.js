@@ -1,3 +1,5 @@
+import { getDb } from './utils/neon-db.js';
+
 // Simple in-memory cache
 let cachedData = null;
 let cacheTime = 0;
@@ -29,123 +31,58 @@ export default async function handler(req, res) {
   }
 
   try {
-    const allParticipants = [];
-    let hasMore = true;
-    let cursor = undefined;
+    const sql = getDb();
 
-    // Fetch all participants using pagination
-    while (hasMore) {
-      const requestBody = {
-        page_size: 100, // Maximum allowed by Notion API
-        sorts: [
-          {
-            property: 'Timestamp',
-            direction: 'ascending' // Oldest first for cumulative graph
-          }
-        ]
+    // Fetch all participants from Neon database
+    const allParticipants = await sql`
+      SELECT
+        name,
+        timestamp,
+        comments
+      FROM leads
+      WHERE published = true
+      ORDER BY timestamp ASC
+    `;
+
+    // Process results to match expected format
+    const processedResults = allParticipants.map(participant => {
+      // Anonymize name: First name + last initial
+      const fullName = participant.name || 'Anonymous';
+      const nameParts = fullName.trim().split(' ');
+      let displayName = nameParts[0];
+
+      if (nameParts.length > 1) {
+        const lastNameInitial = nameParts[nameParts.length - 1].charAt(0).toUpperCase();
+        displayName = `${nameParts[0]} ${lastNameInitial}.`;
+      }
+
+      return {
+        name: displayName,
+        timestamp: participant.timestamp,
+        comment: participant.comments || null
       };
-
-      // Add cursor for pagination
-      if (cursor) {
-        requestBody.start_cursor = cursor;
-      }
-
-      const response = await fetch(`https://api.notion.com/v1/databases/${process.env.NOTION_DATABASE_ID}/query`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${process.env.NOTION_TOKEN}`,
-          'Content-Type': 'application/json',
-          'Notion-Version': '2022-06-28'
-        },
-        body: JSON.stringify(requestBody)
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Notion API error:', {
-          status: response.status,
-          error: errorData,
-          timestamp: new Date().toISOString()
-        });
-        throw new Error('Failed to fetch from Notion');
-      }
-
-      const data = await response.json();
-
-      // Process results
-      const processedResults = data.results.map(page => {
-        try {
-          // Extract name
-          const nameProperty = page.properties['Name'];
-          let fullName = 'Anonymous';
-
-          if (nameProperty && nameProperty.rich_text && nameProperty.rich_text.length > 0) {
-            fullName = nameProperty.rich_text[0].plain_text;
-          }
-
-          // Anonymize name: First name + last initial
-          const nameParts = fullName.trim().split(' ');
-          let displayName = nameParts[0];
-
-          if (nameParts.length > 1) {
-            const lastNameInitial = nameParts[nameParts.length - 1].charAt(0).toUpperCase();
-            displayName = `${nameParts[0]} ${lastNameInitial}.`;
-          }
-
-          // Extract timestamp
-          const timestampProperty = page.properties['Timestamp'];
-          let timestamp = new Date().toISOString();
-
-          if (timestampProperty && timestampProperty.date && timestampProperty.date.start) {
-            timestamp = timestampProperty.date.start;
-          }
-
-          // Extract comment
-          const commentProperty = page.properties['Comments'];
-          let comment = null;
-
-          if (commentProperty && commentProperty.rich_text && commentProperty.rich_text.length > 0) {
-            comment = commentProperty.rich_text[0].plain_text;
-          }
-
-          return {
-            name: displayName,
-            timestamp: timestamp,
-            comment: comment
-          };
-        } catch (error) {
-          console.error('Error processing participant:', error);
-          return null;
-        }
-      }).filter(participant => participant !== null);
-
-      allParticipants.push(...processedResults);
-
-      // Check if there are more pages
-      hasMore = data.has_more;
-      cursor = data.next_cursor;
-    }
+    });
 
     // Calculate statistics
-    const now = new Date();
-    const todayStart = new Date(now);
+    const nowDate = new Date();
+    const todayStart = new Date(nowDate);
     todayStart.setHours(0, 0, 0, 0);
 
-    const weekStart = new Date(now);
+    const weekStart = new Date(nowDate);
     weekStart.setDate(weekStart.getDate() - 7);
 
-    const todayCount = allParticipants.filter(p =>
+    const todayCount = processedResults.filter(p =>
       new Date(p.timestamp) >= todayStart
     ).length;
 
-    const weekCount = allParticipants.filter(p =>
+    const weekCount = processedResults.filter(p =>
       new Date(p.timestamp) >= weekStart
     ).length;
 
     // Prepare response data
     const responseData = {
-      participants: allParticipants,
-      totalCount: allParticipants.length, // Just database count, frontend adds base count
+      participants: processedResults,
+      totalCount: processedResults.length, // Just database count, frontend adds base count
       todayCount: todayCount,
       weekCount: weekCount,
       timestamp: new Date().toISOString()
@@ -154,6 +91,14 @@ export default async function handler(req, res) {
     // Update cache
     cachedData = responseData;
     cacheTime = now;
+
+    // Log for monitoring
+    console.log('Participants fetched from Neon:', {
+      totalCount: responseData.totalCount,
+      todayCount: responseData.todayCount,
+      weekCount: responseData.weekCount,
+      timestamp: responseData.timestamp
+    });
 
     // Return all participants with statistics
     res.status(200).json(responseData);
@@ -177,7 +122,7 @@ export default async function handler(req, res) {
     res.status(500).json({
       error: 'Failed to fetch participants',
       participants: [],
-      totalCount: 0, // No participants fetched
+      totalCount: 0,
       todayCount: 0,
       weekCount: 0,
       timestamp: new Date().toISOString()
