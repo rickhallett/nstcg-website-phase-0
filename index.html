@@ -142,25 +142,10 @@
       <div class="header-content">
         <div class="alert-badge">
           <span class="pulse-dot"></span>
-          <span>COMMUNITY ACTION REQUIRED</span>
+          <span>CAMPAIGN ENDED</span>
         </div>
         <div class="header-countdown">
-          <div class="header-time-unit days">
-            <span class="header-time-value header-days">00</span>
-            <span class="header-time-label">Days</span>
-          </div>
-          <div class="header-time-unit hours">
-            <span class="header-time-value header-hours">00</span>
-            <span class="header-time-label">Hours</span>
-          </div>
-          <div class="header-time-unit minutes">
-            <span class="header-time-value header-minutes">00</span>
-            <span class="header-time-label">Min</span>
-          </div>
-          <div class="header-time-unit seconds">
-            <span class="header-time-value header-seconds">00</span>
-            <span class="header-time-label">Sec</span>
-          </div>
+          <span style="color: #ff6b6b; font-weight: bold; text-shadow: 0 0 10px #ff6b6b; font-size: 18px;">Survey Closed</span>
         </div>
       </div>
     </header>
@@ -192,7 +177,8 @@
           </button>
         </div>
 
-        <div class="impact-map" id="impact-map-section">
+        <!-- Shore Road Impact Zone section hidden - not needed for archive -->
+        <div class="impact-map" id="impact-map-section" style="display: none;">
           <div class="impact-map-header">
             <h2>Shore Road Impact Zone</h2>
             <button
@@ -268,96 +254,13 @@
               Add Your Voice to the Community Consensus NOW
             </p>
           </div>
-          <form id="signupForm" class="signup-form">
-            <div class="referral-bonus-notice" style="display: none">
-              <span class="blinking-text">Register for 100pts!</span>
-            </div>
-            <div class="form-group-row">
-              <div class="form-group">
-                <label for="firstName">First Name</label>
-                <input
-                  type="text"
-                  id="firstName"
-                  name="firstName"
-                  required
-                  placeholder="First name"
-                />
-              </div>
-              <div class="form-group">
-                <label for="lastName">Last Name</label>
-                <input
-                  type="text"
-                  id="lastName"
-                  name="lastName"
-                  required
-                  placeholder="Last name"
-                />
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="email">Email Address</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                required
-                placeholder="Stay connected with updates"
-              />
-            </div>
-            <div class="form-group">
-              <fieldset class="radio-group">
-                <legend>Are you a:</legend>
-                <div class="radio-options">
-                  <label class="radio-label">
-                    <input
-                      type="radio"
-                      name="visitorType"
-                      value="local"
-                      required
-                      checked
-                    />
-                    <span class="radio-custom"></span>
-                    <span>Local Resident</span>
-                  </label>
-                  <label class="radio-label">
-                    <input
-                      type="radio"
-                      name="visitorType"
-                      value="tourist"
-                      required
-                    />
-                    <span class="radio-custom"></span>
-                    <span>Visitor/Tourist</span>
-                  </label>
-                </div>
-              </fieldset>
-            </div>
-            <div class="form-group">
-              <textarea
-                id="comment"
-                name="comment"
-                rows="2"
-                maxlength="150"
-                placeholder="Share why this matters to you (optional)"
-                style="resize: none"
-              ></textarea>
-              <small
-                style="
-                  color: #666;
-                  font-size: 12px;
-                  display: block;
-                  margin-top: 5px;
-                "
-                >Your comment will be publicly visible</small
-              >
-            </div>
-            <button
-              type="submit"
-              class="submit-btn"
-            >
-              <span>JOIN THE MOVEMENT</span>
-            </button>
-          </form>
+          <button
+            class="submit-btn survey-btn"
+            onclick="MicroModal.show('modal-survey');"
+            style="margin-top: 20px; width: 100%; max-width: 400px; margin-left: auto; margin-right: auto; display: block;"
+          >
+            <span>JOIN THE MOVEMENT</span>
+          </button>
         </div>
 
         <div id="confirmation" class="confirmation">
