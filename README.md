@@ -1,346 +1,152 @@
-# NSTCG Website
+# NSTCG Website - Static Archive
 
-> North Swanage Traffic Consultation Group - Community Action Platform
+This is a static archive of the North Swanage Traffic Consultation Group website, preserved as of December 2025. This archive captures the final state of the campaign website that mobilized the community during the Shore Road traffic consultation period.
 
-A modern web application designed to mobilize community engagement for traffic safety initiatives in North Swanage, Dorset. Built with performance, security, and user experience in mind.
+## What This Is
 
-## 🚀 Quick Start
+A static HTML/CSS/JavaScript snapshot preserving:
+- 416 community participant registrations
+- Campaign activity feed and timeline
+- Community comments and engagement
+- Original visual design and user experience
 
-```bash
-# Clone the repository
-git clone https://github.com/your-username/nstcg-website.git
-cd nstcg-website
+## What This Is NOT
 
-# Install dependencies
-npm install
+- Not a functional registration system (forms are disabled)
+- Not connected to any databases or APIs
+- Not accepting donations or processing payments
+- Not tracking user activity or analytics
 
-# Copy environment variables
-cp .env.example .env.local
+## How to View
 
-# Run development servers (frontend + API)
-npm run both
-
-# Open http://localhost:5173 in your browser
-```
-
-## 📋 Features
-
-- **Community Registration**: Secure participant sign-up with duplicate detection
-- **Real-time Updates**: Live countdown timers and activity feeds
-- **Gamification System**: Points, leaderboards, and referral tracking
-- **Donation Processing**: Stripe integration for campaign funding
-- **Dynamic Configuration**: Notion-based feature flags
-- **Email Campaigns**: Automated activation and engagement emails
-- **Social Sharing**: Integrated sharing with referral attribution
-- **Mobile Responsive**: Optimized for all device sizes
-
-## 🛠️ Technology Stack
-
-- **Frontend**: Vite, Vanilla JavaScript (ES6+), Modular CSS
-- **Backend**: Vercel Serverless Functions (Node.js)
-- **Database**: Notion API
-- **Payments**: Stripe
-- **Security**: Google reCAPTCHA v3
-- **Build Tools**: Vite, Vercel
-
-## 📁 Project Structure
-
-### Core Directory Layout
-
-```
-.
-├── api/                    # Vercel serverless functions
-├── components/             # Reusable HTML components
-├── config/                 # Application configuration
-├── css/                    # Modular CSS architecture
-├── data/                   # Static JSON data
-├── docs/                   # Technical documentation
-├── email/                  # Email templates and automation
-├── images/                 # Static images and assets
-├── js/                     # JavaScript modules
-├── logs/                   # Application logs (gitignored)
-├── PRD/                    # Product requirements documents
-├── public/                 # Build output (gitignored)
-├── scripts/                # Development and utility scripts
-│   ├── email-campaigns/    # Email campaign management
-│   ├── gmail-setup/        # Gmail authentication tools
-│   └── utilities/          # General utility scripts
-├── specs/                  # Feature specifications
-└── tests/                  # End-to-end testing suite
-```
-
-### 🏗️ Architecture Overview
-
-| Directory | Purpose | Key Files |
-|-----------|---------|-----------|
-| **`api/`** | Vercel serverless functions | `submit-form.js`, `get-leaderboard.js`, `create-checkout-session.js` |
-| **`css/`** | Modular CSS architecture | `base/`, `components/`, `layout/`, `utilities/` |
-| **`js/`** | JavaScript modules | `core/`, `modules/`, `components/`, `utils/` |
-| **`email/`** | Email campaign system | `auto_smtp.py`, `auto_resend_news.py`, MJML templates |
-| **`scripts/`** | Development & utilities | Organized into subdirectories: `email-campaigns/`, `gmail-setup/`, `utilities/` |
-| **`tests/`** | E2E testing suite | Playwright tests, fixtures, custom matchers |
-| **`docs/`** | Technical documentation | Setup guides, debugging procedures |
-| **`PRD/`** | Product requirements | Feature specifications and requirements |
-| **`specs/`** | Implementation specs | Detailed implementation guides |
-
-### 🎯 Key Features by Directory
-
-- **Frontend Modules** (`js/modules/`): API integration, gamification, referral system, social sharing
-- **Styling System** (`css/`): Component-based CSS with base styles, utilities, and responsive design
-- **Backend APIs** (`api/`): Registration, leaderboards, payments, feature flags, user analytics
-- **Email System** (`email/`): MJML templates, Python automation, comprehensive testing
-- **Testing Suite** (`tests/`): End-to-end tests with Puppeteer, performance monitoring
-- **Documentation** (`docs/`, `specs/`, `PRD/`): Complete technical and product documentation
-
-## 🔧 Development
-
-### Prerequisites
-
-- Node.js v22.x or higher
-- npm or yarn
-- Notion account with API access
-- Stripe account (for payment features)
-- Google reCAPTCHA account
-
-### Environment Variables
-
-Create a `.env.local` file with the following variables:
+### Option 1: Simple HTTP Server (Recommended)
 
 ```bash
-# Notion Integration
-NOTION_TOKEN=your_notion_integration_token
-NOTION_DATABASE_ID=main_participant_database_id
-NOTION_GAMIFICATION_DB_ID=gamification_database_id
-NOTION_FEATURE_FLAGS_DB_ID=feature_flags_database_id
-NOTION_DONATIONS_DB_ID=donations_database_id
-
-# Stripe Configuration
-STRIPE_SECRET_KEY=sk_test_...
-STRIPE_WEBHOOK_SECRET=whsec_...
-STRIPE_PRICE_ID=price_...
-
-# Google reCAPTCHA
-RECAPTCHA_SECRET_KEY=your_recaptcha_secret_key
-
-# Site Configuration
-SITE_URL=http://localhost:5173  # https://nstcg.org in production
-
-# Feature Flags (optional, can use Notion instead)
-FEATURE_DONATIONS=true
-FEATURE_LEADERBOARD=true
-FEATURE_REFERRAL=true
+python3 -m http.server 8000
+# Open http://localhost:8000 in browser
 ```
 
-### Running Development Servers
+### Option 2: Any Web Server
 
-```bash
-# Run both Vite and Vercel dev servers concurrently
-npm run both
+Works with Apache, Nginx, or any static file server. No special configuration needed.
 
-# Or run them separately:
-npm run dev:vite    # Frontend on http://localhost:5173
-npm run dev:vercel  # API on http://localhost:3000
+### File Protocol Warning
+
+Some browsers may have CORS restrictions with `file://` protocol. Using an HTTP server is recommended for full functionality.
+
+## File Structure
+
+```
+/
+├── index.html               - Homepage
+├── feeds.html               - All participants list
+├── share.html               - Share page (archived)
+├── privacy-policy.html      - Privacy policy
+├── terms-and-conditions.html- Terms & conditions
+├── 404.html                 - Not found page
+├── maintenance.html         - Maintenance page
+├── survey-screenshot.html   - Historical reference
+├── /js/
+│   ├── homepage-static.js   - Homepage functionality
+│   ├── feeds-static.js      - Feeds page functionality
+│   ├── share-static.js      - Share page functionality
+│   └── data-loader.js       - JSON data loading utility
+├── /css/                    - Modular CSS files
+├── /data/
+│   ├── /participants/       - Participant data (416 records)
+│   ├── /config/             - Site configuration
+└── /images/                 - Image assets
 ```
 
-### Building for Production
+## Technical Details
 
-```bash
-# Build the frontend assets
-npm run build
+- **Zero build process** - Works without npm, Node.js, or any build tools
+- **No dependencies** - Except CDN libraries (MicroModal, Animate.css, Font Awesome)
+- **Static data** - All data stored in JSON files, loaded at runtime
+- **Browser compatibility** - Modern browsers (Chrome, Firefox, Safari, Edge)
+- **Size** - 11MB total, 431 files
 
-# Preview production build locally
-npm run preview
+## Archive Date
+
+- **Created:** December 1, 2025
+- **Original Campaign Period:** Early 2025 - December 2025
+- **Final Participant Count:** 416
+- **Extraction Source:** Neon PostgreSQL database
+
+## Historical Context
+
+This website was created to mobilize community support during the Dorset Coast Forum's public consultation on Shore Road traffic improvements in North Swanage. It served as a:
+
+- Registration platform for community members
+- Information hub about traffic safety concerns
+- Community organizing tool with gamification features
+- Resource for sharing campaign updates
+
+The campaign successfully engaged over 400 community members in advocating for safer traffic solutions.
+
+## Data Privacy
+
+All participant data in this archive:
+- Has been anonymized (last names shown as initials only)
+- Includes only publicly shared information (names, comments, timestamps)
+- Does not include email addresses or sensitive information
+- Represents participants who opted to be publicly listed
+
+## For Developers
+
+### Architecture
+
+- **Simple IIFE pattern** - No complex module system
+- **Direct DOM manipulation** - No framework dependencies
+- **Fetch API** - For loading static JSON data
+- **Event-driven** - Standard browser event handlers
+
+### Data Loading
+
+All data loading goes through `js/data-loader.js`:
+
+```javascript
+// Load site configuration
+const config = await DataLoader.loadConfig();
+
+// Load all participants
+const { participants, totalCount } = await DataLoader.loadAllParticipants();
+
+// Load recent activity
+const { signups } = await DataLoader.loadRecentSignups();
+
+// Load comments
+const comments = await DataLoader.loadComments();
 ```
 
-## 🚀 Deployment
+### Adding to Archive Notice
 
-### Deploy to Vercel
+The archive notice is automatically added by each static JavaScript file. To modify the message, edit the `addArchiveNotice()` function in:
+- `js/homepage-static.js`
+- `js/feeds-static.js`
+- `js/share-static.js`
 
-1. **Install Vercel CLI**:
-   ```bash
-   npm i -g vercel
-   ```
+## Migration History
 
-2. **Deploy**:
-   ```bash
-   vercel
-   
-   # For production deployment
-   vercel --prod
-   ```
+This static archive was created from a dynamic Vite + Vercel + Neon (PostgreSQL) application through a systematic migration process:
 
-3. **Set Environment Variables**:
-   - Go to your Vercel dashboard
-   - Navigate to Project Settings → Environment Variables
-   - Add all required environment variables
+1. **Phase 1:** Data extraction from Neon database to JSON files
+2. **Phase 2:** JavaScript simplification - replaced API calls with static data loading
+3. **Phase 3:** Build system removal and file cleanup
 
-### GitHub Integration
+Original codebase: ~200+ files with build system, APIs, and dependencies
+Final archive: 431 files, 11MB, zero build dependencies
 
-1. Push repository to GitHub
-2. Import project in Vercel dashboard
-3. Configure environment variables
-4. Deploy automatically on push to main branch
+## License
 
-## 📊 Database Setup
+MIT License - See original campaign materials for full details
 
-### 1. Create Notion Integration
+## Contact
 
-1. Visit [Notion Integrations](https://www.notion.so/my-integrations)
-2. Click "New integration"
-3. Configure with these capabilities:
-   - Read content
-   - Update content
-   - Insert content
-4. Copy the integration token
-
-### 2. Create Required Databases
-
-Create databases manually in Notion with these properties:
-
-**Main Database**:
-- Name (Title)
-- Email (Email)
-- First Name (Text)
-- Last Name (Text)
-- Source (Text)
-- Timestamp (Date)
-- User ID (Text)
-- Referrer (Text)
-- Comments (Text)
-- Visitor Type (Select: Local/Tourist)
-
-**Gamification Database**:
-- Email (Email)
-- Name (Title)
-- Display Name (Text)
-- User ID (Text)
-- Referral Code (Text)
-- Total Points (Number)
-- [Additional point tracking fields...]
-
-### 3. Share Databases with Integration
-
-For each database:
-1. Click "..." menu → "Add connections"
-2. Search for your integration name
-3. Add the connection
-
-## 🔐 Security Features
-
-- **Rate Limiting**: 10 requests/minute per IP for form submissions
-- **Input Validation**: Client and server-side validation
-- **CSRF Protection**: Token-based protection
-- **Content Security Policy**: Strict CSP headers
-- **Bot Protection**: Google reCAPTCHA v3 + honeypot fields
-- **Data Privacy**: Email masking, opt-in features
-
-## 📝 API Documentation
-
-### Core Endpoints
-
-**POST /api/submit-form**
-- Handles participant registration
-- Rate limited
-- Returns: `{ success: true, id: "..." }`
-
-**GET /api/get-count**
-- Returns participant count
-- Cached for 1 minute
-- Returns: `{ count: 250 }`
-
-**GET /api/get-leaderboard**
-- Returns gamification leaderboard
-- Returns: `{ leaderboard: [...], stats: {...} }`
-
-**POST /api/create-checkout-session**
-- Creates Stripe checkout session
-- Returns: `{ url: "https://checkout.stripe.com/..." }`
-
-For complete API documentation, see `architecture.md`.
-
-## 🧪 Testing
-
-### Local Testing
-
-```bash
-# Test form submission
-curl -X POST http://localhost:3000/api/submit-form \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "John Doe",
-    "firstName": "John",
-    "lastName": "Doe",
-    "email": "test@example.com",
-    "visitorType": "local"
-  }'
-
-# Test participant count
-curl http://localhost:3000/api/get-count
-
-# Test rate limiting (run 11 times quickly)
-for i in {1..11}; do
-  curl -X POST http://localhost:3000/api/submit-form \
-    -H "Content-Type: application/json" \
-    -d '{"name": "Test", "email": "test@example.com"}'
-done
-```
-
-### Production Testing
-
-Replace `localhost:3000` with your production domain.
-
-## 🎮 Feature Flags
-
-Features can be toggled via Notion database or environment variables:
-
-1. **Via Notion** (recommended):
-   - Open Feature Flags database
-   - Change value to `true`, `false`, or `unset`
-   - Changes take effect within 5 minutes
-
-2. **Via Environment Variables**:
-   - Set `FEATURE_*` variables
-   - Redeploy to apply changes
-
-## 📧 Email Campaigns
-
-### Compile Email Templates
-
-```bash
-# Compile MJML to HTML
-npm run compile-email
-
-# Run email campaigns
-node scripts/email-campaigns/email-campaign.js
-
-# Monitor campaign progress
-node scripts/email-campaigns/monitor-campaign.js
-```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 🆘 Support
-
-- **Documentation**: See `architecture.md` for detailed technical documentation
-- **Issues**: [GitHub Issues](https://github.com/your-username/nstcg-website/issues)
-- **Contact**: support@nstcg.org
-
-## 🙏 Acknowledgments
-
-- North Swanage community members
-- Swanage Town Council
-- All contributors and supporters
+For historical inquiries about this campaign:
+- North Swanage Traffic Consultation Group
+- Community archive maintained for historical reference
 
 ---
 
-Built with ❤️ for the North Swanage community
+**Note:** This is a preserved snapshot. The information reflects the state of the campaign as of December 2025. For current traffic information in Swanage, please contact local authorities or the Dorset Coast Forum.
