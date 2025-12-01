@@ -7,6 +7,11 @@
 (function() {
   'use strict';
 
+  // Only run on feeds page (check for unique feeds element)
+  if (!document.querySelector('.feeds-page')) {
+    return;
+  }
+
   // ===================
   // Configuration
   // ===================
@@ -37,11 +42,27 @@
 
   function displayParticipants(participants, page = 1) {
     const container = document.getElementById('feeds-grid');
+    const loadingState = document.getElementById('loading-state');
+    const errorState = document.getElementById('error-state');
+    const emptyState = document.getElementById('empty-state');
+
     if (!container) return;
+
+    // Hide all state elements first
+    if (loadingState) loadingState.style.display = 'none';
+    if (errorState) errorState.style.display = 'none';
+    if (emptyState) emptyState.style.display = 'none';
+
+    // Check if we have participants
+    if (!participants || participants.length === 0) {
+      if (emptyState) emptyState.style.display = 'block';
+      return;
+    }
 
     const start = (page - 1) * ITEMS_PER_PAGE;
     const end = start + ITEMS_PER_PAGE;
     const pageParticipants = participants.slice(start, end);
+    const totalParticipants = participants.length;
 
     const html = pageParticipants.map((p, index) => {
       const fullName = p.name || `${p.first_name || ''} ${p.last_name || ''}`.trim() || 'Anonymous';
@@ -53,9 +74,12 @@
         displayName = `${nameParts[0]} ${lastInitial}.`;
       }
 
+      // Calculate submission number (most recent = highest number)
+      const submissionNumber = totalParticipants - start - index;
+
       return `
-        <div class="participant-card animate__animated animate__fadeIn" style="animation-delay: ${index * 0.02}s">
-          <div class="participant-avatar">${displayName.charAt(0)}</div>
+        <div class="participant-card visible" style="transition-delay: ${index * 0.05}s">
+          <div class="participant-avatar" style="font-size: 11px; color: #7f8c8d; font-weight: 600;">#${submissionNumber}</div>
           <div class="participant-info">
             <div class="participant-name">${displayName}</div>
             <div class="participant-meta">${formatDate(p.timestamp)}</div>
@@ -65,7 +89,8 @@
       `;
     }).join('');
 
-    container.innerHTML = html || '<p>No participants found.</p>';
+    container.innerHTML = html;
+    container.style.display = 'grid';
 
     // Update pagination
     updatePagination(participants.length, page);
@@ -392,20 +417,23 @@
 
     const hotTopicsContainer = document.getElementById('hot-topics-container');
     if (hotTopicsContainer) {
-      const html = hotTopics.map(topic => `
-        <div class="hot-topic-card ${topic.sentiment}">
-          <div class="hot-topic-icon">
-            <i class="fas ${topic.icon}"></i>
+      const html = hotTopics.map((topic, index) => `
+        <div class="hot-topic-card visible rank-${index + 1}">
+          <div class="hot-topic-header">
+            <div class="hot-topic-info">
+              <h3 class="hot-topic-title">
+                <i class="fas ${topic.icon}" style="margin-right: 12px; color: var(--color-primary);"></i>
+                ${topic.title}
+              </h3>
+              <div class="hot-topic-frequency">
+                <i class="fas fa-users"></i>
+                <span>${topic.count} mentions (${topic.percentage}% of feedback)</span>
+              </div>
+            </div>
+            <div class="hot-topic-rank rank-${index + 1}">#${index + 1}</div>
           </div>
-          <div class="hot-topic-content">
-            <h3 class="hot-topic-title">${topic.title}</h3>
-            <div class="hot-topic-stats">
-              <span class="hot-topic-count">${topic.count} mentions</span>
-              <span class="hot-topic-percentage">${topic.percentage}%</span>
-            </div>
-            <div class="hot-topic-bar">
-              <div class="hot-topic-fill" style="width: ${topic.percentage}%"></div>
-            </div>
+          <div class="frequency-bar">
+            <div class="frequency-fill" style="width: ${topic.percentage}%"></div>
           </div>
         </div>
       `).join('');
