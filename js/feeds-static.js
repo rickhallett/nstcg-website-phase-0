@@ -206,13 +206,28 @@
     // Sort dates and create cumulative data
     const dates = Object.keys(signupsByDate).sort();
     let cumulative = 0;
-    const chartData = dates.map(date => {
+    const labels = [];
+    const data = [];
+
+    dates.forEach(date => {
       cumulative += signupsByDate[date];
-      return {
-        x: date,
-        y: cumulative
-      };
+      // Format date for display
+      const d = new Date(date);
+      const label = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+      labels.push(label);
+      data.push(cumulative);
     });
+
+    // Sample data if too many points (show every nth point)
+    const maxPoints = 60;
+    let sampledLabels = labels;
+    let sampledData = data;
+
+    if (labels.length > maxPoints) {
+      const step = Math.ceil(labels.length / maxPoints);
+      sampledLabels = labels.filter((_, i) => i % step === 0 || i === labels.length - 1);
+      sampledData = data.filter((_, i) => i % step === 0 || i === data.length - 1);
+    }
 
     // Hide loading spinner
     if (graphLoading) {
@@ -223,9 +238,10 @@
     new Chart(chartCanvas, {
       type: 'line',
       data: {
+        labels: sampledLabels,
         datasets: [{
           label: 'Total Participants',
-          data: chartData,
+          data: sampledData,
           borderColor: '#ff6600',
           backgroundColor: 'rgba(255, 102, 0, 0.1)',
           borderWidth: 3,
@@ -256,14 +272,6 @@
             padding: 12,
             displayColors: false,
             callbacks: {
-              title: function(context) {
-                const date = new Date(context[0].parsed.x);
-                return date.toLocaleDateString('en-GB', {
-                  day: 'numeric',
-                  month: 'short',
-                  year: 'numeric'
-                });
-              },
               label: function(context) {
                 return `Total: ${context.parsed.y} participants`;
               }
@@ -272,13 +280,6 @@
         },
         scales: {
           x: {
-            type: 'time',
-            time: {
-              unit: 'day',
-              displayFormats: {
-                day: 'MMM d'
-              }
-            },
             grid: {
               display: false
             },
