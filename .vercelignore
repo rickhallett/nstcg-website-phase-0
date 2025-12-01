@@ -1,0 +1,11 @@
+# Prevent source maps from being deployed
+*.map
+**/*.map
+
+# Build artifacts
+.tmp/
+node_modules/
+
+# Development files
+.env.local
+.env.development
