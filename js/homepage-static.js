@@ -9,7 +9,7 @@
   "use strict";
 
   // Only run on homepage (check for unique homepage element)
-  if (!document.getElementById("signupForm")) {
+  if (!document.getElementById("thought-bubbles-container")) {
     return;
   }
 
