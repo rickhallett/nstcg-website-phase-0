@@ -5,6 +5,7 @@ This is a static archive of the North Swanage Traffic Consultation Group website
 ## What This Is
 
 A static HTML/CSS/JavaScript snapshot preserving:
+
 - 416 community participant registrations
 - Campaign activity feed and timeline
 - Community comments and engagement
@@ -45,6 +46,7 @@ Some browsers may have CORS restrictions with `file://` protocol. Using an HTTP 
 ├── terms-and-conditions.html- Terms & conditions
 ├── 404.html                 - Not found page
 ├── maintenance.html         - Maintenance page
+├── survey-screenshot.html   - Historical reference
 ├── /js/
 │   ├── homepage-static.js   - Homepage functionality
 │   ├── feeds-static.js      - Feeds page functionality
@@ -94,9 +96,10 @@ The campaign successfully engaged over 400 community members in advocating for s
 ## Data Privacy
 
 All participant data in this archive:
+
 - Has been anonymized (last names shown as initials only)
 - Includes only publicly shared information (names, comments, timestamps)
-- Does not include email addresses or sensitive information
+- Does not render email addresses or sensitive information
 - Represents participants who opted to be publicly listed
 
 ## For Developers
@@ -105,16 +108,17 @@ All participant data in this archive:
 
 This project includes specialized agents in `.claude/agents/` for complex development tasks:
 
-| Agent | Purpose | Use Cases |
-|-------|---------|-----------|
-| **@css-module-architect** | CSS architecture and build order | Adding CSS components, managing 26-file modular structure, fixing build order issues |
-| **@page-module-guardian** | JavaScript module isolation | Creating page scripts with page-guard pattern, IIFE isolation, DataLoader integration |
-| **@static-data-steward** | Data integrity and privacy | Managing 416 participant records, ensuring privacy compliance, DataLoader patterns |
-| **@archive-compliance-officer** | Archive mode compliance | Verifying disabled features, adding archive notices, maintaining historical integrity |
-| **@build-pipeline-specialist** | Build and deployment | Running builds, debugging minification, optimizing bundles, Vercel deployment |
-| **@agent-architect** | Agent creation | Creating new specialized agents for project-specific patterns |
+| Agent                           | Purpose                          | Use Cases                                                                             |
+| ------------------------------- | -------------------------------- | ------------------------------------------------------------------------------------- |
+| **@css-module-architect**       | CSS architecture and build order | Adding CSS components, managing 26-file modular structure, fixing build order issues  |
+| **@page-module-guardian**       | JavaScript module isolation      | Creating page scripts with page-guard pattern, IIFE isolation, DataLoader integration |
+| **@static-data-steward**        | Data integrity and privacy       | Managing 416 participant records, ensuring privacy compliance, DataLoader patterns    |
+| **@archive-compliance-officer** | Archive mode compliance          | Verifying disabled features, adding archive notices, maintaining historical integrity |
+| **@build-pipeline-specialist**  | Build and deployment             | Running builds, debugging minification, optimizing bundles, Vercel deployment         |
+| **@agent-architect**            | Agent creation                   | Creating new specialized agents for project-specific patterns                         |
 
 **Usage with Claude Code:**
+
 ```bash
 # Reference agents with @ prefix
 @css-module-architect Add a new notification banner component
@@ -174,13 +178,14 @@ The build script concatenates and minifies all CSS and JavaScript files. See `do
 ### Adding to Archive Notice
 
 The archive notice is automatically added by each static JavaScript file. To modify the message, edit the `addArchiveNotice()` function in:
+
 - `js/homepage-static.js`
 - `js/feeds-static.js`
 - `js/share-static.js`
 
 ## Migration History
 
-This static archive was created from a dynamic Vite + Node.js + Neon (PostgreSQL) application through a systematic five-phase migration process:
+This static archive was created from a dynamic Vite + Vercel + Neon (PostgreSQL) application through a systematic migration process:
 
 1. **Phase 1:** Data extraction from Neon database to JSON files with anonymization
 2. **Phase 2:** Backend elimination - API calls replaced with static file loading via DataLoader abstraction
@@ -218,6 +223,7 @@ MIT License - See original campaign materials for full details
 ## Contact
 
 For historical inquiries about this campaign:
+
 - North Swanage Traffic Consultation Group
 - Community archive maintained for historical reference
 
