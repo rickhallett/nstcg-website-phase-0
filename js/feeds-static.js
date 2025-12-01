@@ -187,31 +187,127 @@
   }
 
   // ===================
-  // Hide Dynamic Sections for Archive
+  // Chart Display
   // ===================
 
-  function hideLoadingStates() {
-    // Hide graph loading spinner
+  function createSignupChart() {
+    const chartCanvas = document.getElementById('signup-chart');
     const graphLoading = document.getElementById('graph-loading');
+
+    if (!chartCanvas || !allParticipants.length) return;
+
+    // Group signups by date
+    const signupsByDate = {};
+    allParticipants.forEach(p => {
+      const date = new Date(p.timestamp).toISOString().split('T')[0]; // YYYY-MM-DD
+      signupsByDate[date] = (signupsByDate[date] || 0) + 1;
+    });
+
+    // Sort dates and create cumulative data
+    const dates = Object.keys(signupsByDate).sort();
+    let cumulative = 0;
+    const chartData = dates.map(date => {
+      cumulative += signupsByDate[date];
+      return {
+        x: date,
+        y: cumulative
+      };
+    });
+
+    // Hide loading spinner
     if (graphLoading) {
       graphLoading.style.display = 'none';
     }
 
-    // Hide signup chart canvas (not available in archive)
-    const chartCanvas = document.getElementById('signup-chart');
-    if (chartCanvas) {
-      const parent = chartCanvas.parentElement;
-      if (parent) {
-        parent.innerHTML = `
-          <div style="text-align: center; padding: 40px; color: #95a5a6;">
-            <i class="fas fa-chart-line" style="font-size: 48px; margin-bottom: 20px;"></i>
-            <p style="font-size: 18px; margin-bottom: 10px;">Campaign Momentum Chart</p>
-            <p>Historical chart data not available in this archive</p>
-          </div>
-        `;
+    // Create chart
+    new Chart(chartCanvas, {
+      type: 'line',
+      data: {
+        datasets: [{
+          label: 'Total Participants',
+          data: chartData,
+          borderColor: '#ff6600',
+          backgroundColor: 'rgba(255, 102, 0, 0.1)',
+          borderWidth: 3,
+          fill: true,
+          tension: 0.4,
+          pointRadius: 0,
+          pointHoverRadius: 6,
+          pointHoverBackgroundColor: '#ff6600',
+          pointHoverBorderColor: '#fff',
+          pointHoverBorderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+          intersect: false,
+          mode: 'index'
+        },
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            titleColor: '#fff',
+            bodyColor: '#fff',
+            padding: 12,
+            displayColors: false,
+            callbacks: {
+              title: function(context) {
+                const date = new Date(context[0].parsed.x);
+                return date.toLocaleDateString('en-GB', {
+                  day: 'numeric',
+                  month: 'short',
+                  year: 'numeric'
+                });
+              },
+              label: function(context) {
+                return `Total: ${context.parsed.y} participants`;
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            type: 'time',
+            time: {
+              unit: 'day',
+              displayFormats: {
+                day: 'MMM d'
+              }
+            },
+            grid: {
+              display: false
+            },
+            ticks: {
+              color: '#ecf0f1',
+              maxRotation: 45,
+              minRotation: 45
+            }
+          },
+          y: {
+            beginAtZero: true,
+            grid: {
+              color: 'rgba(255, 255, 255, 0.1)'
+            },
+            ticks: {
+              color: '#ecf0f1',
+              precision: 0
+            }
+          }
+        }
       }
-    }
+    });
+  }
 
+  // ===================
+  // Hide Hot Topics (No Data)
+  // ===================
+
+  function hideHotTopics() {
     // Hide hot topics loading spinner
     const hotTopicsLoading = document.getElementById('hot-topics-loading');
     if (hotTopicsLoading) {
@@ -304,7 +400,8 @@
     // Display content
     displayParticipants(allParticipants, 1);
     await displayStats();
-    hideLoadingStates();
+    createSignupChart();
+    hideHotTopics();
     addArchiveNotice();
 
     console.log(`Loaded ${allParticipants.length} participants`);
