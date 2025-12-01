@@ -10,7 +10,7 @@
 node_modules/
 
 # Build output
-dist/
+# dist/ - now committed for Vercel deployment
 build/
 
 # Vite cache

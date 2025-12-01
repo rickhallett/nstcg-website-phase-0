@@ -4,8 +4,25 @@
 
 # Build artifacts
 .tmp/
-node_modules/
 
 # Development files
 .env.local
 .env.development
+.env
+
+# Git files
+.git/
+.gitignore
+
+# IDE files
+.vscode/
+.idea/
+
+# Documentation
+README.md
+DEPLOYMENT.md
+
+# Source files - not needed after build
+css/
+js/
+build.sh

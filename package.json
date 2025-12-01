@@ -1,0 +1,6 @@
+{
+  "name": "nstcg-website-archive",
+  "version": "1.0.0",
+  "description": "Static archive of NSTCG campaign website",
+  "private": true
+}

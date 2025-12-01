@@ -77,8 +77,7 @@ echo "Minifying and uglifying JS with terser..."
 npx terser .tmp/app.js -o dist/app.min.js \
   --compress passes=3,drop_console=true,drop_debugger=true,pure_funcs=['console.log','console.info','console.debug'],unsafe=true,unsafe_comps=true,unsafe_math=true,unsafe_methods=true,unsafe_proto=true,unsafe_regexp=true,unsafe_undefined=true \
   --mangle toplevel=true,eval=true \
-  --format ascii_only=true,comments=false \
-  --source-map false
+  --format ascii_only=true,comments=false
 
 # Clean up temp files
 rm -rf .tmp
