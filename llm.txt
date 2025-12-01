@@ -10,6 +10,26 @@
 
 **Technology:** Pure HTML/CSS/JavaScript. No frameworks. No database. Data stored in JSON files.
 
+## Specialized Agents Available
+
+This project includes specialized agents for complex tasks. Reference them with `@<agent-name>`:
+
+- **@css-module-architect** - CSS architecture, build order, modular organization
+- **@page-module-guardian** - JavaScript IIFE patterns, page-guard isolation
+- **@static-data-steward** - Participant data management, privacy compliance
+- **@archive-compliance-officer** - Archive integrity, disabled features verification
+- **@build-pipeline-specialist** - Build process, minification, Vercel deployment
+- **@agent-architect** - Creating new specialized agents for repetitive tasks
+
+**When to use agents:**
+- CSS changes affecting multiple files → `@css-module-architect`
+- JavaScript module issues → `@page-module-guardian`
+- Participant data updates → `@static-data-steward`
+- Archive compliance checks → `@archive-compliance-officer`
+- Build/deployment problems → `@build-pipeline-specialist`
+
+For general requests, continue using the main AI assistant. Agents are for specialized, technical tasks.
+
 ---
 
 ## Your Role When Helping Users

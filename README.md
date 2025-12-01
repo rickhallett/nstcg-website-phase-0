@@ -101,6 +101,33 @@ All participant data in this archive:
 
 ## For Developers
 
+### Specialized Agents
+
+This project includes specialized agents in `.claude/agents/` for complex development tasks:
+
+| Agent | Purpose | Use Cases |
+|-------|---------|-----------|
+| **@css-module-architect** | CSS architecture and build order | Adding CSS components, managing 26-file modular structure, fixing build order issues |
+| **@page-module-guardian** | JavaScript module isolation | Creating page scripts with page-guard pattern, IIFE isolation, DataLoader integration |
+| **@static-data-steward** | Data integrity and privacy | Managing 416 participant records, ensuring privacy compliance, DataLoader patterns |
+| **@archive-compliance-officer** | Archive mode compliance | Verifying disabled features, adding archive notices, maintaining historical integrity |
+| **@build-pipeline-specialist** | Build and deployment | Running builds, debugging minification, optimizing bundles, Vercel deployment |
+| **@agent-architect** | Agent creation | Creating new specialized agents for project-specific patterns |
+
+**Usage with Claude Code:**
+```bash
+# Reference agents with @ prefix
+@css-module-architect Add a new notification banner component
+
+# Agents have deep knowledge of:
+# - Project file structure and paths
+# - Build order requirements
+# - Privacy and compliance rules
+# - Archive mode constraints
+```
+
+Each agent encodes project-specific expertise to eliminate repeated context explanation. See `CLAUDE.md` for detailed agent descriptions.
+
 ### Architecture
 
 - **Simple IIFE pattern** - No complex module system

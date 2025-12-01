@@ -2,6 +2,19 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Specialized Agents
+
+For complex tasks, specialized agents are available in `.claude/agents/`:
+
+- **@agent-architect** - System design, architecture decisions, technology evaluation
+- **@archive-compliance-officer** - Archive integrity, data preservation, compliance verification
+- **@build-pipeline-specialist** - Build process optimization, minification, deployment pipeline
+- **@css-module-architect** - CSS organization, specificity management, modular architecture
+- **@page-module-guardian** - JavaScript module isolation, page-guard patterns, cross-page issues
+- **@static-data-steward** - JSON data management, data integrity, participant records
+
+Reference these agents with `@<agent-name>` for specialized assistance.
+
 ## Project Overview
 
 NSTCG (North Swanage Traffic Consultation Group) static website archive - a preserved snapshot of a community activism campaign website with 416 participant registrations. Originally a dynamic Vite + PostgreSQL application, now a zero-dependency static HTML/CSS/JavaScript site.
@@ -213,3 +226,27 @@ Archive mode explicitly disables: form submissions, donations, user registration
 - Always test with local HTTP server, not file:// protocol (CORS restrictions)
 - CSS order in build.sh is critical - variables must load before components
 - Each JS module has page-guard - do not remove unique element ID checks
+
+## Quick Reference
+
+### Key Files
+- **Build script:** `build.sh` - Concatenates and minifies assets
+- **Deployment config:** `vercel.json` - Vercel deployment settings
+- **Site config:** `data/config/site-config.json` - Feature flags and counts
+- **Main entry points:** `index.html`, `feeds.html`, `share.html`
+
+### Common Tasks
+- **Add new CSS component:** Edit `build.sh` CSS_FILES array, maintain order
+- **Modify page behavior:** Edit respective `-static.js` file with page-guard
+- **Update participant data:** Modify JSON in `data/participants/`
+- **Change archive notices:** Edit `addArchiveNotice()` in page-specific JS
+
+### Production URLs
+- **Live site:** https://nstcg-website-inqckzyad-rick-halletts-projects.vercel.app
+- **Vercel dashboard:** https://vercel.com/rick-halletts-projects/nstcg-website
+
+### Troubleshooting
+- **Styles not loading:** Check CSS order in `build.sh`, rebuild with `./build.sh`
+- **JS not running on page:** Verify page-guard selector matches HTML element
+- **Build fails:** Ensure `build.sh` is executable (`chmod +x build.sh`)
+- **Data not displaying:** Check browser console, verify JSON file paths

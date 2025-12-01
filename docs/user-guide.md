@@ -48,8 +48,28 @@ This is a **static archive** of the NSTCG campaign website. It preserves the his
 - It understands website code
 - It can test changes immediately
 - It's designed for this type of work
+- It supports specialized agents for complex tasks
 
 **Alternatives:** ChatGPT with Code Interpreter, Cursor, or similar AI coding tools
+
+### Specialized Agents (Advanced)
+
+This project includes specialized agents for complex technical tasks. These are typically used by developers, but non-technical users can reference them when needed:
+
+| Agent | What It Does | When to Use |
+|-------|--------------|-------------|
+| `@css-module-architect` | CSS architecture and styling | Complex CSS changes affecting multiple files |
+| `@page-module-guardian` | JavaScript functionality | Issues with page-specific JavaScript |
+| `@static-data-steward` | Participant data management | Updating participant records safely |
+| `@archive-compliance-officer` | Archive integrity checks | Verifying archive features stay disabled |
+| `@build-pipeline-specialist` | Build and deployment | Build failures or deployment issues |
+
+**How to use:** Simply mention the agent in your request to Claude Code:
+```
+@css-module-architect I need to add a new component with proper build order
+```
+
+For most tasks, you won't need these specialized agents - the main AI assistant will handle common requests just fine.
 
 ### What AI Assistants Can Do
 
