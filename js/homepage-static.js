@@ -237,12 +237,54 @@
   // ===================
 
   function setupNavigation() {
-    // Simple navigation setup - just ensure links work
-    const navLinks = document.querySelectorAll('a[href^="/"]');
-    navLinks.forEach(link => {
-      const href = link.getAttribute('href');
-      if (href && !href.includes('.html')) {
-        link.setAttribute('href', href + '.html');
+    const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+    const mobileMenuOverlay = document.querySelector('.mobile-menu-overlay');
+    const body = document.body;
+
+    if (!mobileMenuToggle) return;
+
+    // Toggle mobile menu
+    function toggleMobileMenu() {
+      const isOpen = body.classList.contains('mobile-menu-open');
+
+      if (isOpen) {
+        body.classList.remove('mobile-menu-open');
+        mobileMenuToggle.setAttribute('aria-expanded', 'false');
+      } else {
+        body.classList.add('mobile-menu-open');
+        mobileMenuToggle.setAttribute('aria-expanded', 'true');
+      }
+    }
+
+    // Event listeners
+    mobileMenuToggle.addEventListener('click', toggleMobileMenu);
+
+    if (mobileMenuOverlay) {
+      mobileMenuOverlay.addEventListener('click', toggleMobileMenu);
+    }
+
+    // Close menu on navigation
+    const mobileMenuLinks = document.querySelectorAll('.mobile-menu a');
+    mobileMenuLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        body.classList.remove('mobile-menu-open');
+        mobileMenuToggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    // Close menu on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && body.classList.contains('mobile-menu-open')) {
+        toggleMobileMenu();
+      }
+    });
+
+    // Active page highlighting
+    const currentPage = window.location.pathname;
+    document.querySelectorAll('.nav-menu a').forEach(link => {
+      const linkPath = new URL(link.href).pathname;
+      if (linkPath === currentPage || (currentPage === '/' && linkPath === '/index.html')) {
+        link.classList.add('active');
       }
     });
   }
