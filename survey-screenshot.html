@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Survey Instructions - Screenshot Reference</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+      background: #000;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .modal-container {
+      background: #1a1a1a;
+      border-radius: 10px;
+      max-width: 600px;
+      width: 100%;
+      padding: 30px;
+      border: 2px solid #333;
+    }
+
+    .modal-header {
+      text-align: center;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #333;
+    }
+
+    .modal-title {
+      color: #3498db;
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .success-message {
+      background: linear-gradient(135deg, rgba(0, 255, 0, 0.1), rgba(0, 200, 0, 0.05));
+      border: 2px solid #00ff00;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 25px;
+      text-align: center;
+    }
+
+    .success-message h3 {
+      color: #00ff00;
+      font-size: 28px;
+      margin-bottom: 15px;
+    }
+
+    .success-message p {
+      color: #ccc;
+      margin-bottom: 10px;
+    }
+
+    .success-message .highlight {
+      color: #00ff00;
+      font-weight: bold;
+    }
+
+    .continue-btn {
+      display: block;
+      width: 100%;
+      background: #00ff00;
+      color: #1a1a1a;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 5px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      text-transform: uppercase;
+      margin-top: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .continue-btn:hover {
+      background: #00cc00;
+    }
+
+    /* Survey Instructions Section */
+    .survey-instructions {
+      background: #2a2a2a;
+      padding: 25px;
+      border-radius: 10px;
+      border: 2px solid #00ff00;
+      margin-top: 20px;
+    }
+
+    .survey-instructions h4 {
+      color: #00ff00;
+      margin-bottom: 20px;
+      font-size: 20px;
+      text-align: center;
+    }
+
+    .instructions-content {
+      background: #1a1a1a;
+      padding: 20px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+
+    .instructions-content > p {
+      color: #ccc;
+      margin-bottom: 15px;
+      line-height: 1.6;
+    }
+
+    .steps {
+      margin-left: 20px;
+    }
+
+    .step {
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .step-label {
+      color: #00ff00;
+      font-weight: bold;
+    }
+
+    /* Traffic Light Ranking Box */
+    .ranking-box {
+      background: #333;
+      padding: 15px;
+      margin-left: 20px;
+      margin-top: 10px;
+      border-left: 4px solid #00ff00;
+      border-radius: 0 5px 5px 0;
+    }
+
+    .ranking-item {
+      margin: 8px 0;
+      font-size: 15px;
+    }
+
+    .ranking-item.best {
+      color: #00ff00;
+    }
+
+    .ranking-item.neutral {
+      color: #ccc;
+    }
+
+    .ranking-item .warning-orange {
+      color: #FFA500;
+      font-weight: bold;
+    }
+
+    .ranking-item .warning-red {
+      color: #ff0000;
+      font-weight: bold;
+    }
+
+    .completion-note {
+      color: #00ff00;
+      margin-top: 20px;
+      font-weight: bold;
+      text-align: center;
+      line-height: 1.8;
+    }
+
+    /* Checkboxes */
+    .checkbox-container {
+      background: #1a1a1a;
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      color: #fff;
+    }
+
+    .checkbox-label input {
+      margin-right: 10px;
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+
+    /* Official Survey Button */
+    .official-survey-btn {
+      width: 100%;
+      padding: 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 20px;
+      font-weight: bold;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+      margin-top: 15px;
+    }
+
+    .official-survey-btn.disabled {
+      background: #666;
+      color: #999;
+      cursor: not-allowed;
+    }
+
+    .official-survey-btn.enabled {
+      background: #00ff00;
+      color: #1a1a1a;
+      cursor: pointer;
+    }
+
+    .note {
+      text-align: center;
+      color: #666;
+      font-size: 12px;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="modal-container">
+    <header class="modal-header">
+      <h2 class="modal-title">Community Safety Survey</h2>
+    </header>
+
+    <div class="success-message">
+      <h3>✓ WELCOME TO THE MOVEMENT!</h3>
+      <p style="font-size: 18px;">
+        You are now part of <strong><span class="highlight">247 Neighbours</span></strong> fighting for safer streets.
+      </p>
+      <p class="highlight">
+        Check your email for next steps and community updates.
+      </p>
+      <button class="continue-btn">
+        Continue to Official Survey →
+      </button>
+    </div>
+
+    <div class="survey-instructions">
+      <h4>Dorset Coast Forum Public Engagement Survey</h4>
+
+      <div class="instructions-content">
+        <p>
+          The Dorset Coast Forum has launched a public engagement survey to gather community input on the Shore Road improvements. The survey contains approximately 30 questions covering various aspects including green spaces, pedestrian safety, and traffic management.
+        </p>
+
+        <p>
+          If your primary concern is traffic safety, the most relevant questions are:
+        </p>
+
+        <div class="steps">
+          <p class="step">
+            <span class="step-label">STEP 1:</span> Answer Question 1 (Your connection to the area)
+          </p>
+          <p class="step">
+            <span class="step-label">STEP 2:</span> Skip directly to Question 24 - Select <strong>"Don't Know"</strong>
+          </p>
+          <p class="step">
+            <span class="step-label">STEP 3:</span> Go to Question 26 - Rank preferences in this order:
+          </p>
+
+          <!-- Traffic Light Ranking Box -->
+          <div class="ranking-box">
+            <p class="ranking-item best">
+              <strong>1st Choice:</strong> Two-way traffic on Shore Road with removal of parking
+            </p>
+            <p class="ranking-item neutral">
+              <strong>2nd Choice:</strong> Do nothing / keep Shore Road as it is
+            </p>
+            <p class="ranking-item neutral">
+              <strong>3rd Choice:</strong> A one-way system on Shore Road - would <span class="warning-orange">redirect significant</span> traffic
+            </p>
+            <p class="ranking-item neutral">
+              <strong>4th Choice:</strong> Full closure of Shore Road - would redirect <span class="warning-red">traffic to residential streets</span>
+            </p>
+          </div>
+        </div>
+
+        <p class="completion-note">
+          ⏱️ This takes only 30 seconds vs 30 minutes for the full survey<br>
+          ✅ These 3 questions constitute a COMPLETE and VALID survey response
+        </p>
+      </div>
+
+      <div class="checkbox-container">
+        <label class="checkbox-label">
+          <input type="checkbox" id="understand-checkbox">
+          <span>I understand the survey structure and am ready to proceed</span>
+        </label>
+      </div>
+
+      <div class="checkbox-container">
+        <label class="checkbox-label">
+          <input type="checkbox" id="valid-survey-checkbox">
+          <span>I understand that questions 1, 24, and 26 do constitute a valid and complete survey</span>
+        </label>
+      </div>
+
+      <button class="official-survey-btn disabled" id="official-btn" disabled>
+        Open Official Survey →
+      </button>
+    </div>
+
+    <p class="note">
+      Screenshot reference - recreated from git commit 547037b (July 2025)
+    </p>
+  </div>
+
+  <script>
+    // Enable button when both checkboxes are checked
+    const checkbox1 = document.getElementById('understand-checkbox');
+    const checkbox2 = document.getElementById('valid-survey-checkbox');
+    const btn = document.getElementById('official-btn');
+
+    function updateButton() {
+      if (checkbox1.checked && checkbox2.checked) {
+        btn.disabled = false;
+        btn.classList.remove('disabled');
+        btn.classList.add('enabled');
+      } else {
+        btn.disabled = true;
+        btn.classList.remove('enabled');
+        btn.classList.add('disabled');
+      }
+    }
+
+    checkbox1.addEventListener('change', updateButton);
+    checkbox2.addEventListener('change', updateButton);
+  </script>
+</body>
+</html>
