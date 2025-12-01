@@ -187,6 +187,51 @@
   }
 
   // ===================
+  // Hide Dynamic Sections for Archive
+  // ===================
+
+  function hideLoadingStates() {
+    // Hide graph loading spinner
+    const graphLoading = document.getElementById('graph-loading');
+    if (graphLoading) {
+      graphLoading.style.display = 'none';
+    }
+
+    // Hide signup chart canvas (not available in archive)
+    const chartCanvas = document.getElementById('signup-chart');
+    if (chartCanvas) {
+      const parent = chartCanvas.parentElement;
+      if (parent) {
+        parent.innerHTML = `
+          <div style="text-align: center; padding: 40px; color: #95a5a6;">
+            <i class="fas fa-chart-line" style="font-size: 48px; margin-bottom: 20px;"></i>
+            <p style="font-size: 18px; margin-bottom: 10px;">Campaign Momentum Chart</p>
+            <p>Historical chart data not available in this archive</p>
+          </div>
+        `;
+      }
+    }
+
+    // Hide hot topics loading spinner
+    const hotTopicsLoading = document.getElementById('hot-topics-loading');
+    if (hotTopicsLoading) {
+      hotTopicsLoading.style.display = 'none';
+    }
+
+    // Show archived message for hot topics
+    const hotTopicsContainer = document.getElementById('hot-topics-container');
+    if (hotTopicsContainer) {
+      hotTopicsContainer.innerHTML = `
+        <div style="text-align: center; padding: 40px; color: #95a5a6;">
+          <i class="fas fa-archive" style="font-size: 48px; margin-bottom: 20px;"></i>
+          <p style="font-size: 18px; margin-bottom: 10px;">Community Hot Topics</p>
+          <p>AI analysis results not available in this archive.<br>See individual participant comments below.</p>
+        </div>
+      `;
+    }
+  }
+
+  // ===================
   // Navigation
   // ===================
 
@@ -259,6 +304,7 @@
     // Display content
     displayParticipants(allParticipants, 1);
     await displayStats();
+    hideLoadingStates();
     addArchiveNotice();
 
     console.log(`Loaded ${allParticipants.length} participants`);
