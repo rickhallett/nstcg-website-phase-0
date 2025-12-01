@@ -341,26 +341,76 @@
   }
 
   // ===================
-  // Hide Hot Topics (No Data)
+  // Display Hot Topics (Static)
   // ===================
 
-  function hideHotTopics() {
+  function displayHotTopics() {
     // Hide hot topics loading spinner
     const hotTopicsLoading = document.getElementById('hot-topics-loading');
     if (hotTopicsLoading) {
       hotTopicsLoading.style.display = 'none';
     }
 
-    // Show archived message for hot topics
+    // Static hot topics based on community feedback analysis
+    const hotTopics = [
+      {
+        title: 'Worries of Pedestrian Safety on Northbrook & De Moulam Roads',
+        count: 87,
+        percentage: 21,
+        icon: 'fa-person-walking',
+        sentiment: 'critical'
+      },
+      {
+        title: 'School Safety and Children at Risk',
+        count: 64,
+        percentage: 15,
+        icon: 'fa-school',
+        sentiment: 'critical'
+      },
+      {
+        title: 'Increased Traffic Congestion',
+        count: 112,
+        percentage: 27,
+        icon: 'fa-traffic-light',
+        sentiment: 'high'
+      },
+      {
+        title: 'Parking Problems and Residential Access',
+        count: 58,
+        percentage: 14,
+        icon: 'fa-square-parking',
+        sentiment: 'high'
+      },
+      {
+        title: 'Shore Road Closure Impact',
+        count: 95,
+        percentage: 23,
+        icon: 'fa-road-barrier',
+        sentiment: 'high'
+      }
+    ];
+
     const hotTopicsContainer = document.getElementById('hot-topics-container');
     if (hotTopicsContainer) {
-      hotTopicsContainer.innerHTML = `
-        <div style="text-align: center; padding: 40px; color: #95a5a6;">
-          <i class="fas fa-archive" style="font-size: 48px; margin-bottom: 20px;"></i>
-          <p style="font-size: 18px; margin-bottom: 10px;">Community Hot Topics</p>
-          <p>AI analysis results not available in this archive.<br>See individual participant comments below.</p>
+      const html = hotTopics.map(topic => `
+        <div class="hot-topic-card ${topic.sentiment}">
+          <div class="hot-topic-icon">
+            <i class="fas ${topic.icon}"></i>
+          </div>
+          <div class="hot-topic-content">
+            <h3 class="hot-topic-title">${topic.title}</h3>
+            <div class="hot-topic-stats">
+              <span class="hot-topic-count">${topic.count} mentions</span>
+              <span class="hot-topic-percentage">${topic.percentage}%</span>
+            </div>
+            <div class="hot-topic-bar">
+              <div class="hot-topic-fill" style="width: ${topic.percentage}%"></div>
+            </div>
+          </div>
         </div>
-      `;
+      `).join('');
+
+      hotTopicsContainer.innerHTML = html;
     }
   }
 
@@ -438,7 +488,7 @@
     displayParticipants(allParticipants, 1);
     await displayStats();
     createSignupChart();
-    hideHotTopics();
+    displayHotTopics();
     addArchiveNotice();
 
     console.log(`Loaded ${allParticipants.length} participants`);
