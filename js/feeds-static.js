@@ -196,37 +196,73 @@
 
     if (!chartCanvas || !allParticipants.length) return;
 
+    // Campaign end date (June 30th, 2025)
+    const campaignEndDate = new Date('2025-06-30T23:59:59.999Z');
+
+    // Filter participants within campaign period and sort by date
+    const campaignParticipants = allParticipants
+      .filter(p => new Date(p.timestamp) <= campaignEndDate)
+      .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+    if (!campaignParticipants.length) return;
+
+    // Find the campaign start date (first signup)
+    const startDate = new Date(campaignParticipants[0].timestamp);
+    startDate.setHours(0, 0, 0, 0);
+
     // Group signups by date
     const signupsByDate = {};
-    allParticipants.forEach(p => {
-      const date = new Date(p.timestamp).toISOString().split('T')[0]; // YYYY-MM-DD
+    campaignParticipants.forEach(p => {
+      const date = new Date(p.timestamp).toISOString().split('T')[0];
       signupsByDate[date] = (signupsByDate[date] || 0) + 1;
     });
 
-    // Sort dates and create cumulative data
-    const dates = Object.keys(signupsByDate).sort();
-    let cumulative = 0;
+    // Create all dates from start to campaign end
+    const dates = [];
+    const currentDate = new Date(startDate);
+    while (currentDate <= campaignEndDate) {
+      dates.push(currentDate.toISOString().split('T')[0]);
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    // Build chart data starting from 0
     const labels = [];
     const data = [];
+    let cumulative = 0;
 
+    // Add day 0 starting point
+    labels.push(startDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }));
+    data.push(0);
+
+    // Add cumulative data for each day
     dates.forEach(date => {
-      cumulative += signupsByDate[date];
-      // Format date for display
+      if (signupsByDate[date]) {
+        cumulative += signupsByDate[date];
+      }
       const d = new Date(date);
       const label = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
       labels.push(label);
       data.push(cumulative);
     });
 
-    // Sample data if too many points (show every nth point)
+    // Sample data if too many points (show every nth point, but always keep first and last)
     const maxPoints = 60;
     let sampledLabels = labels;
     let sampledData = data;
 
     if (labels.length > maxPoints) {
       const step = Math.ceil(labels.length / maxPoints);
-      sampledLabels = labels.filter((_, i) => i % step === 0 || i === labels.length - 1);
-      sampledData = data.filter((_, i) => i % step === 0 || i === data.length - 1);
+      sampledLabels = [labels[0]]; // Always include first point (day 0)
+      sampledData = [data[0]];
+
+      for (let i = step; i < labels.length - 1; i += step) {
+        sampledLabels.push(labels[i]);
+        sampledData.push(data[i]);
+      }
+
+      // Always include last point
+      sampledLabels.push(labels[labels.length - 1]);
+      sampledData.push(data[data.length - 1]);
     }
 
     // Hide loading spinner
@@ -240,7 +276,7 @@
       data: {
         labels: sampledLabels,
         datasets: [{
-          label: 'Total Participants',
+          label: 'Campaign Participants',
           data: sampledData,
           borderColor: '#ff6600',
           backgroundColor: 'rgba(255, 102, 0, 0.1)',
@@ -273,7 +309,7 @@
             displayColors: false,
             callbacks: {
               label: function(context) {
-                return `Total: ${context.parsed.y} participants`;
+                return `Participants: ${context.parsed.y}`;
               }
             }
           }
