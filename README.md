@@ -169,6 +169,7 @@ For a comprehensive analysis of the migration strategy, data integrity verificat
 
 Additional documentation is available in the `docs/` directory:
 
+- **`docs/user-guide.md`** - Complete guide for non-technical users updating the website with AI assistants
 - **`docs/deployment.md`** - Deployment guide for Vercel and other static hosts
 - **`docs/migration-report.md`** - Comprehensive migration analysis including:
   - Original architecture reconstruction
@@ -178,7 +179,10 @@ Additional documentation is available in the `docs/` directory:
   - Architectural patterns and trade-offs
   - Expert validation and recommendations
 
-For AI assistant guidance, see `CLAUDE.md` in the project root.
+### For AI Assistants
+
+- **`CLAUDE.md`** - Technical guidance for Claude Code when working in this repository
+- **`llm.txt`** - AI assistant instruction file for non-technical users. Paste this into Claude/ChatGPT to get helpful guidance, complexity assessments, and clarifying questions when making website updates.
 
 ## License
 
