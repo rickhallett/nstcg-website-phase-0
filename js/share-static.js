@@ -7,6 +7,11 @@
 (function() {
   'use strict';
 
+  // Only run on share page (check for unique share element)
+  if (!document.querySelector('.share-dashboard')) {
+    return;
+  }
+
   // ===================
   // Archive Notice
   // ===================
