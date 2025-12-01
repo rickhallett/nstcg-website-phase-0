@@ -36,7 +36,7 @@
   // ===================
 
   function displayParticipants(participants, page = 1) {
-    const container = document.getElementById('participants-container');
+    const container = document.getElementById('feeds-grid');
     if (!container) return;
 
     const start = (page - 1) * ITEMS_PER_PAGE;
@@ -135,24 +135,29 @@
       const response = await fetch('/data/config/site-config.json');
       const config = await response.json();
 
-      const statsContainer = document.getElementById('stats-container');
-      if (statsContainer) {
-        statsContainer.innerHTML = `
-          <div class="stats-grid">
-            <div class="stat-card">
-              <div class="stat-value">${config.finalCount}</div>
-              <div class="stat-label">Total Participants</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-value">${config.publishedCount}</div>
-              <div class="stat-label">Published</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-value">Archived</div>
-              <div class="stat-label">Campaign Status</div>
-            </div>
-          </div>
-        `;
+      // Update individual stat elements
+      const totalCount = document.getElementById('total-count');
+      const todayCount = document.getElementById('today-count');
+      const weekCount = document.getElementById('week-count');
+      const feedsCount = document.getElementById('feeds-count');
+
+      if (totalCount) {
+        totalCount.innerHTML = config.finalCount || allParticipants.length;
+      }
+
+      if (todayCount) {
+        todayCount.innerHTML = config.todayCount || 0;
+      }
+
+      if (weekCount) {
+        weekCount.innerHTML = config.weekCount || 0;
+      }
+
+      if (feedsCount) {
+        const countSpan = feedsCount.querySelector('span');
+        if (countSpan) {
+          countSpan.textContent = allParticipants.length;
+        }
       }
     } catch (error) {
       console.error('Error loading stats:', error);
