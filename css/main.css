@@ -34,6 +34,9 @@
 @import url('components/messages.css');
 @import url('components/financial-card.css');
 
+/* Page-specific modules */
+@import url('pages/feeds.css');
+
 /* Utility modules - Helpers */
 @import url('utilities/helpers.css');
 @import url('utilities/registration-state.css');
