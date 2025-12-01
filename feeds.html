@@ -14,19 +14,13 @@
   <meta property="og:url" content="https://nstcg.org/feeds.html">
   <meta property="og:type" content="website">
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="/favicon.ico">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="manifest" href="/site.webmanifest">
   <meta name="theme-color" content="#2c3e50">
 
   <!-- Font Awesome CDN for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-  <!-- CSS - Direct link to prevent FOUC on mobile -->
-  <link rel="stylesheet" href="css/main.css">
+  <!-- Minified Styles -->
+  <link rel="stylesheet" href="dist/styles.min.css">
 
   <!-- Chart.js for signup trends graph -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -40,6 +34,7 @@
     <div class="nav-container">
       <!-- Logo -->
       <a href="/" class="nav-logo">
+        <img src="/images/nstcg-logo-resized.png" alt="NSTCG Logo" class="logo-image">
         <span class="logo-text">NSTCG</span>
       </a>
 
@@ -200,8 +195,8 @@
     </div>
   </footer>
 
-  <!-- Static Archive JavaScript -->
-  <script src="/js/feeds-static.js"></script>
+  <!-- Minified JavaScript -->
+  <script src="/dist/app.min.js"></script>
 </body>
 
 </html>
