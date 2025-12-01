@@ -620,31 +620,16 @@
     <!-- Micromodal CDN -->
     <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
 
-    <!-- Alpine.js CDN for reactive templating -->
-    <script
-      defer
-      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
-    ></script>
+    <!-- Static Archive JavaScript -->
+    <script src="/js/homepage-static.js"></script>
 
-    <!-- Local JavaScript - Single Entry Point -->
-    <script type="module" src="/js/main-entry.js"></script>
-
+    <!-- Initialize MicroModal -->
     <script>
-      // Only load Vercel Speed Insights in production
-      if (
-        window.location.hostname !== "localhost" &&
-        window.location.hostname !== "127.0.0.1"
-      ) {
-        window.si =
-          window.si ||
-          function () {
-            (window.siq = window.siq || []).push(arguments);
-          };
-
-        const script = document.createElement("script");
-        script.defer = true;
-        script.src = "/_vercel/speed-insights/script.js";
-        document.head.appendChild(script);
+      if (typeof MicroModal !== 'undefined') {
+        MicroModal.init({
+          disableScroll: true,
+          awaitCloseAnimation: true
+        });
       }
     </script>
   </body>
