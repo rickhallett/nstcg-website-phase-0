@@ -41,11 +41,11 @@
 
 .modal__container {
   background-color: var(--bg-tertiary);
-  padding: 40px;
+  padding: 30px;
   position: relative;
-  max-width: 500px;
+  max-width: 650px;
   width: 90%;
-  max-height: 90vh;
+  max-height: 95vh;
   overflow-y: auto;
   overflow-x: hidden;
   border-radius: var(--radius-md);
